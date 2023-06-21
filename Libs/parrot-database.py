@@ -15,7 +15,7 @@ class Database:
     # Register your google account to store in the database
     def register(self, username, name, password):
         try:
-            create_table_command = "CREATE TABLE {name} (username VARCHAR(255), password VARCHAR(255))".format(name = name)
+            create_table_command = "CREATE TABLE {name} (username VARCHAR(255), password VARCHAR(255), enrolled_course VARCHAR(255))".format(name = name)
             self.cursor.execute(create_table_command)
             add_username_password = "INSERT into {name} (username, password) VALUES(%s, %s)".format(name = name)
             self.cursor.execute(add_username_password, (username, password))
