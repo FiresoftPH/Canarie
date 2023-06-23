@@ -47,18 +47,22 @@ class Database:
             self.connection.commit()
 
     def userRegister(self, name, username, password):
-        user_list = self.showUserData()
-        new_user_data = (name, username)
-        new_user_data_long = (name, username, password, "")
-        if new_user_data in user_list:
-            print("User already exists")
-            return False
+        self.cursor.execute("SELECT name, username FROM users")
+        result = self.cursor.fetchall()
+        new_user_data = (name, username)        
+        for row in result:
+            if row == new_user_data:
+                print("User already exist")
+                return False
 
-        else:
-            command = "INSERT INTO users (name, username, password, enrolled_courses) VALUES (%s, %s, %s, %s)"
-            self.cursor.execute(command, new_user_data_long)
-            self.connection.commit()
-            return True
+        new_user_data_long = (name, username, password, "")
+        command = "INSERT INTO users (name, username, password, enrolled_courses) VALUES (%s, %s, %s, %s)"
+        self.cursor.execute(command, new_user_data_long)
+        self.connection.commit()
+        return True
+
+    def userCourseRegister(self):
+        pass
 
     def showCourseData(self, mode=0):
         if mode == 0:
@@ -99,9 +103,9 @@ class Database:
             result = self.cursor.fetchall()
             user_data = []
             for row in result:
-                user_data.append(row[0])
+                user_data.append(row)
 
-            print(user_data)
+            # print(user_data)
             return user_data
 
     def showStatisticsData(self):
@@ -121,12 +125,15 @@ class Database:
         return temp
 
     def userLogin(self, username, password):
-        credentials_list = self.showUserData(2)
-        if (username, password) in credentials_list:
-            return True
+        self.cursor.execute("SELECT username, password FROM users")
+        result = self.cursor.fetchall()
+        credentials = (username, password)        
+        for row in result:
+            if row == credentials:
+                # print("Login Successfully")
+                return True
 
-        else:
-            return False
+        return False
 
 # test = Database()
 # test.addCourseData("Innovative Communication", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])

@@ -43,12 +43,15 @@ class appCLI:
     def loginInterface(self):
         while True:
             username = str(input("What is your username?: "))
-            password = str(input("what is your password? :"))
+            password = str(input("What is your password? :"))
             success = self.db.userLogin(username, password)
             if success is True:
                 print("Login sucessfully")
+                break
             else:
                 print("Wrong password or username")
+        
+        self.courseSelection()
 
     def courseSelection(self):
         pass
