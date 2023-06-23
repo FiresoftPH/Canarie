@@ -115,5 +115,5 @@ test = Database()
 # test.addCourseData("Computer System", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
 # test.showCourseData(1)
 
-test.userRegister("Firesoft", "64011532", "111111")
-test.showUserData(1)
+# test.userRegister("Firesoft", "64011532", "111111")
+# test.showUserData(1)
