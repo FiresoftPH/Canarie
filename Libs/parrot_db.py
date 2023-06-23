@@ -47,9 +47,9 @@ class Database:
             self.connection.commit()
 
     def userRegister(self, name, username, password):
-        self.cursor.execute("SELECT name, username FROM users")
+        self.cursor.execute("SELECT username FROM users")
         result = self.cursor.fetchall()
-        new_user_data = (name, username)        
+        new_user_data = (username, )        
         for row in result:
             if row == new_user_data:
                 print("User already exist")
@@ -131,15 +131,9 @@ class Database:
         for row in result:
             if row == credentials:
                 # print("Login Successfully")
-                return True
+                return (credentials, True)
 
         return False
 
-# test = Database()
-# test.addCourseData("Innovative Communication", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
-# test.addCourseData("Principal Of Computing Application", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
-# test.addCourseData("Computer System", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
-# test.showCourseData(1)
-
-# test.userRegister("Firesoft", "64011532", "111111")
-# test.showUserData(2)
+    def enrollCourse(self, username):
+        pass

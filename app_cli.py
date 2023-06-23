@@ -7,7 +7,7 @@ from Libs import parrot_db as db
 class appCLI:
     def __init__(self):
         self.db = db.Database()
-        self.login_status = False
+        self.credentials = None
         # self.global_command_list = ["abort"]
 
     def firstPage(self):
@@ -45,11 +45,16 @@ class appCLI:
             username = str(input("What is your username?: "))
             password = str(input("What is your password? :"))
             success = self.db.userLogin(username, password)
-            if success is True:
-                print("Login sucessfully")
-                break
-            else:
-                print("Wrong password or username")
+            try:
+                if success[1] is True:
+                    print("Login sucessfully")
+                    self.credentials = success[0]
+                    break
+                else:
+                    print("Wrong password or username")
+
+            except TypeError:
+                print("Wrong username and password (TE)")
         
         self.courseSelection()
 
