@@ -52,11 +52,13 @@ class Database:
         new_user_data_long = (name, username, password, "")
         if new_user_data in user_list:
             print("User already exists")
+            return False
 
         else:
             command = "INSERT INTO users (name, username, password, enrolled_courses) VALUES (%s, %s, %s, %s)"
             self.cursor.execute(command, new_user_data_long)
             self.connection.commit()
+            return True
 
     def showCourseData(self, mode=0):
         if mode == 0:
@@ -78,7 +80,6 @@ class Database:
     def showUserData(self, mode=0):
         if mode == 0:
             self.cursor.execute("SELECT name, username FROM users")
-
             result = self.cursor.fetchall()
             user_data = []
             for row in result:
@@ -92,6 +93,16 @@ class Database:
             result = self.cursor.fetchall()
             for row in result:
                 print(row)
+
+        elif mode == 2:
+            self.cursor.execute("SELECT username FROM users")
+            result = self.cursor.fetchall()
+            user_data = []
+            for row in result:
+                user_data.append(row[0])
+
+            print(user_data)
+            return user_data
 
     def showStatisticsData(self):
         self.cursor.execute("SELECT statistics, assignments FROM courses")
@@ -109,11 +120,19 @@ class Database:
         temp = string.split(',')
         return temp
 
-test = Database()
+    def login(self, username, password):
+        username_list = self.showUserData(2)
+        if username in username_list:
+            print("Login Sucessfully")
+
+        else:
+            print("Wrong Password or Username")
+
+# test = Database()
 # test.addCourseData("Innovative Communication", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
 # test.addCourseData("Principal Of Computing Application", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
 # test.addCourseData("Computer System", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
 # test.showCourseData(1)
 
 # test.userRegister("Firesoft", "64011532", "111111")
-# test.showUserData(1)
+# test.showUserData(2)
