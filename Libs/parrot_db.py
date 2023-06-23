@@ -95,7 +95,7 @@ class Database:
                 print(row)
 
         elif mode == 2:
-            self.cursor.execute("SELECT username FROM users")
+            self.cursor.execute("SELECT username, password FROM users")
             result = self.cursor.fetchall()
             user_data = []
             for row in result:
@@ -120,13 +120,13 @@ class Database:
         temp = string.split(',')
         return temp
 
-    def login(self, username, password):
-        username_list = self.showUserData(2)
-        if username in username_list:
-            print("Login Sucessfully")
+    def userLogin(self, username, password):
+        credentials_list = self.showUserData(2)
+        if (username, password) in credentials_list:
+            return True
 
         else:
-            print("Wrong Password or Username")
+            return False
 
 # test = Database()
 # test.addCourseData("Innovative Communication", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"])
