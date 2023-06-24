@@ -60,13 +60,16 @@ class appCLI:
 
     def courseEnroll(self):
         chosen_list = []
+        stop_choice = ["yes", "no"]
         while True:
             self.db.showCourseData(2)
             chosen = str(input("Which course do you want to enroll: "))
             chosen_list.append(chosen)
-            stop = bool(input("Stop enrolling? [True, False]: "))
-            if stop is True:
+            stop = str(input("Stop enrolling? [yes, no]: "))
+            if stop == stop_choice[0]:
                 break
+            elif stop not in stop_choice:
+                print("Invalid Choice")
             
         self.db.enrollCourse(self.credentials[0], chosen_list)
         self.db.showUserData(1)

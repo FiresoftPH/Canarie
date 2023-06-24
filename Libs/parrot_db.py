@@ -116,6 +116,12 @@ class Database:
 
             # print(user_data)
             return user_data
+        
+        elif mode == 3:
+            self.cursor.execute("SELECT enrolled_courses FROM users")
+            result = self.cursor.fetchall()
+            for row in result:
+                print(row)
 
     def showStatisticsData(self):
         self.cursor.execute("SELECT statistics, assignments FROM courses")
@@ -148,15 +154,14 @@ class Database:
         course_list_data = self.stringFromArray(course_list)
         self.cursor.execute("SELECT enrolled_courses FROM users WHERE username = %s", username)
         enrolled_course = self.cursor.fetchall()
-        compare_course = []
-        for course in enrolled_course:
-            compare_course.append(course[0])
 
-        compare_course_data = self.stringFromArray(compare_course)
-        if enrolled_course[0] != '':
+        compare_course_data = enrolled_course[0][0]
+        if '' != compare_course_data:
             compare_course_data = compare_course_data + ',' + course_list_data
             # Reset course data
             # compare_course_data = ""
+        else:
+            compare_course_data = course_list_data
 
         command = "UPDATE users SET enrolled_courses = %s WHERE username = %s"
         value = (compare_course_data, username)
@@ -164,9 +169,23 @@ class Database:
         self.connection.commit()
         # print("Initial enroll finished")
 
+    def checkEnrolledCourse(self, username, course_list):
+        command = "SELECT enrolled_courses FROM users WHERE username = %s"
+        self.cursor.execute(command, username)
+        registered_course = self.cursor.fetchall()
+        registered_course = registered_course[0][0]
+        registered_course = self.arrayFromString(registered_course)
+        # print(registered_course)
+        same = list(set(course_list).difference(registered_course))
+        print(same)
+        print(course_list)
+        print(registered_course)
+        
 test = Database()
 # test.addCourseData("Calculus 1", ["Assignment 1", "Assignment 2", "Assignment 3"])
 # test.showCourseData(1)
 # test.enrollCourse("Firesoft", ["Computer System", "Principal of Programming Applications", "Innovative Communicaation"])
-# test.enrollCourse("Firesoft", [""])
-# test.showUserData(1)
+# test.enrollCourse("hutao", ["Computer System", "Principal of Programming Applications"])
+# test.enrollCourse("OTorku", [""])
+test.checkEnrolledCourse("hutao", ["Computer System", "Principal of Programming Applications"])
+# test.showUserData(3)
