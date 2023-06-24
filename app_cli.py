@@ -56,10 +56,23 @@ class appCLI:
             except TypeError:
                 print("Wrong username and password (TE)")
         
-        self.courseSelection()
+        self.courseEnroll()
 
-    def courseSelection(self):
-        pass
+    def courseEnroll(self):
+        chosen_list = []
+        while True:
+            self.db.showCourseData(2)
+            chosen = str(input("Which course do you want to enroll: "))
+            chosen_list.append(chosen)
+            stop = bool(input("Stop enrolling? [True, False]: "))
+            if stop is True:
+                break
+            
+        self.db.enrollCourse(self.credentials[0], chosen_list)
+        self.db.showUserData(1)
+
+    def courseSelection():
+        print("Which course do you want to ask?: ")
 
     def chatRoomSelection(self):
         pass
