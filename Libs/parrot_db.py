@@ -3,11 +3,12 @@ import numpy as np
 
 class Database:
     def __init__(self):
+        file = open("Libs/parrot_db_keys.txt", "r")
         self.connection = pymysql.connect(
         host='127.0.0.1',
         port=14000,
-        user='root',
-        password='',
+        user=file.readline(),
+        password=file.readline(),
         database='mft'
         )
         self.cursor = self.connection.cursor()
@@ -231,3 +232,4 @@ TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
 test = Database()
 test.showUserEnrolledCourse("OTorku")
+test.showUserData(1)

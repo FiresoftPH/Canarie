@@ -1,2 +1,2 @@
 # ignore ALL files in ANY directory named env
-env/
+Libs/parrot_db_keys.txt
