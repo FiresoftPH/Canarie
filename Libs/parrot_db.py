@@ -11,10 +11,6 @@ class Database:
         database='mft'
         )
         self.cursor = self.connection.cursor()
-
-        # self.cursor.execute("DROP TABLE courses")
-        # self.cursor.execute("DROP TABLE users")
-        # self.cursor.execute("DROP TABLE statistics")
         # except pymysql.err.OperationalError:
 
         try:
@@ -37,10 +33,15 @@ class Database:
         except pymysql.err.OperationalError:
             # print("Already initialized")
             pass
+    def resetTable(self):
+        self.cursor.execute("DROP TABLE courses")
+        self.cursor.execute("DROP TABLE users")
+        self.cursor.execute("DROP TABLE statistics")
 
     def addCourseData(self, course_name, assignment_list):
+        self.cursor.execute("SELECT course_name, assignments FROM courses")
+        registered_course = self.cursor.fetchall()
         assignment_list = self.stringFromArray(assignment_list)
-        registered_course = self.showCourseData()
         new_course_data = (course_name, assignment_list)
         if new_course_data in registered_course:
             print("Course already exist")
@@ -87,7 +88,9 @@ class Database:
         elif mode == 2:
             self.cursor.execute("SELECT course_name FROM courses")
             result = self.cursor.fetchall()
+            # course_data = []
             for row in result:
+                # course_data.append(row[0])
                 print(row[0])
 
     def showUserData(self, mode=0):
@@ -151,13 +154,16 @@ class Database:
         return False
 
     def enrollCourse(self, username, course_list):
-        course_list_data = self.stringFromArray(course_list)
+        # course_list_data = self.stringFromArray(course_list)
+        difference_enrolled_course = self.checkEnrolledCourse(username, course_list)
+        course_list_data = self.stringFromArray(difference_enrolled_course)
         self.cursor.execute("SELECT enrolled_courses FROM users WHERE username = %s", username)
-        enrolled_course = self.cursor.fetchall()
 
+        enrolled_course = self.cursor.fetchall()
         compare_course_data = enrolled_course[0][0]
         if '' != compare_course_data:
-            compare_course_data = compare_course_data + ',' + course_list_data
+            if course_list_data != "":
+                compare_course_data = compare_course_data + ',' + course_list_data
             # Reset course data
             # compare_course_data = ""
         else:
@@ -172,20 +178,29 @@ class Database:
     def checkEnrolledCourse(self, username, course_list):
         command = "SELECT enrolled_courses FROM users WHERE username = %s"
         self.cursor.execute(command, username)
-        registered_course = self.cursor.fetchall()
-        registered_course = registered_course[0][0]
-        registered_course = self.arrayFromString(registered_course)
-        # print(registered_course)
-        same = list(set(course_list).difference(registered_course))
-        print(same)
-        print(course_list)
-        print(registered_course)
+        enrolled_course = self.cursor.fetchall()
+        enrolled_course = enrolled_course[0][0]
+        enrolled_course = self.arrayFromString(enrolled_course)
+        same = list(set(course_list).difference(enrolled_course))
+        return same
+
+    def checkRegisteredCourse(self, course_name):
+        self.cursor.execute("SELECT course_name FROM courses")
+        enrolled_course = self.cursor.fetchall()
+        # enrolled_course = self.arrayFromString(enrolled_course)
+        # print(enrolled_course)
+        course_name = (course_name, )
+        if course_name in enrolled_course:
+            return True
+        else:
+            return False   
         
 test = Database()
-# test.addCourseData("Calculus 1", ["Assignment 1", "Assignment 2", "Assignment 3"])
+# test.addCourseData("Calculus 2", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"])
 # test.showCourseData(1)
 # test.enrollCourse("Firesoft", ["Computer System", "Principal of Programming Applications", "Innovative Communicaation"])
 # test.enrollCourse("hutao", ["Computer System", "Principal of Programming Applications"])
 # test.enrollCourse("OTorku", [""])
-test.checkEnrolledCourse("hutao", ["Computer System", "Principal of Programming Applications"])
-# test.showUserData(3)
+# test.checkEnrolledCourse("hutao", ["Computer System", "Principal of Programming Applications"])
+print(test.checkRegisteredCourse("Calculus 1"))
+# test.showUserData(1)

@@ -64,7 +64,12 @@ class appCLI:
         while True:
             self.db.showCourseData(2)
             chosen = str(input("Which course do you want to enroll: "))
-            chosen_list.append(chosen)
+            check_course = self.db.checkRegisteredCourse(chosen)
+            if check_course is False:
+                print("Course does not exist")
+            else:
+                chosen_list.append(chosen)
+
             stop = str(input("Stop enrolling? [yes, no]: "))
             if stop == stop_choice[0]:
                 break
