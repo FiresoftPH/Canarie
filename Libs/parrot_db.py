@@ -33,11 +33,18 @@ class Database:
         except pymysql.err.OperationalError:
             # print("Already initialized")
             pass
+
+    # Reset the table values to nothing in case something gone wrong. This is used for development only.
     def resetTable(self):
         self.cursor.execute("DROP TABLE courses")
         self.cursor.execute("DROP TABLE users")
         self.cursor.execute("DROP TABLE statistics")
 
+    # Alter the table columns to add more functionalities. This is used for development only
+    def alterTable(self):
+        self.cursor.execute("ALTER TABLE users ADD status VARCHAR(100) DEFAULT 'user'")
+
+    # Add course data to the courses table. In the final development, this will be automatically integrated with canvas
     def addCourseData(self, course_name, assignment_list):
         self.cursor.execute("SELECT course_name, assignments FROM courses")
         registered_course = self.cursor.fetchall()
@@ -50,6 +57,7 @@ class Database:
             self.cursor.execute(command, new_course_data)
             self.connection.commit()
 
+    # User register, each user have to have a name, username and password.
     def userRegister(self, name, username, password):
         self.cursor.execute("SELECT username FROM users")
         result = self.cursor.fetchall()
@@ -65,9 +73,7 @@ class Database:
         self.connection.commit()
         return True
 
-    def userCourseRegister(self, username, course_list):
-        course_list = self.stringFromArray(course_list)
-
+    # Used to show course data in the database. Some modes will be removed from the final version.
     def showCourseData(self, mode=0):
         if mode == 0:
             self.cursor.execute("SELECT course_name, assignments FROM courses")
@@ -93,6 +99,7 @@ class Database:
                 # course_data.append(row[0])
                 print(row[0])
 
+    # Shows the data from the users table. Some modes will be removed in the final version.
     def showUserData(self, mode=0):
         if mode == 0:
             self.cursor.execute("SELECT name, username FROM users")
@@ -105,7 +112,7 @@ class Database:
             return user_data
         
         elif mode == 1:
-            self.cursor.execute("SELECT name, username, password, enrolled_courses FROM users")
+            self.cursor.execute("SELECT * FROM users")
             result = self.cursor.fetchall()
             for row in result:
                 print(row)
@@ -126,6 +133,7 @@ class Database:
             for row in result:
                 print(row)
 
+    # Shows the data from the statistics table. 
     def showStatisticsData(self):
         self.cursor.execute("SELECT statistics, assignments FROM courses")
 
@@ -133,15 +141,17 @@ class Database:
         for row in result:
             print(row)
 
+    # These are for the Assignment list for each courses. It changes an array to strings to store inside the database.
     def stringFromArray(self, array):
         temp = ','.join(array)
         # print(temp)
         return temp
-    
+
     def arrayFromString(self, string):
         temp = string.split(',')
         return temp
 
+    # Provided login functionalities and returns the credentials to the applications.
     def userLogin(self, username, password):
         self.cursor.execute("SELECT username, password FROM users")
         result = self.cursor.fetchall()
@@ -153,6 +163,7 @@ class Database:
 
         return False
 
+    # Used when enrolling courses for each user.
     def enrollCourse(self, username, course_list):
         # course_list_data = self.stringFromArray(course_list)
         difference_enrolled_course = self.checkEnrolledCourse(username, course_list)
@@ -164,7 +175,7 @@ class Database:
         if '' != compare_course_data:
             if course_list_data != "":
                 compare_course_data = compare_course_data + ',' + course_list_data
-            # Reset course data
+            # Reset course data (Used for debugging only)
             # compare_course_data = ""
         else:
             compare_course_data = course_list_data
@@ -175,6 +186,7 @@ class Database:
         self.connection.commit()
         # print("Initial enroll finished")
 
+    # Used when enrolling courses for each user. This method checks if the selected courses are already enrolled or not
     def checkEnrolledCourse(self, username, course_list):
         command = "SELECT enrolled_courses FROM users WHERE username = %s"
         self.cursor.execute(command, username)
@@ -184,6 +196,7 @@ class Database:
         same = list(set(course_list).difference(enrolled_course))
         return same
 
+    # Used when enrolling courses for each user. This method checks if the selected courses are registered or not.
     def checkRegisteredCourse(self, course_name):
         self.cursor.execute("SELECT course_name FROM courses")
         enrolled_course = self.cursor.fetchall()
@@ -193,14 +206,20 @@ class Database:
         if course_name in enrolled_course:
             return True
         else:
-            return False   
-        
+            return False
+    
+    # Used together with the login method. This checks whether the user enrolled any courses yet.
+    def checkInitialSetup(self, username):
+        command = "SELECT enrolled_courses FROM users WHERE username = %s"
+        self.cursor.execute(command, username)
+        enrolled_courses = self.cursor.fetchall()
+        if enrolled_courses == '':
+            return False
+        else:
+            return True
+
+    
+"""
+TESTING THE FUNCTIONALITIES OF THE DATABASE
+"""
 test = Database()
-# test.addCourseData("Calculus 2", ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"])
-# test.showCourseData(1)
-# test.enrollCourse("Firesoft", ["Computer System", "Principal of Programming Applications", "Innovative Communicaation"])
-# test.enrollCourse("hutao", ["Computer System", "Principal of Programming Applications"])
-# test.enrollCourse("OTorku", [""])
-# test.checkEnrolledCourse("hutao", ["Computer System", "Principal of Programming Applications"])
-print(test.checkRegisteredCourse("Calculus 1"))
-# test.showUserData(1)
