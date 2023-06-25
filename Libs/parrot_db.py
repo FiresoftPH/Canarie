@@ -217,9 +217,17 @@ class Database:
             return False
         else:
             return True
-
+    
+    # Returns the users enrolled courses as the name suggested.
+    def showUserEnrolledCourse(self, username):
+        command = "SELECT enrolled_courses FROM users WHERE username = %s"
+        self.cursor.execute(command, username)
+        enrolled_courses = self.cursor.fetchall()
+        enrolled_courses = self.arrayFromString(enrolled_courses[0][0])
+        return enrolled_courses
     
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
 test = Database()
+test.showUserEnrolledCourse("OTorku")

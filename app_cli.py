@@ -10,6 +10,7 @@ class appCLI:
         self.credentials = None
         # self.global_command_list = ["abort"]
 
+    def firstPage(self):
         print("Welcome to Phoenix, your friendly fiery mentor.")
         while True:
             print("What do you want to do? [login, register]")
@@ -25,6 +26,10 @@ class appCLI:
         elif user_choice == choices[1]:
             self.registerInterface()
 
+    def printSpace(self):
+        for x in range(5):
+            print("")
+
     def registerInterface(self):
         while True:
             username = str(input("What is your username?: ")).strip()
@@ -37,7 +42,9 @@ class appCLI:
             else:
                 print("It seems like I have known you before, use login instead.")
         
-        self.db.showUserData(1)
+        # self.db.showUserData(1)
+        self.printSpace()
+        self.firstPage()
 
     def loginInterface(self):
         while True:
@@ -55,9 +62,12 @@ class appCLI:
             except TypeError:
                 print("Wrong username and password (TE)")
         
-        while True:
-
+        initial = self.db.checkInitialSetup(self.credentials[0])
+        if initial is False:
             self.courseEnroll()
+        else:
+            self.courseSelection()
+        self.printSpace()
 
     def courseEnroll(self):
         chosen_list = []
@@ -78,10 +88,22 @@ class appCLI:
                 print("Invalid Choice")
             
         self.db.enrollCourse(self.credentials[0], chosen_list)
-        self.db.showUserData(1)
+        self.printSpace()
+        self.courseSelection()
 
-    def courseSelection():
-        print("Which course do you want to ask?: ")
+    def courseSelection(self):
+        while True:
+            course_list = self.db.showUserEnrolledCourse(self.credentials[0])
+            for course in course_list:
+                print(course)
+            choice = str(input("Which course do you want to ask? (Type exit if you want to log out): "))
+            if choice in course_list:
+                print("You chose "+ choice)
+                break
+            else:
+                print("Invalid choice")
+            
+        self.printSpace()
 
     def chatRoomSelection(self):
         pass
@@ -90,4 +112,4 @@ class appCLI:
         pass
 
 app = appCLI()
-# app.firstPage()
+app.firstPage()
