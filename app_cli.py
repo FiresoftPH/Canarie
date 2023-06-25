@@ -10,7 +10,6 @@ class appCLI:
         self.credentials = None
         # self.global_command_list = ["abort"]
 
-    def firstPage(self):
         print("Welcome to Phoenix, your friendly fiery mentor.")
         while True:
             print("What do you want to do? [login, register]")
@@ -56,7 +55,9 @@ class appCLI:
             except TypeError:
                 print("Wrong username and password (TE)")
         
-        self.courseEnroll()
+        while True:
+
+            self.courseEnroll()
 
     def courseEnroll(self):
         chosen_list = []
@@ -89,4 +90,4 @@ class appCLI:
         pass
 
 app = appCLI()
-app.firstPage()
+# app.firstPage()
