@@ -7,7 +7,7 @@ class Database:
         self.connection = pymysql.connect(
         host='127.0.0.1',
         port=14000,
-        user=file.readline(),
+        user='root',
         password=file.readline(),
         database='mft'
         )
