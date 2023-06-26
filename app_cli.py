@@ -2,18 +2,18 @@
 The CLI (Command Line Interface) is for testing the user journey and visualizing the steps programmically. Initial demonstration will be done here.
 Note that the CLI will not be updated once the WebUI is completed.
 """
-from Libs import parrot_db as db
+from Libs import macaw_server as server
 
 class appCLI:
     def __init__(self):
-        self.db = db.Database()
+        self.db = server.DatabaseOperations()
         self.credentials = None
         # self.global_command_list = ["abort"]
 
     def firstPage(self):
         print("Welcome to Phoenix, your friendly fiery mentor.")
         while True:
-            print("What do you want to do? [login, register, admin]")
+            print("What do you want to do? [login, register]")
             choices = ["login", "register"]
             user_choice = str(input("Command: ")).strip().lower()
             if user_choice in choices:
@@ -99,6 +99,8 @@ class appCLI:
             choice = str(input("Which course do you want to ask? (Type exit if you want to log out): "))
             if choice in course_list:
                 print("You chose "+ choice)
+                break
+            elif choice == "exit":
                 break
             else:
                 print("Invalid choice")

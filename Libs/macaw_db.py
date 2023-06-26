@@ -233,18 +233,20 @@ class Database:
     
     # Admin login to access other user's data
     def adminLogin(self, username, password):
-        command = "SELECT status FROM users where username = %s"
-        self.cursor.execute(command, username)
-        status = self.cursor.fetchall()
-        if status == "admin":
-            result = self.cursor.fetchall()
-            credentials = (username, password)        
-            for row in result:
-                if row == credentials:
-                    # print("Login Successfully")
+        self.cursor.execute("SELECT username, password FROM users")
+        result = self.cursor.fetchall()
+        credentials = (username, password)        
+        for row in result:
+            if row == credentials:
+                # print("Login Successfully")
+                self.cursor.execute("SELECT status FROM users WHERE username = %s", username)
+                status = self.cursor.fetchall()
+                if status[0][0] == "admin":
                     return (credentials, True)
-        else:
-            return False
+                else:
+                    return False
+
+        return False
     
     # Promote a standard user to be an admin. Only used during development and authorized use.ss
     def promoteUser(self, username):
@@ -255,8 +257,8 @@ class Database:
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-test = Database()
+# test = Database()
 # test.showUserEnrolledCourse("OTorku")
 # print(test.adminLogin("Firesoft", "111111"))
 # test.promoteUser("Firesoft")
-test.showUserData(1)
+# test.showUserData(1)
