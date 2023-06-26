@@ -1,0 +1,11 @@
+.bg-container{
+  background-image: url("../assets/Mask group.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  place-self: center;
+  height: 100vh;
+  /* margin: 50px 100px;
+  padding: 0 ; */
+}
