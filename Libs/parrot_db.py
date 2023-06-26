@@ -22,7 +22,7 @@ class Database:
             pass
 
         try:
-            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), username VARCHAR(255),  password VARCHAR(255), enrolled_courses VARCHAR(255))"
+            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), username VARCHAR(255),  password VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255))"
             self.cursor.execute(command_1)
         except pymysql.err.OperationalError:
             # print("Already initialized")
@@ -227,9 +227,32 @@ class Database:
         enrolled_courses = self.arrayFromString(enrolled_courses[0][0])
         return enrolled_courses
     
+    # Admin login to access other user's data
+    def adminLogin(self, username, password):
+        command = "SELECT status FROM users where username = %s"
+        self.cursor.execute(command, username)
+        status = self.cursor.fetchall()
+        if status == "admin":
+            result = self.cursor.fetchall()
+            credentials = (username, password)        
+            for row in result:
+                if row == credentials:
+                    # print("Login Successfully")
+                    return (credentials, True)
+        else:
+            return False
+    
+    # Promote a standard user to be an admin. Only used during development and authorized use.ss
+    def promoteUser(self, username):
+        command = "UPDATE users SET status = %s WHERE username = %s"
+        self.cursor.execute(command, ("admin", username))
+        self.connection.commit()
+
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-test = Database()
-test.showUserEnrolledCourse("OTorku")
-test.showUserData(1)
+# test = Database()
+# test.showUserEnrolledCourse("OTorku")
+# print(test.adminLogin("Firesoft", "111111"))
+# test.promoteUser("Firesoft")
+# test.showUserData(1)

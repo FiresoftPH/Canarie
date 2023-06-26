@@ -49,7 +49,7 @@ class appCLI:
     def loginInterface(self):
         while True:
             username = str(input("What is your username?: "))
-            password = str(input("What is your password? :"))
+            password = str(input("What is your password?: "))
             success = self.db.userLogin(username, password)
             try:
                 if success[1] is True:
