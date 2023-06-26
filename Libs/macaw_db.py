@@ -1,18 +1,21 @@
 import pymysql.cursors
 import numpy as np
+from dotenv import dotenv_values
 
 class Database:
     def __init__(self):
-        file = open("Libs/parrot_db_keys.txt", "r")
+
+        # file = open("Libs/parrot_db_keys.txt", "r")
+        config = dotenv_values("Libs/.env")
         self.connection = pymysql.connect(
         host='127.0.0.1',
-        port=14000,
-        user='root',
-        password=file.readline(),
-        database='mft'
+        port=int(config["PORT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
         )
         self.cursor = self.connection.cursor()
-        file.close()
+        # file.close()
         # except pymysql.err.OperationalError:
 
         try:
@@ -23,7 +26,7 @@ class Database:
             pass
 
         try:
-            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), username VARCHAR(255),  password VARCHAR(255), enrolled_courses VARCHAR(255))"
+            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), username VARCHAR(255),  password VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255))"
             self.cursor.execute(command_1)
         except pymysql.err.OperationalError:
             # print("Already initialized")
@@ -228,9 +231,34 @@ class Database:
         enrolled_courses = self.arrayFromString(enrolled_courses[0][0])
         return enrolled_courses
     
+    # Admin login to access other user's data
+    def adminLogin(self, username, password):
+        self.cursor.execute("SELECT username, password FROM users")
+        result = self.cursor.fetchall()
+        credentials = (username, password)        
+        for row in result:
+            if row == credentials:
+                # print("Login Successfully")
+                self.cursor.execute("SELECT status FROM users WHERE username = %s", username)
+                status = self.cursor.fetchall()
+                if status[0][0] == "admin":
+                    return (credentials, True)
+                else:
+                    return False
+
+        return False
+    
+    # Promote a standard user to be an admin. Only used during development and authorized use.ss
+    def promoteUser(self, username):
+        command = "UPDATE users SET status = %s WHERE username = %s"
+        self.cursor.execute(command, ("admin", username))
+        self.connection.commit()
+
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-test = Database()
-test.showUserEnrolledCourse("OTorku")
-test.showUserData(1)
+# test = Database()
+# test.showUserEnrolledCourse("OTorku")
+# print(test.adminLogin("Firesoft", "111111"))
+# test.promoteUser("Firesoft")
+# test.showUserData(1)
