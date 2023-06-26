@@ -1,7 +1,7 @@
 from transformers import pipeline, Conversation
 
 chatbot = pipeline(model="microsoft/DialoGPT-large")
-conversation = Conversation("what is cofee")
+conversation = Conversation("what is coffee")
 conversation = chatbot(conversation)
 print(conversation.generated_responses[-1])
 
