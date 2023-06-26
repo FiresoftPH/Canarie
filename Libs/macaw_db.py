@@ -8,8 +8,8 @@ class Database:
         # file = open("Libs/parrot_db_keys.txt", "r")
         config = dotenv_values("Libs/.env")
         self.connection = pymysql.connect(
-        host='127.0.0.1',
-        port=int(config["PORT"]),
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"]
@@ -47,7 +47,7 @@ class Database:
 
     # Alter the table columns to add more functionalities. This is used for development only
     def alterTable(self):
-        self.cursor.execute("ALTER TABLE users ADD status VARCHAR(100) DEFAULT 'user'")
+        self.cursor.execute("ALTER TABLE courses ADD assignment_details VARCHAR(100) DEFAULT ''")
 
     # Add course data to the courses table. In the final development, this will be automatically integrated with canvas
     def addCourseData(self, course_name, assignment_list):
@@ -91,7 +91,7 @@ class Database:
             return course_data
         
         elif mode == 1:
-            self.cursor.execute("SELECT course_name, assignments FROM courses")
+            self.cursor.execute("SELECT * FROM courses")
             result = self.cursor.fetchall()
             for row in result:
                 print(row)
@@ -257,7 +257,9 @@ class Database:
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-# test = Database()
+test = Database()
+# test.alterTable()
+test.showCourseData(1)
 # test.showUserEnrolledCourse("OTorku")
 # print(test.adminLogin("Firesoft", "111111"))
 # test.promoteUser("Firesoft")

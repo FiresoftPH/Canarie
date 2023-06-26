@@ -1,7 +1,7 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-from Libs import macaw_db
+from Libs import macaw_db, macaw_ai
 
 class DatabaseOperations:
     def __init__(self):
@@ -46,3 +46,8 @@ class DatabaseOperations:
     # Promote a standard user to be an admin. Only used during development and authorized use.ss
     def promoteUser(self, username):
         return self.db.promoteUser(username)
+
+class PromptOperations:
+    def __init__(self):
+        self.ai = macaw_ai.GetResponse()
+        self.prompt = macaw_ai.GeneratePrompt()
