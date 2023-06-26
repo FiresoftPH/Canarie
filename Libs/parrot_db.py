@@ -1,18 +1,21 @@
 import pymysql.cursors
 import numpy as np
+from dotenv import dotenv_values
 
 class Database:
     def __init__(self):
-        file = open("Libs/parrot_db_keys.txt", "r")
+
+        # file = open("Libs/parrot_db_keys.txt", "r")
+        config = dotenv_values("Libs/.env")
         self.connection = pymysql.connect(
         host='127.0.0.1',
-        port=14000,
-        user='root',
-        password=file.readline(),
-        database='mft'
+        port=int(config["PORT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
         )
         self.cursor = self.connection.cursor()
-        file.close()
+        # file.close()
         # except pymysql.err.OperationalError:
 
         try:
@@ -252,8 +255,8 @@ class Database:
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-# test = Database()
+test = Database()
 # test.showUserEnrolledCourse("OTorku")
 # print(test.adminLogin("Firesoft", "111111"))
 # test.promoteUser("Firesoft")
-# test.showUserData(1)
+test.showUserData(1)

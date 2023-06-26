@@ -13,7 +13,7 @@ class appCLI:
     def firstPage(self):
         print("Welcome to Phoenix, your friendly fiery mentor.")
         while True:
-            print("What do you want to do? [login, register]")
+            print("What do you want to do? [login, register, admin]")
             choices = ["login", "register"]
             user_choice = str(input("Command: ")).strip().lower()
             if user_choice in choices:
