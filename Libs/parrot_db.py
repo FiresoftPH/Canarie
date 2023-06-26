@@ -12,6 +12,7 @@ class Database:
         database='mft'
         )
         self.cursor = self.connection.cursor()
+        file.close()
         # except pymysql.err.OperationalError:
 
         try:
