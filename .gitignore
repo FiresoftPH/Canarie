@@ -1,5 +1,5 @@
 # ignore ALL files in ANY directory named env
 Libs/parrot_db_keys.txt
 Libs/.env
-/test_file
+/test_files
 Libs/__pycache__
