@@ -269,13 +269,20 @@ class Database:
         self.cursor.execute("SELECT * FROM chat_history")
         result = self.cursor.fetchall()
         for row in result:
-            print(row)        
+            print(row)
+
+    def showAllTables(self):
+        self.cursor.execute("SHOW TABLES")
+        result = self.cursor.fetchall()
+        for row in result:
+            print(row)               
 
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
 test = Database()
-test.showChatHistory()
+test.showAllTables()
+# test.showChatHistory()
 # test.resetTable()
 # test.alterTable()
 # test.showStatisticsData()
