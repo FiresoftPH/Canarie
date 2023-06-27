@@ -4,16 +4,18 @@
   width: 100vw;
   justify-content: center;
   align-items: center;
+  background-color: rgb(47, 50, 90);
 }
 .glass-layer{
   display: grid;
   position: absolute;
+  grid-template-columns: 1fr 1fr;
 /* Setting the size of the upper layer to 80% of the screen size*/
   height: 85vh;
   width: 92.5vw;
   align-items: center;
   /* justify-content: space-between; */
-  padding: 50px;
+  padding: 60px;
 
 
   /*the alpha value controls the transparency*/
@@ -55,4 +57,22 @@
   width: 18rem;
   height: 18rem;
   border-radius: 50%;
+}
+
+.app-name{
+  grid-column: 1 / 2;
+}
+
+.quote{
+  grid-column: 1 / 2;
+}
+
+.api{
+grid-column: 2 / 3;
+grid-row: 2 / 3;
+}
+
+.agree-term{
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
 }
