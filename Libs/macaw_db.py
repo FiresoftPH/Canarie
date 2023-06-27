@@ -33,7 +33,7 @@ class Database:
             pass
 
         try:
-            command_2 = "CREATE TABLE statistics (FOREIGN KEY (id) REFERENCES users(id), id INT,  overall_understanding VARCHAR(255), most_asked_course VARCHAR(255), average_session_time VARCHAR(255))"
+            command_2 = "CREATE TABLE statistics (FOREIGN KEY (username) REFERENCES users(username), username VARCHAR(255),  overall_understanding VARCHAR(255), most_asked_course VARCHAR(255), average_session_time VARCHAR(255))"
             self.cursor.execute(command_2)
         except pymysql.err.OperationalError:
             # print("Already initialized")
@@ -47,7 +47,7 @@ class Database:
 
     # Alter the table columns to add more functionalities. This is used for development only
     def alterTable(self):
-        self.cursor.execute("ALTER TABLE courses ADD assignment_details VARCHAR(100) DEFAULT ''")
+        self.cursor.execute("ALTER TABLE statistics ADD assignment_details VARCHAR(255) DEFAULT ''")
 
     # Add course data to the courses table. In the final development, this will be automatically integrated with canvas
     def addCourseData(self, course_name, assignment_list):
@@ -140,7 +140,7 @@ class Database:
 
     # Shows the data from the statistics table. 
     def showStatisticsData(self):
-        self.cursor.execute("SELECT statistics, assignments FROM courses")
+        self.cursor.execute("SELECT username FROM statistics")
 
         result = self.cursor.fetchall()
         for row in result:
@@ -257,9 +257,11 @@ class Database:
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-test = Database()
+# test = Database()
+# test.resetTable()
 # test.alterTable()
-test.showCourseData(1)
+# test.showStatisticsData()
+# test.showCourseData(1)
 # test.showUserEnrolledCourse("OTorku")
 # print(test.adminLogin("Firesoft", "111111"))
 # test.promoteUser("Firesoft")
