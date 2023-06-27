@@ -280,8 +280,8 @@ class Database:
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-test = Database()
-test.showAllTables()
+# test = Database()
+# test.showAllTables()
 # test.showChatHistory()
 # test.resetTable()
 # test.alterTable()
