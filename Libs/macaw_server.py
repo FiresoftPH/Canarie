@@ -1,7 +1,7 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-from Libs import macaw_db, macaw_ai
+import macaw_db, macaw_ai
 
 class DatabaseOperations:
     def __init__(self):
@@ -49,5 +49,19 @@ class DatabaseOperations:
 
 class PromptOperations:
     def __init__(self):
-        self.ai = macaw_ai.GetResponse()
+        self.ai = macaw_ai.AI()
         self.prompt = macaw_ai.GeneratePrompt()
+
+    def checkPromptType(self, prompt, code):
+        try:
+            return self.prompt.codePrompt(prompt, code)
+
+        except FileNotFoundError:
+            return prompt
+        
+        except TypeError:
+            return prompt
+        
+# test = PromptOperations()
+# print(test.checkPromptType("UWU", None))
+        
