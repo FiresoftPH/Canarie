@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Login from 'src/pages/Login.jsx'
+import Login from 'src/pages/LoginPage/Login.jsx'
 import Course from 'src/pages/CoursePage/Course.jsx'
 import './index.css'
 
