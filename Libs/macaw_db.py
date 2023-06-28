@@ -33,16 +33,22 @@ class Database:
             pass
 
         try:
-            command_2 = "CREATE TABLE statistics (FOREIGN KEY (username) REFERENCES users(username), username VARCHAR(255),  overall_understanding VARCHAR(255), most_asked_course VARCHAR(255), average_session_time VARCHAR(255))"
+            command_2 = "CREATE TABLE statistics (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), username VARCHAR(255),  overall_understanding VARCHAR(255), most_asked_course VARCHAR(255), average_session_time VARCHAR(255))"
             self.cursor.execute(command_2)
         except pymysql.err.OperationalError:
             # print("Already initialized")
             pass
 
+        try:
+            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log VARCHAR(255))"
+            self.cursor.execute(command_3)
+        except pymysql.err.OperationalError:
+            pass
+
     # Reset the table values to nothing in case something gone wrong. This is used for development only.
     def resetTable(self):
-        self.cursor.execute("DROP TABLE courses")
-        self.cursor.execute("DROP TABLE users")
+        # self.cursor.execute("DROP TABLE courses")
+        # self.cursor.execute("DROP TABLE users")
         self.cursor.execute("DROP TABLE statistics")
 
     # Alter the table columns to add more functionalities. This is used for development only
@@ -254,10 +260,29 @@ class Database:
         self.cursor.execute(command, ("admin", username))
         self.connection.commit()
 
+    # Function to create a chat room.
+    def createChatRoom(self, username, course, assignment):
+        command = "INSERT INTO chat_history (username, course_name, assignment_name) VALUES (%s, %s, %s)"
+        self.cursor.execute(command, (username, course, assignment))
+
+    def showChatHistory(self):
+        self.cursor.execute("SELECT * FROM chat_history")
+        result = self.cursor.fetchall()
+        for row in result:
+            print(row)
+
+    def showAllTables(self):
+        self.cursor.execute("SHOW TABLES")
+        result = self.cursor.fetchall()
+        for row in result:
+            print(row)               
+
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
 # test = Database()
+# test.showAllTables()
+# test.showChatHistory()
 # test.resetTable()
 # test.alterTable()
 # test.showStatisticsData()

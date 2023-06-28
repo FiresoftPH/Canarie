@@ -11,7 +11,7 @@ class GeneratePrompt:
             return code.read()
 
     def codePrompt(self, prompt, extracted_code):
-        return prompt + self.prevent_example[0] + "\n\n" + extracted_code
+        return prompt + self.prevent_example[0] + "\n\n" + self.textExtraction(extracted_code)
     
     def classificationPrompt(self, prompt, context_list):
         # return self.system_configurations[0] + prompt + str(context_list)
@@ -34,3 +34,6 @@ class GetResponse:
 
     def getSuggestion(self):
         pass
+
+# test = GeneratePrompt()
+# print(test.codePrompt("Explain this code: ", "test_files/UwU.py"))
