@@ -7,9 +7,10 @@ from langchain.memory import ConversationTokenBufferMemory
 import time
 import torch
 from Libs import macaw_ai
+import sys
 
 arima = macaw_ai.GeneratePrompt()
-prompt = arima.codePrompt("explain this code ", "test_files/UwU.js")
+prompt = arima.codePrompt("explain this code ", "test_files/UwU.py")
 
 #tokenizer = LlamaTokenizer.from_pretrained("/lustre/scratch/project/cmkl/ai-chat/llama-13b-meta-hf")
 tokenizer = LlamaTokenizer.from_pretrained("TheBloke/vicuna-13B-1.1-HF")
@@ -53,3 +54,5 @@ while True:
     start = time.time()
     print(conversation.predict(input=q))
     print("time taken ",time.time()-start,"s")
+    # print(sys.getsizeof(conversation))
+    print(sys.getsizeof(conversation))

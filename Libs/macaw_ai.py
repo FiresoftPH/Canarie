@@ -1,4 +1,12 @@
 from transformers import pipeline, Conversation
+from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig, pipeline
+from langchain.llms import HuggingFacePipeline
+from langchain import PromptTemplate, LLMChain
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationTokenBufferMemory
+import time
+import torch
+import sys
 
 # This used to be a separate file named macaw_pg. If this class gets longer, it will become its own file
 class GeneratePrompt:
@@ -18,16 +26,34 @@ class GeneratePrompt:
         return self.system_configurations[1] + prompt + str(context_list)
 
 # Used to call AI responses. This will be changed since the model used here is just temporary.
-class GetResponse:
+class AI:
     def __init__(self):
-        self.model = pipeline(model="microsoft/DialoGPT-large")
-        self.conversation_cache = Conversation("Greetings!")
-        self.conversation_cache = self.model(self.conversation_cache)
+        self.tokenizer = LlamaTokenizer.from_pretrained("TheBloke/vicuna-13B-1.1-HF")
+        self.base_model = LlamaForCausalLM.from_pretrained(
+                            "TheBloke/vicuna-13B-1.1-HF",
+                            load_in_8bit=True,
+                            device_map='auto',
+                            )
+        self.pipe = pipeline(
+                        "text-generation",
+                        model=self.base_model, 
+                        tokenizer=self.tokenizer, 
+                        max_length=1024,
+                        temperature=0.6,
+                        top_p=0.95,
+                        repetition_penalty=1.2
+                    )
+        self.local_llm = HuggingFacePipeline(pipeline=self.pipe)
+        self.memory = ConversationTokenBufferMemory(llm=self.local_llm,max_token_limit=512)
+        self.conversation = ConversationChain(llm=self.local_llm, verbose=True, memory=self.memory)
+        self.conversation.prompt.template = '''The following is a friendly conversation between a human and an AI called vicuna. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know.
+        Current conversation:
+        {history}
+        Human: {input}
+        AI:'''
 
     def getResponse(self, prompt):
-        self.conversation_cache.add_user_input(prompt)
-        self.conversation_cache = self.model(self.conversation_cache)
-        return self.conversation_cache.generated_responses[-1]
+        return self.conversation.predict(input=prompt)
 
     def getNotice(self):
         pass
@@ -36,4 +62,11 @@ class GetResponse:
         pass
 
 # test = GeneratePrompt()
-# print(test.codePrompt("Explain this code: ", "test_files/UwU.py"))
+# prompt = test.codePrompt("Explain this code: ", "test_files/UwU.py")
+# ai = AI()
+
+# while True:
+#     code = input("gimme: ")
+#     prompt = test.codePrompt(q, "test_files/UwU.py")
+#     answer = ai.getResponse(prompt)
+#     print(answer)
