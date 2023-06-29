@@ -1,6 +1,7 @@
 import pymysql.cursors
 import numpy as np
 from dotenv import dotenv_values
+import json
 
 class Database:
     def __init__(self):
@@ -42,6 +43,12 @@ class Database:
         try:
             command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log VARCHAR(255))"
             self.cursor.execute(command_3)
+        except pymysql.err.OperationalError:
+            pass
+
+        try:
+            command_4 = "CREATE TABLE assignments (id INT AUTO_INCREMENT PRIMARY KEY, assignment_name VARCHAR(255), assignment_details VARCHAR(255))"
+            self.cursor.execute(command_4)
         except pymysql.err.OperationalError:
             pass
 
@@ -265,22 +272,43 @@ class Database:
         command = "INSERT INTO chat_history (username, course_name, assignment_name) VALUES (%s, %s, %s)"
         self.cursor.execute(command, (username, course, assignment))
 
+    # Show all chat history stored in the database
     def showChatHistory(self):
         self.cursor.execute("SELECT * FROM chat_history")
         result = self.cursor.fetchall()
         for row in result:
             print(row)
 
+    # Show all tables listed in the database.
     def showAllTables(self):
         self.cursor.execute("SHOW TABLES")
         result = self.cursor.fetchall()
         for row in result:
-            print(row)               
+            print(row)
 
+    # Update chat history in the database. This will be updated when the session ends.
+    def storeChatHistory(self, username, course, assignment, history):
+        self.cursor.execute("UPDATE chat_history SET log = %s WHERE assignment_name = %s, course_name = %s, username = %s", (history, assignment, course, username))               
+        self.connection.commit()
+
+    def loadChatHistory(self, username, course, assignment):
+        self.cursor.execute("SELECT log FROM chat_history WHERE assignment_name = %s, course_name = %s, username = %s", (assignment, course, username))
+        self.connection.commit()
+
+
+    def jsonDump(self):
+        self.cursor.execute("SELECT * FROM courses")
+        data = self.cursor.fetchall()
+        temp = []
+        with open("sample.json", "w") as outfile:
+            for e in data:
+                json.dump(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '), default=str), outfile)
+    
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-# test = Database()
+test = Database()
+test.jsonDump()
 # test.showAllTables()
 # test.showChatHistory()
 # test.resetTable()
