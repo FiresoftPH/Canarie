@@ -20,8 +20,8 @@ function Login() {
             </div>
           <div className="Term">
             <form className="agree-term">
-             <p>I agree with</p> 
-             <a>Terms and Conditions</a>
+              <p>I agree with</p> 
+              <a>Terms and Conditions</a>
             </form>
             <div className="accept-button"></div>
           </div>

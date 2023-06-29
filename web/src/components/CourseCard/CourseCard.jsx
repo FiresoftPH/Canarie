@@ -7,7 +7,7 @@ export default function CourseCard(props) {
   {
     props.data.map((post) => (
       <div key={post.id}>
-        <p>{post.first_name} {post.last_name}</p>
+        <p>{post.course_name1} {post.course_name2} {post.course_name3}</p>
       </div>
     ))
   }

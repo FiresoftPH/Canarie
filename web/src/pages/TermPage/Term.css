@@ -5,29 +5,25 @@
     justify-content: center;
     align-items: center;
     background-color: rgb(47, 50, 90);
-  }
-  
+}
+
 .glass-layer{
     display: grid;
     position: absolute;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 4fr;
-  /* Setting the size of the upper layer to 80% of the screen size*/
+/* Setting the size of the upper layer to 80% of the screen size*/
     height: 85vh;
     width: 92.5vw;
-    align-items: center;
-    /* justify-content: space-between; */
+    /* align-items: center; */
     padding: 60px 65px 32px 65px;
-  
-  
     /*the alpha value controls the transparency*/
     background: rgba(24, 24, 35, 1);
-  
     /*Adding the shadow*/
     box-shadow: 0 8px 32px 0 rgba( 0, 0, 0, 0.18 );
     border-radius: 1.3rem;
     z-index: 4;
-  }
+}
 
 .top-bar{
     display: flexbox;
@@ -60,10 +56,15 @@
 
 .detail-notes{
     display: grid;
-    grid-template-columns: 13% 5% 82%;
-    height: 90%;
-    box-sizing: content-box;
+    grid-template-columns: 1fr 0.1fr 5fr;
+    height: 100%;
+    overflow: auto;
     /* background-color: #FFF; */
+}
+
+.term-container{
+    overflow: auto;
+    height: 100%;
 }
 
 .date{
@@ -87,12 +88,8 @@
 
 .scroll-term{
     position: relative;
-    height: 100%;
-    width: 100%;
     font-size: 1.5rem;
     font-weight: 500;
-    overflow: hidden;
-    overflow-y: scroll;
     padding-right: 2rem;
 }
 
@@ -104,7 +101,7 @@
     background: white;
     border-radius: 1.3rem
 }
-
+/* 
 @media only screen and (max-width:1350px){
     .scroll-term{
         position: relative;
@@ -169,4 +166,4 @@
         padding-right: 2rem;
     }
 }
-
+ */
