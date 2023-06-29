@@ -1,8 +1,14 @@
+import { useState } from 'react'
 import './Course.css'
 import CourseCard from 'src/components/CourseCard/CourseCard.jsx'
 import SearchBox from 'src/components/SearchBox/SearchBox'
 
 function Course() {
+  const [inputbox, setInputbox] = useState('');
+
+  function inputChangeHandler(event) {
+    setInputbox(event.target.value);
+  }
 
   return(
     <>
@@ -10,7 +16,7 @@ function Course() {
           <div className="glass-layer-course">
             <header className="header">
               <p className="title">Enrolled Course</p>
-              <SearchBox></SearchBox>
+              <SearchBox onInputChange={inputChangeHandler}/>
             </header>
             <header className="user-tab">
               <p className="user-name"> Good <span>morning</span>, <span>Mr/Mrs</span> <span>Username</span></p>
@@ -18,6 +24,7 @@ function Course() {
               <div className="dropdown"> V </div>
             </header>
             <div className="course-container">
+              <p>{inputbox}</p>
               <CourseCard></CourseCard>
             </div>
           </div>
