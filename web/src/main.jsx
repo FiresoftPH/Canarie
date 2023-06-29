@@ -17,7 +17,7 @@ import { useMediaQuery } from "react-responsive";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     {/* <Login /> */}
-    {/* {/* <Term /> */} */}
+    {/* <Term />
     {/* <Course /> */}
     <Chat />
   </React.StrictMode>
