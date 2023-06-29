@@ -61,6 +61,9 @@ class PromptOperations:
         
         except TypeError:
             return prompt
+    
+    def storeChatHistory(self, username):
+        chat_history = self.ai.getCachedMemory()
         
 # test = PromptOperations()
 # print(test.checkPromptType("UWU", None))
