@@ -38,6 +38,13 @@
 .wrapper:hover{
   background-color: rgba(148, 148, 148, 1);
 }
+.wrapper:hover > .searchbox{
+  color: #F2f2f2;
+  background-color: rgba(148, 148, 148, 1);
+}
+.wrapper:hover > .searchbox::placeholder{
+  color: #F2f2f2;
+}
 .wrapper:hover > .icon{
   filter: brightness(0) invert(1);
 }

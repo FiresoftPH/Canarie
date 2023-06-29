@@ -2,12 +2,20 @@ import { useState } from 'react'
 import './Course.css'
 import CourseCard from 'src/components/CourseCard/CourseCard.jsx'
 import SearchBox from 'src/components/SearchBox/SearchBox'
+import Data from '../../mockDB/MOCK_DATA.json'
 
 function Course() {
   const [inputbox, setInputbox] = useState('');
 
   function inputChangeHandler(event) {
     setInputbox(event.target.value);
+  }
+
+  const filterkeys = ["first_name", "last_name"]
+
+  const search = (data) =>{
+    return data.filter((item)=> filterkeys.some((key) => item[key].toLowerCase().includes(inputbox))
+    );
   }
 
   return(
@@ -24,8 +32,7 @@ function Course() {
               <div className="dropdown"> V </div>
             </header>
             <div className="course-container">
-              <p>{inputbox}</p>
-              <CourseCard></CourseCard>
+              <CourseCard data={search(Data)}/>
             </div>
           </div>
           <div className="mask">
