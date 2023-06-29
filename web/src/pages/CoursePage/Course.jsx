@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './Course.css'
-import CourseCard from 'src/components/CourseCard/CourseCard.jsx'
+import CourseList from 'src/components/CourseList/CourseList.jsx'
 import SearchBox from 'src/components/SearchBox/SearchBox'
 import Data from '../../mockDB/MOCK_DATA.json'
 
@@ -31,9 +31,7 @@ function Course() {
             <div className="user-img"> img </div>
             <div className="dropdown"> V </div>
           </header>
-          <div className="course-container">
-            <CourseCard data={search(Data)}/>
-          </div>
+          <CourseList displayData={search(Data)}/>
         </div>
         <div className="mask">
           <div className="red-circle-course"></div>

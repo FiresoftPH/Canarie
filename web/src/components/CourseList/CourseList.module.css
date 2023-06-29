@@ -1,0 +1,9 @@
+.course_container{
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  justify-items: center;
+  gap: 1rem;
+  list-style: none;
+  grid-area: main;
+  overflow-y: scroll;
+}
