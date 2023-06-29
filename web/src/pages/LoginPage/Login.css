@@ -11,12 +11,13 @@
   display: grid;
   position: absolute;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.5fr 0.2fr 0.5fr;
 /* Setting the size of the upper layer to 80% of the screen size*/
   height: 85vh;
   width: 92.5vw;
   align-items: center;
   /* justify-content: space-between; */
-  padding: 60px;
+  padding: 110px;
 
   /*the alpha value controls the transparency*/
   background: rgba(30, 34, 80, 0.63);
@@ -28,6 +29,11 @@
   box-shadow: 0 8px 32px 0 rgba( 0, 0, 0, 0.18 );
   border-radius: 1.3rem;
   z-index: 4;
+}
+
+.logo{
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
 }
 
 .mask{
@@ -60,19 +66,92 @@
 }
 
 .app-name{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* background-color: #EA4335; */
+  color: #e4e4e4;
+  font-size: 3rem;
+  font-weight: 500;
   grid-column: 1 / 2;
+  grid-row: 2 / 3;
+
+
 }
 
 .quote{
   grid-column: 1 / 2;
+  grid-row: 3 / 4;
+}
+
+h2{
+  font-size: 8.40038rem;
+  font-weight: 600;
+  line-height: 1;
+  background-image: linear-gradient(180deg, rgba(222, 222, 222, 1), rgba(203, 203, 203, 0.6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -moz-text-fill-color: transparent;
 }
 
 .api{
-grid-column: 2 / 3;
-grid-row: 2 / 3;
-}
-
-.agree-term{
+  display: flex;
+  align-self: baseline;
   grid-column: 2 / 3;
   grid-row: 3 / 4;
+  /* padding: 1.5rem;   */
+  align-items: center;
+  justify-content:center ;
+  width: 28.25rem;
+  height: 5.0625rem;
+  background: linear-gradient(180deg, black, black) padding-box, linear-gradient(90deg, rgba(251, 75, 129, 1), rgba(164, 79, 192, 1), rgba(82, 85, 253, 1)) border-box;
+  border-width: 0.4rem;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 1.3rem;
+  margin-top: 5rem;
+  margin-left: auto;
 }
+
+.api p{
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.api [src="src/assets/CMKL logo.svg"]{
+  margin-right: 1.375rem;
+}
+
+.Term{
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+  align-items: center;
+  text-align: right;
+  margin-left: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.agree-term p{
+  color: #C0C0C0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.agree-term a{
+  color: #C0C0C0;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.accept-button{
+  height: 24px;
+  width: 24px;
+  border-radius: 1.5rem;
+  border-style: solid;
+  border-color: #C0C0C0;
+  margin-left: 1rem;
+}
+
