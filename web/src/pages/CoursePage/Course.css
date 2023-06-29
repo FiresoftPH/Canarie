@@ -12,7 +12,7 @@
   width: 92.5vw;
   /* align-items: center; */
   /* justify-content: space-between; */
-  padding: 5.2rem 4.7rem;
+  padding: 4rem 4.7rem;
 
 
   /*the alpha value controls the transparency*/
@@ -50,9 +50,9 @@
 }
 
 .header{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  grid-template: 2fr 1fr / 1fr;
+  row-gap: 1.5rem;
   grid-area:title;
 }
 
@@ -88,7 +88,3 @@ span{
   border-radius: 50%;
 }
 
-.course-container{
-  grid-area: main;
-  overflow-y: scroll;
-}
