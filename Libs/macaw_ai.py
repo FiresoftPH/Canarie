@@ -55,18 +55,25 @@ class AI:
     def getResponse(self, prompt):
         return self.conversation.predict(input=prompt)
 
-    def getNotice(self):
-        pass
+    def getCachedMemory(self, prompt=None):
+        if prompt is None:
+            return self.memory
+        else:
+            return self.conversation(prompt)
 
-    def getSuggestion(self):
+    def loadHistory(self, history):
         pass
 
 # test = GeneratePrompt()
-# prompt = test.codePrompt("Explain this code: ", "test_files/UwU.py")
+# # prompt = test.codePrompt("Explain this code: ", "test_files/UwU.py")
 # ai = AI()
 
 # while True:
 #     code = input("gimme: ")
-#     prompt = test.codePrompt(q, "test_files/UwU.py")
+#     prompt = test.codePrompt(code, "test_files/UwU.py")
 #     answer = ai.getResponse(prompt)
-#     print(answer)
+#     print(ai.getCachedMemory())
+#     # print(type(ai.getCachedMemory(prompt)))
+#     object_array = [ai.getCachedMemory()]
+#     print(type(object_array))
+#     print(object_array)
