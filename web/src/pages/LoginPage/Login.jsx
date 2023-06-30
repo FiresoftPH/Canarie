@@ -39,7 +39,6 @@ function Login() {
           <div className="yellow-circle"></div>
         </div>
       </div>
-      {/* hello */}
     </>
   );
 }

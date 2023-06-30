@@ -1,0 +1,36 @@
+.background-admin {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #3b4298;
+  filter: blur(9px);
+}
+
+.mask {
+  height: 85vh;
+  width: 92.5vw;
+  border-radius: 1.3rem;
+  overflow: hidden;
+}
+
+.red-circle {
+  background: #ea4335;
+  display: inline-block;
+  position: relative;
+  top: 46%;
+  left: -8%;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 50%;
+}
+
+.yellow-circle {
+  background: #fbbc05;
+  display: inline-block;
+  position: relative;
+  top: 60%;
+  left: -8%;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+}
