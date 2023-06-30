@@ -20,7 +20,7 @@ function Chat() {
             <p>File-Uploaded</p>
             <img src="src/assets/Upload.svg" />
           </section>
-          <section className="file-status">No files added</section>
+          <section className="file-status">No files added yet!</section>
         </div>
         <div className="sidebar-below">
           <section className="Header">
