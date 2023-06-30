@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import './Course.css'
-import CourseCard from 'src/components/CourseCard/CourseCard.jsx'
+import styles from './Course.module.css'
+import CourseList from 'src/components/CourseList/CourseList.jsx'
 import SearchBox from 'src/components/SearchBox/SearchBox'
 import Data from '../../mockDB/MOCK_DATA.json'
 
@@ -20,24 +20,22 @@ function Course() {
 
   return(
     <>
-      <div className="bg-container">
-        <div className="glass-layer-course">
-          <header className="header">
-            <p className="title">Enrolled Course</p>
+      <div className={styles.bg_container}>
+        <div className={styles.glass_layer_course}>
+          <header className={styles.header}>
+            <p className={styles.title}>Enrolled Course</p>
             <SearchBox onInputChange={inputChangeHandler}/>
           </header>
-          <header className="user-tab">
-            <p className="user-name"> Good <span>morning</span>, <span>Mr/Mrs</span> <span>Username</span></p>
-            <div className="user-img"> img </div>
-            <div className="dropdown"> V </div>
+          <header className={styles.userdropdown}>
+            <p className={styles.username}> Good <span>morning</span>, <span>Mr/Mrs</span> <span>Username</span></p>
+            <div className={styles.user_img}> img </div>
+            <div className={styles.dropdown}> V </div>
           </header>
-          <div className="course-container">
-            <CourseCard data={search(Data)}/>
-          </div>
+          <CourseList displayData={search(Data)}/>
         </div>
-        <div className="mask">
-          <div className="red-circle-course"></div>
-          <div className="yellow-circle-course"></div>
+        <div className={styles.mask}>
+          <div className={styles.red_circle_course}></div>
+          <div className={styles.yellow_circle_course}></div>
         </div>
       </div>
     </>

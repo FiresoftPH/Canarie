@@ -1,55 +1,34 @@
 .wrapper{
-  background-color: #F2f2f2;
-  border-radius: 2.5rem;
-  box-shadow: 0px 0px 5px #ddd;
   width: 74%;
   height: 2rem;
-  padding-left: 4%;
   display: flex;
   align-items: center;
 }
 
+/* .icon{
+  position: absolute;
+  padding-left: 1%;
+} */
+
 .searchbox{
+  background-color: #F2f2f2;
+  background-image: url(src/assets/SearchIcon.svg);
+  background-repeat: no-repeat;
+  background-position: 1rem;
+  border: none;
+  border-radius: 2.5rem;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.25) inset;
   width: 100%;
   height: 100%;
-  border: none;
-  background-color: #F2f2f2;
-  border-radius: 2.5rem;
-  padding-left: 1vw;
+  padding-left: 10%;
+  display: flex;
+  align-items: center;
 }
 
-.icon{
-  position: relative;
-}
-
-.searchbox::-webkit-input-placeholder {
-  color: rgba(148, 148, 148, 1);
-}
-.searchbox::-moz-placeholder {
-  color: rgba(148, 148, 148, 1);
-}
-.searchbox:-ms-input-placeholder {
-  color: rgba(148, 148, 148, 1);
-}
-.searchbox:-moz-placeholder {
-  color: rgba(148, 148, 148, 1);
-}
-
-.wrapper:hover{
-  background-color: rgba(148, 148, 148, 1);
-}
-.wrapper:hover > .searchbox{
-  color: #F2f2f2;
-  background-color: rgba(148, 148, 148, 1);
-}
-.wrapper:hover > .searchbox::placeholder{
-  color: #F2f2f2;
-}
-.wrapper:hover > .icon{
-  filter: brightness(0) invert(1);
-}
-.searchbox:hover{
+.searchbox:hover {
   background-color: #949494;
+  color: #F2f2f2;
+  background-image: url(src/assets/SearchIconwhite.svg);
 }
 .searchbox:hover::-webkit-input-placeholder {
   color: #F2f2f2;
@@ -63,8 +42,27 @@
 .searchbox:hover:-moz-placeholder {
   color: #F2f2f2;
 }
+.searchbox::-webkit-input-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+.searchbox::-moz-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+.searchbox:-ms-input-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+.searchbox:-moz-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+
+.wrapper:hover > .icon{
+  filter: brightness(0) invert(1);
+}
 
 .searchbox:focus{
   outline: none;
   color: black;
+}
+.searchbox:focus:hover{
+  color: #F2f2f2;
 }

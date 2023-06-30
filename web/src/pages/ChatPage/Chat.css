@@ -1,0 +1,147 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.55fr 1fr 1fr;
+  grid-template-rows: 11fr 1fr 6fr;
+  grid-template-areas:
+    "Sidebar-top Chatzone Chatzone"
+    "Sidebar-below Chatzone Chatzone"
+    "Sidebar-below IDE Output";
+  height: 100vh;
+  width: 100vw;
+  background-color: #2f325a;
+}
+
+.sidebar-top {
+  grid-area: Sidebar-top;
+  width: auto;
+  height: auto;
+  background-color: rgba(38, 41, 82, 1);
+}
+
+.sidebar-below {
+  grid-area: Sidebar-below;
+  overflow: auto;
+  width: auto;
+  height: auto;
+  background-color: rgba(94, 96, 132, 1);
+}
+
+.chat {
+  grid-area: Chatzone;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.ide {
+  grid-area: IDE;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(28, 35, 50, 1);
+}
+
+.output {
+  grid-area: Output;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(80, 80, 80, 1);
+}
+
+img[src="src/assets/Back Button.svg"] {
+  padding-top: 1.5rem;
+  padding-left: 2rem;
+}
+
+.macow-chat {
+  display: flex;
+  /* background-color: #2f325a; */
+  justify-content: space-between;
+}
+
+.macow-chat p {
+  padding-left: 1.5rem;
+  font-size: 2rem;
+  font-weight: 500;
+  padding-left: 3rem;
+}
+
+img[src="src/assets/Collapse.svg"] {
+  padding-right: 1.75rem;
+}
+
+.new-chat {
+  font-size: 1.3rem;
+  margin-top: 3rem;
+  padding-left: 1.64rem;
+  display: flex;
+  background-color: #2f325a;
+  align-items: center;
+}
+
+.new-chat p {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+img[src="src/assets/New button.svg"] {
+  padding-right: 0.8rem;
+}
+
+.file-uploaded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6.875rem;
+  background-color: #2f325a;
+  padding-left: 1.64rem;
+}
+
+.file-uploaded p {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+img[src="src/assets/Upload.svg"] {
+  padding-right: 1.75rem;
+}
+
+.file-status {
+  display: flex;
+  justify-content: safe;
+  padding-left: 2rem;
+  margin-top: 1rem;
+}
+
+.sidebar-below {
+  display: flex;
+  flex-direction: column;
+}
+
+.Header h3:first-child {
+  /* margin-top: 1.44rem; */
+  padding-left: 1.69rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.Header h3:last-child {
+  /* padding-top: 0.44rem; */
+  padding-left: 2.51rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.assignment {
+  letter-spacing: 0.0375rem;
+  font-size: 1.5rem;
+  /* margin-top: 1rem; */
+  padding-left: 2.51rem;
+  color: rgba(208, 209, 216, 1);
+}
+
+.general {
+  font-size: 1.5rem;
+  padding-left: 2.51rem;
+  color: rgba(208, 209, 216, 1);
+}
