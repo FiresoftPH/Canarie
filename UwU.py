@@ -11,16 +11,16 @@ from Libs import macaw_ai
 import sys
 
 arima = macaw_ai.GeneratePrompt()
-prompt = arima.codePrompt("explain this code ", "UwU.py")
+prompt = arima.codePrompt("explain this code ", "test_files/waifus.py")
 
 #tokenizer = LlamaTokenizer.from_pretrained("/lustre/scratch/project/cmkl/ai-chat/llama-13b-meta-hf")
-tokenizer = LlamaTokenizer.from_pretrained("TheBloke/vicuna-13B-1.1-HF")
-#tokenizer = LlamaTokenizer.from_pretrained("chavinlo/alpaca-native")
+#tokenizer = LlamaTokenizer.from_pretrained("TheBloke/vicuna-13B-1.1-HF")
+tokenizer = LlamaTokenizer.from_pretrained("chavinlo/alpaca-native")
 #tokenizer = AutoTokenizer.from_pretrained('mosaicml/mpt-30b')
 print("here")
 
 base_model = LlamaForCausalLM.from_pretrained(
-    "TheBloke/vicuna-13B-1.1-HF",
+    "chavinlo/alpaca-native",
     load_in_8bit=True,
     device_map='auto',
 )
@@ -37,11 +37,10 @@ pipe = pipeline(
     "text-generation",
     model=base_model, 
     tokenizer=tokenizer, 
-    max_length=720,
+    max_length=1024,
     temperature=0.6,
     top_p=0.95,
-    repetition_penalty=1.2,
-    device_map="auto"
+    repetition_penalty=1.2
 )
 print("here3")
 local_llm = HuggingFacePipeline(pipeline=pipe)
@@ -51,7 +50,7 @@ local_llm = HuggingFacePipeline(pipeline=pipe)
 # question = "What is the capital of England?"
 # print(llm_chain.run(question))
 #window_memory = ConversationBufferWindowMemory(k=3)
-memcho = ConversationTokenBufferMemory(llm=local_llm,max_token_limit=480)
+memcho = ConversationTokenBufferMemory(llm=local_llm,max_token_limit=512)
 conversation = ConversationChain(llm=local_llm, verbose=True, memory=memcho)
 conversation.prompt.template = '''The following is a friendly conversation between a human and an AI called alpaca. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know. 
 Current conversation:
