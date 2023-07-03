@@ -342,3 +342,4 @@ TESTING THE FUNCTIONALITIES OF THE DATABASE
 # print(test.adminLogin("Firesoft", "111111"))
 # test.promoteUser("Firesoft")
 # test.showUserData(1)
+test = Database()

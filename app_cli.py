@@ -68,6 +68,8 @@ class appCLI:
         if initial == False:
             self.courseEnroll()
         else:
+            # confirm = str(input("Do you want to enroll any courses?: "))
+            # # if +
             self.courseSelection()
         self.printSpace()
 
@@ -129,11 +131,12 @@ class appCLI:
                 print(self.ai.getResponse(prompt))
             elif choice == "exit":
                 self.ai.storeChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
-                self.courseSelection()
                 break
             else:
                 print("invalid_choice")
                 choice = str(input("Upload any file?: "))
+
+        self.courseSelection()
 
     def assignmentChatRoom(self):
         pass
