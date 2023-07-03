@@ -7,7 +7,7 @@ export default function CourseCard(props) {
       {
         props.data.map((post) => (
           <Link to="/Chat" className={styles.container} key={post.id}>
-            <p className={styles.text}>{post.course_name1}</p>
+            <p className={styles.text}>{post.enrolled_courses}</p>
           </Link>
         ))
       }

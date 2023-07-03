@@ -1,45 +1,41 @@
-import { useState } from "react";
-import "./Login.css";
+import styles from "./Login.module.css";
+import { Link } from "react-router-dom"
 
 function Login() {
   return (
-    <>
-      <div className="background">
-        <div className="content">
-          <div className="logo">
-            <img src="src/assets/Logo.svg" />
-          </div>
-          <h1 className="app-name">Macaw</h1>
-          <div className="quote">
-            <section className="left-text">
-              Let us <br />
-              be your
-              <br />
-              coach.
-            </section>
-          </div>
-          <div className="group">
-            <div className="api-button">
-              <div className="api">
-                <img src="src/assets/CMKL logo.svg" />
-                <p>Sign in with CMKL account</p>
-              </div>
-            </div>
-            <div className="Term">
-              <form className="agree-term">
-                <p>I agree with</p>
-                <a>Terms and Conditions</a>
-              </form>
-              <div className="accept-button"></div>
-            </div>
-          </div>
+    <div className={styles.background}>
+      <div className={styles.content}>
+        <img className={styles.logo} src="src/assets/Logo.svg" />
+        <p className={styles.app_name}>Macaw</p>
+        <div className={styles.quote}>
+          <section className={styles.left_text}>
+            Let us <br />
+            be your
+            <br />
+            coach.
+          </section>
         </div>
-        <div className="mask">
-          <div className="red-circle"></div>
-          <div className="yellow-circle"></div>
+        <div className={styles.group}>
+          <div className={styles.api_button}>
+            <div className={styles.api}>
+              <img src="src/assets/CMKL logo.svg" />
+              <p>Sign in with CMKL account</p>
+            </div>
+          </div>
+          <div className={styles.Term}>
+            <form className={styles.agree_term}>
+              <p>I agree with</p>
+              <Link to="/Term">Terms and Conditions</Link>
+            </form>
+            <div className={styles.accept_button}></div>
+          </div>
         </div>
       </div>
-    </>
+      <div className={styles.mask}>
+        <div className={styles.red_circle}></div>
+        <div className={styles.yellow_circle}></div>
+      </div>
+    </div>
   );
 }
 
