@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './Course.module.css'
 import CourseList from 'src/components/CourseList/CourseList.jsx'
 import SearchBox from 'src/components/SearchBox/SearchBox'
@@ -11,7 +11,18 @@ function Course() {
     setInputbox(event.target.value);
   }
 
-  const filterkeys = ["course_name1", "course_name2", "course_name3"]
+
+  const headerValue = Data.enrolled_courses;
+  
+  console.log(Data.map((txt)=> txt.enrolled_courses))
+
+  const separatedValues = Data.map((txt)=> txt.enrolled_courses.split(', '));
+  console.log(separatedValues.map((value)=> value))
+
+
+
+
+  const filterkeys = ["enrolled_courses"]
 
   const search = (data) =>{
     return data.filter((item)=> filterkeys.some((key) => item[key].toLowerCase().includes(inputbox.toLowerCase()))

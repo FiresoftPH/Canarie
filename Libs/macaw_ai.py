@@ -3,10 +3,7 @@ from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig, pip
 from langchain.llms import HuggingFacePipeline
 from langchain import PromptTemplate, LLMChain
 from langchain.chains import ConversationChain
-from langchain.memory import ConversationTokenBufferMemory
-import time
-import torch
-import sys
+from langchain.memory import ConversationTokenBufferMemory, ChatMessageHistory
 
 # This used to be a separate file named macaw_pg. If this class gets longer, it will become its own file
 class GeneratePrompt:
@@ -57,12 +54,16 @@ class AI:
 
     def getCachedMemory(self, prompt=None):
         if prompt is None:
-            return self.memory
+            value = self.conversation.memory.chat_memory.messages
+            print(type(value))
+            return value
         else:
             return self.conversation(prompt)
 
     def loadHistory(self, history):
-        pass
+        retrieved_chat_history = ChatMessageHistory(messages=history)
+        self.memory = ConversationTokenBufferMemory(chat_memory=retrieved_chat_history,llm=self.local_llm,max_token_limit=512)
+        self.conversation = ConversationChain(llm=self.local_llm, verbose=True, memory=self.memory)
 
 # test = GeneratePrompt()
 # # prompt = test.codePrompt("Explain this code: ", "test_files/UwU.py")
