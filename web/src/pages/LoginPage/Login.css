@@ -36,14 +36,14 @@
   overflow: hidden;
 }
 
-.mask {
+.mask-A {
   height: 85vh;
   width: 92.5vw;
   border-radius: 1.3rem;
   overflow: hidden;
 }
 
-.red-circle {
+.red-circle-A {
   background: #ea4335;
   display: inline-block;
   position: relative;
@@ -54,7 +54,7 @@
   border-radius: 50%;
 }
 
-.yellow-circle {
+.yellow-circle-A {
   background: #fbbc05;
   display: inline-block;
   position: relative;
