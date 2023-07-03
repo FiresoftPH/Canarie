@@ -1,7 +1,12 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-import macaw_db, macaw_ai
+
+try: 
+    import macaw_db, macaw_ai
+
+except:
+    from Libs import macaw_db, macaw_ai
 
 class DatabaseOperations:
     def __init__(self):
@@ -42,17 +47,22 @@ class DatabaseOperations:
     # Admin login to access other user's data
     def adminLogin(self, username, password):
         return self.db.adminLogin(username, password)
+
+    def showCourseData(self, mode):
+        return self.db.showCourseData(mode)
     
     # Promote a standard user to be an admin. Only used during development and authorized use.ss
     def promoteUser(self, username):
         return self.db.promoteUser(username)
 
-class PromptOperations:
+class AIOperations:
     def __init__(self):
         self.ai = macaw_ai.AI()
         self.prompt = macaw_ai.GeneratePrompt()
+        self.db = macaw_db.Database()
+        self.template = {"error_checking" : "Can you recheck this response?: ", "rating" : "Can you rate this conversation from 1 - 10"}
 
-    def checkPromptType(self, prompt, code):
+    def getPrompt(self, prompt, code):
         try:
             return self.prompt.codePrompt(prompt, code)
 
@@ -62,9 +72,20 @@ class PromptOperations:
         except TypeError:
             return prompt
     
-    def storeChatHistory(self, username):
+    def storeChatHistory(self, username, course, assignment):
         chat_history = self.ai.getCachedMemory()
-        
-# test = PromptOperations()
-# print(test.checkPromptType("UWU", None))
+        self.db.storeChatHistory(username, course, assignment, chat_history)
+        self.db.showChatHistory()
+
+    def getResponse(self, prompt):
+        return self.ai.getResponse(prompt)
+    
+    def loadChatHistory(self, username, course, assignment):
+        old_chat = self.db.loadChatHistory(username, course, assignment)
+        if old_chat == False:
+            pass
+        else:
+            self.ai.loadHistory(old_chat)
+
+    # def updae
         

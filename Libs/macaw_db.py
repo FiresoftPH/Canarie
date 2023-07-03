@@ -2,6 +2,7 @@ import pymysql.cursors
 import numpy as np
 from dotenv import dotenv_values
 import json
+import pickle
 
 class Database:
     def __init__(self):
@@ -41,7 +42,7 @@ class Database:
             pass
 
         try:
-            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log VARCHAR(255))"
+            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log BLOB)"
             self.cursor.execute(command_3)
         except pymysql.err.OperationalError:
             pass
@@ -56,7 +57,8 @@ class Database:
     def resetTable(self):
         # self.cursor.execute("DROP TABLE courses")
         # self.cursor.execute("DROP TABLE users")
-        self.cursor.execute("DROP TABLE statistics")
+        # self.cursor.execute("DROP TABLE statistics")
+        self.cursor.execute("DROP TABLE chat_history")
 
     # Alter the table columns to add more functionalities. This is used for development only
     def alterTable(self):
@@ -231,7 +233,7 @@ class Database:
         command = "SELECT enrolled_courses FROM users WHERE username = %s"
         self.cursor.execute(command, username)
         enrolled_courses = self.cursor.fetchall()
-        if enrolled_courses == '':
+        if enrolled_courses[0][0] == '':
             return False
         else:
             return True
@@ -288,27 +290,48 @@ class Database:
 
     # Update chat history in the database. This will be updated when the session ends.
     def storeChatHistory(self, username, course, assignment, history):
-        self.cursor.execute("UPDATE chat_history SET log = %s WHERE assignment_name = %s, course_name = %s, username = %s", (history, assignment, course, username))               
-        self.connection.commit()
+        history = pickle.dumps(history)
+        self.cursor.execute("SELECT username, course_name, assignment_name from chat_history WHERE username = %s", username)
+        enrolled_data = self.cursor.fetchall()
+        values = (username, course, assignment)
+        if values not in enrolled_data:
+            self.cursor.execute("INSERT INTO chat_history (username, course_name, assignment_name, log) VALUES (%s, %s, %s, %s)", (username, course, assignment, history))
+            self.connection.commit()
+        else:
+            # self.cursor.execute("UPDATE chat_history SET history WHERE (username, course_name, assignment_name) = (%s, %s, %s)", (username, course, assignment, history))
+            self.cursor.execute("SELECT id, username, course_name, assignment_name from chat_history WHERE username = %s", username)
+            related_id = self.cursor.fetchall()
+            for data in related_id:
+                if (username, course, assignment) == (data[1], data[2], data[3]):
+                    user_id = data[0]
+
+            self.cursor.execute("UPDATE chat_history SET log = %s WHERE id = %s", (history, user_id))
+            self.connection.commit()
 
     def loadChatHistory(self, username, course, assignment):
-        self.cursor.execute("SELECT log FROM chat_history WHERE assignment_name = %s, course_name = %s, username = %s", (assignment, course, username))
-        self.connection.commit()
+        self.cursor.execute("SELECT course_name, assignment_name, log FROM chat_history WHERE username = %s", username)
+        all_history = self.cursor.fetchall()
+        for data in all_history:
+            if (course, assignment) == (data[0], data[1]):
+                temp = data[2]
+                return pickle.loads(temp)
+            else:
+                return False
+        # history = pickle.loads(history[0])
+        # return history
 
-
-    def jsonDump(self):
-        self.cursor.execute("SELECT * FROM courses")
-        data = self.cursor.fetchall()
-        temp = []
-        with open("sample.json", "w") as outfile:
-            for e in data:
-                json.dump(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '), default=str), outfile)
+    def showColumnNames(self):
+        self.cursor.execute("SELECT * from chat_history")
+        print(self.cursor.description)
     
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-test = Database()
-test.jsonDump()
+# test = Database()
+# test.loadChatHistory("kokomi", "Calculus 1", "")
+# test.resetTable()
+# test.showColumnNames()
+# test.jsonDump()
 # test.showAllTables()
 # test.showChatHistory()
 # test.resetTable()
