@@ -1,19 +1,11 @@
-.container {
+.container{
+  grid-area: Sidebar;
   display: grid;
-  grid-template-columns: 0.55fr 1fr 1fr;
-  grid-template-rows: 11fr 1fr 6fr;
-  grid-template-areas:
-    "Sidebar-top Chatzone Chatzone"
-    "Sidebar-below Chatzone Chatzone"
-    "Sidebar-below IDE Output";
-  height: 100vh;
-  width: 100vw;
   background-color: #2f325a;
 }
 
-.sidebar-top {
-  grid-area: Sidebar-top;
-  width: auto;
+.sidebar_top {
+  width: 100%;
   height: auto;
   background-color: rgba(38, 41, 82, 1);
 }
@@ -26,50 +18,13 @@
   background-color: rgba(94, 96, 132, 1);
 }
 
-.chat {
-  grid-area: Chatzone;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-}
-
-.ide {
-  grid-area: IDE;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(28, 35, 50, 1);
-}
-
-.output {
-  grid-area: Output;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(80, 80, 80, 1);
-}
-
 img[src="src/assets/Back Button.svg"] {
-  padding-top: 1.5rem;
-  padding-left: 2rem;
+  /* padding-top: 1.5rem;
+  padding-left: 2rem; */
 }
 
-.macow-chat {
-  display: flex;
-  /* background-color: #2f325a; */
-  justify-content: space-between;
-}
 
-.macow-chat p {
-  padding-left: 1.5rem;
-  font-size: 2rem;
-  font-weight: 500;
-  padding-left: 3rem;
-}
-
-img[src="src/assets/Collapse.svg"] {
-  padding-right: 1.75rem;
-}
-
-.new-chat {
+.new_chat {
   font-size: 1.3rem;
   margin-top: 3rem;
   padding-left: 1.64rem;
@@ -78,16 +33,40 @@ img[src="src/assets/Collapse.svg"] {
   align-items: center;
 }
 
-.new-chat p {
+.top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas:
+  "backBtn blank"
+  "textArea collapseBtn"
+  "searchArea searchArea";
+  justify-content: space-between;
+}
+
+.top p {
+  grid-area: textArea;
+  /* padding-left: 1.5rem; */
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+img[src="src/assets/Collapse.svg"] {
+  grid-area: collapseBtn;
+  /* padding-right: 1.75rem; */
+}
+
+.new_chat p {
   color: #fff;
   font-size: 1.2rem;
 }
+
 
 img[src="src/assets/New button.svg"] {
   padding-right: 0.8rem;
 }
 
-.file-uploaded {
+.file_uploaded {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -96,7 +75,7 @@ img[src="src/assets/New button.svg"] {
   padding-left: 1.64rem;
 }
 
-.file-uploaded p {
+.file_uploaded p {
   color: #fff;
   font-size: 2rem;
   font-weight: 500;
@@ -106,14 +85,14 @@ img[src="src/assets/Upload.svg"] {
   padding-right: 1.75rem;
 }
 
-.file-status {
+.file_status {
   display: flex;
   justify-content: safe;
   padding-left: 2rem;
   margin-top: 1rem;
 }
 
-.sidebar-below {
+.sidebar_below {
   display: flex;
   flex-direction: column;
 }

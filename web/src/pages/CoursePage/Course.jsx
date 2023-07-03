@@ -20,8 +20,6 @@ function Course() {
   console.log(separatedValues.map((value)=> value))
 
 
-
-
   const filterkeys = ["enrolled_courses"]
 
   const search = (data) =>{
