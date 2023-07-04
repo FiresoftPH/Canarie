@@ -4,6 +4,7 @@ import Course from "src/pages/CoursePage/Course.jsx";
 import Term from "src/pages/TermPage/Term.jsx";
 import Chat from "src/pages/ChatPage/Chat.jsx";
 import Admin from "src/pages/AdminPage/Admin.jsx";
+import AdminCourse from "src/pages/AdminCoursePage/AdminCourse.jsx";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/Course" element={<Course />} />
         <Route path="/Chat" element={<Chat />} />
         <Route path="/Admin" element={<Admin />} />
+        <Route path="/AdminCourse" element={<AdminCourse />} />
       </Routes>
     </>
   );
