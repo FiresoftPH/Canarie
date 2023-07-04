@@ -6,7 +6,7 @@ function Sidebar() {
     <div className={styles.container}>
       <div className={styles.sidebar_top}>
         <div className={styles.top}>
-          <img src="src/assets/Back Button.svg" />
+          <img src="src/assets/Back_Button.svg" />
           <p>Macaw Chat</p>
           <img src="src/assets/Collapse.svg" />
           <SearchBox />
@@ -33,4 +33,4 @@ function Sidebar() {
   )
 }
 
-export default Sidebar
+export default Sidebar;

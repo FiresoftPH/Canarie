@@ -19,8 +19,8 @@
 }
 
 img[src="src/assets/Back Button.svg"] {
-  /* padding-top: 1.5rem;
-  padding-left: 2rem; */
+  padding-top: 1.5rem;
+  padding-left: 2rem;
 }
 
 
@@ -41,7 +41,7 @@ img[src="src/assets/Back Button.svg"] {
   "backBtn blank"
   "textArea collapseBtn"
   "searchArea searchArea";
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .top p {

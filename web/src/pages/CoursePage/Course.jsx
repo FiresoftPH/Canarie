@@ -22,26 +22,17 @@ function Course() {
     setInputbox(event.target.value);
   }
 
-  // console.log(Data.map((txt) => txt.enrolled_courses));
-
-  const separatedValues = Data.map((txt) => txt.enrolled_courses.split(", "));
-  // console.log(separatedValues.map((value) => value));
-
-  const filterkeys = ["enrolled_courses"];
-
   const search = (data) => {
     return data.filter((item) =>
       item.toLowerCase().includes(inputbox.toLowerCase())
     );
   };
 
-  const headerValue = Data.enrolled_courses;
-
   return (
     <>
       <div className={styles.bg_container}>
         <div className={styles.glass_layer_course}>
-          <header className={styles.header}>
+          <header className={styles.header_topleft}>
             <p className={styles.title}>Enrolled Course</p>
             <SearchBox onInputChange={inputChangeHandler} />
           </header>
@@ -61,7 +52,7 @@ function Course() {
             </div>
           </header>
           <CourseList displayData={search(courses)} />
-          <h1>{JSON.stringify(user)}</h1>
+          {/* <h1>{JSON.stringify(user)}</h1> */}
         </div>
         <div className={styles.mask}>
           <div className={styles.red_circle_course}></div>
