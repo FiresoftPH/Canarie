@@ -1,10 +1,29 @@
 .bg-container {
   display: flex;
+  position: absolute;
   height: 100vh;
   width: 100vw;
   justify-content: center;
   align-items: center;
-  background-color: rgb(47, 50, 90);
+  background-color: rgba(47, 50, 90);
+}
+
+.backdrop {
+  opacity: 0.7;
+  background-color: rgba(47, 50, 90);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.close-btn {
+  all: unset;
+  background-color: transparent;
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 70px;
+  right: 70px;
 }
 
 .glass-layer {
@@ -23,6 +42,7 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
   border-radius: 1.3rem;
   z-index: 4;
+  opacity: 0.9;
 }
 
 .top-bar {

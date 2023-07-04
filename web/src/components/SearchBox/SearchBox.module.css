@@ -1,14 +1,10 @@
 .wrapper{
+  grid-area: searchArea;
   width: 74%;
   height: 2rem;
   display: flex;
   align-items: center;
 }
-
-/* .icon{
-  position: absolute;
-  padding-left: 1%;
-} */
 
 .searchbox{
   background-color: #F2f2f2;

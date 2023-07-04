@@ -36,14 +36,14 @@
   overflow: hidden;
 }
 
-.mask {
+.mask-A {
   height: 85vh;
   width: 92.5vw;
   border-radius: 1.3rem;
   overflow: hidden;
 }
 
-.red_circle {
+.red-circle-A {
   background: #ea4335;
   display: inline-block;
   position: relative;
@@ -54,7 +54,7 @@
   border-radius: 50%;
 }
 
-.yellow_circle {
+.yellow-circle-A {
   background: #fbbc05;
   display: inline-block;
   position: relative;
@@ -171,11 +171,11 @@
 }
 
 @media only screen and (max-width: 1600px) {
-  .logo{
+  .logo {
     width: 4rem;
   }
 
-  .app_name{
+  .app_name {
     font-size: 3rem;
   }
 
@@ -183,7 +183,7 @@
     font-size: 6rem;
   }
 
-  .content{
+  .content {
     padding: 80px;
   }
 }

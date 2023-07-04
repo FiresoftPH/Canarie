@@ -65,9 +65,12 @@
   border-radius: 50%;
 }
 
-.header{
+.header_topleft{
   display: grid;
-  grid-template: 2fr 1fr / 1fr;
+  grid-template: 2fr 1fr ;
+  grid-template-areas: 
+  "enrolledText" 
+  "searchArea";
   row-gap: 1.5rem;
   grid-area:title;
 }
