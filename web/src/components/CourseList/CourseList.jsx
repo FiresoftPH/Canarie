@@ -4,7 +4,7 @@ import styles from './CourseList.module.css'
 export default function CourseList(props) {
   return (
     <ul className={styles.course_container}>
-      <CourseCard data ={props.displayData}/>
+      <CourseCard data={props.displayData}/>
     </ul>
   );
 }

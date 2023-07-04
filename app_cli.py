@@ -136,8 +136,6 @@ class appCLI:
                 print("invalid_choice")
                 choice = str(input("Upload any file?: "))
 
-        self.courseSelection()
-
     def assignmentChatRoom(self):
         pass
 

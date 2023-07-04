@@ -317,29 +317,21 @@ class Database:
                 return pickle.loads(temp)
             else:
                 return False
+            
+        return False
         # history = pickle.loads(history[0])
         # return history
 
     def showColumnNames(self):
         self.cursor.execute("SELECT * from chat_history")
         print(self.cursor.description)
+
+    def getUserChatRoom(self, username):
+        self.cursor.execute("SELECT assignment_name from chat_history WHERE username = %s", username)
+        result = self.cursor.fetchall()
+        
+        print(result)
     
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
-# test = Database()
-# test.loadChatHistory("kokomi", "Calculus 1", "")
-# test.resetTable()
-# test.showColumnNames()
-# test.jsonDump()
-# test.showAllTables()
-# test.showChatHistory()
-# test.resetTable()
-# test.alterTable()
-# test.showStatisticsData()
-# test.showCourseData(1)
-# test.showUserEnrolledCourse("OTorku")
-# print(test.adminLogin("Firesoft", "111111"))
-# test.promoteUser("Firesoft")
-# test.showUserData(1)
-test = Database()

@@ -1,12 +1,15 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-
+from flask import Flask, request
+import os
 try: 
     import macaw_db, macaw_ai
 
 except:
     from Libs import macaw_db, macaw_ai
+
+import json
 
 class DatabaseOperations:
     def __init__(self):
@@ -55,6 +58,10 @@ class DatabaseOperations:
     def promoteUser(self, username):
         return self.db.promoteUser(username)
 
+    # Get all chatroom assosiated with a user and course name (WIP):
+    def getUserChatRoom(self, username):
+        return self.db.getUserChatRoom(username)
+
 class AIOperations:
     def __init__(self):
         self.ai = macaw_ai.AI()
@@ -64,7 +71,10 @@ class AIOperations:
 
     def getPrompt(self, prompt, code):
         try:
-            return self.prompt.codePrompt(prompt, code)
+            if code == None:
+                return prompt
+            else:
+                return self.prompt.codePrompt(prompt, code)
 
         except FileNotFoundError:
             return prompt
@@ -83,9 +93,105 @@ class AIOperations:
     def loadChatHistory(self, username, course, assignment):
         old_chat = self.db.loadChatHistory(username, course, assignment)
         if old_chat == False:
-            pass
+            return
         else:
             self.ai.loadHistory(old_chat)
+            return
 
-    # def updae
+# Google authentication
+class GAuthentication:
+    def __init__(self):
+        pass
+
+class FlaskServer(Flask):
+    def __init__(self, name):
+        super().__init__(name)
+        # Routing applications
+        self.route('/login')(self.login)
+        self.route('/register')(self.register)
+        self.route('/enrolled_courses')(self.getEnrolledCourse)
+
+        # Init class
+        self.db = DatabaseOperations()
+        self.ai = AIOperations()
+        self.auth = GAuthentication()
+        self.credentials = None
+        self.credentials = ("Firesoft", "111111")
+        self.current_chat_room = None
+        self.current_chat_room = ["Computer System", None]
+
+    def login(self):
+        data = request.json
+        username = data.get("username")
+        password = data.get("password")
+
+        success = self.db.userLogin(username, password)
+        try:
+            if success[1] is True:
+                response = {'message': 'Login Success'}
+                self.credentials = success[0]
+                initial = self.db.checkInitialSetup(self.credentials[0])
+                if initial == False:
+                    response.update({'status': 'No courses enrolled yet'})
+                else:
+                    # confirm = str(input("Do you want to enroll any courses?: "))
+                    # # if +
+                    response.update({'status': 'Already contained enrolled courses'})
+
+            else:
+                response = {'message': 'Wrong Username or Password!'}
+
+        except TypeError:
+            response = {'message': 'Wrong Username or Password!'}
+
+        return json.dumps(response)
+
+    def register(self):
+        data = request.json
+        name = data.get("name")
+        username = data.get("username")
+        password = data.get("password")
+        success = self.db.userRegister(name, username, password)
+        if success is True:
+            response = {'message': 'Done!'}
+        else:
+            response = {'message': "User already register, use login instead"}
+
+        return json.dumps(response)
+    
+    def getEnrolledCourse(self):
+        course_list = self.db.showUserEnrolledCourse(self.credentials[0])
+        print(json.dumps(course_list))
+        return json.dumps(course_list)
+    
+    def loadChatHistory(self):
+        return self.ai.loadChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
+
+    def getResponse(self):
+        data = request.json
+        question = data.get("responses")
+        if 'file' in request.files:
+            file = request.files['file']
+        else:
+            file_dir = None
+        
+        if file.filename is '':
+            return "File name is empty"
+        else:
+            try:
+                file_dir = os.path.join('uploads', file.filename)
+                file.save(file_dir)
+            except OSError:
+                file_dir = None
+
+        prompt = self.ai.getPrompt(question, file_dir)
+        self.ai.getResponse(prompt, file_dir)
+        # self.ai.storeChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
+
+if __name__ == '__main__':
+    app = FlaskServer(__name__)
+    app.run()
+
+
+
         
