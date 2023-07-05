@@ -17,11 +17,10 @@
   background-color: white;
 }
 
-.ide {
+.ide *{
   grid-area: IDE;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(28, 35, 50, 1);
+  font-size: 14px;
+  /* background-color: rgba(28, 35, 50, 1); */
 }
 
 .output {
@@ -29,4 +28,12 @@
   width: 100%;
   height: 100%;
   background-color: rgba(80, 80, 80, 1);
+}
+
+.close {
+  grid-template-columns: 0.1fr 1fr 1fr;
+}
+
+.open {
+  grid-template-columns: 0.55fr 1fr 1fr;
 }

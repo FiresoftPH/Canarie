@@ -1,6 +1,6 @@
 .wrapper{
   grid-area: searchArea;
-  width: 74%;
+  width: 100%;
   height: 2rem;
   display: flex;
   align-items: center;
@@ -18,6 +18,25 @@
   height: 100%;
   padding-left: 10%;
   display: flex;
+  padding-left: 3rem;
+  align-items: center;
+}
+
+.searchbox_dark {
+  all: unset;
+
+  background-color: #000000;
+  background-image: url(src/assets/SearchIcon.svg);
+  background-repeat: no-repeat;
+  background-position: 1rem;
+  border: none;
+  border-radius: 2.5rem;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.25) inset;
+  width: 100%;
+  height: 100%;
+  padding-left: 10%;
+  display: flex;
+  padding-left: 3rem;
   align-items: center;
 }
 

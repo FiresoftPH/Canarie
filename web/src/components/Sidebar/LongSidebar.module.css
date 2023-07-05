@@ -1,0 +1,89 @@
+/* Wrapper */
+.container {
+  grid-area: Sidebar;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #2f325a;
+}
+
+/* Section INCLUDING Search, Chat and File Upload */
+.sidebar_top {
+  width: 100%;
+  height: auto;
+  /* background-color: rgba(38, 41, 82, 1); */
+}
+
+/* Return back to COURSE page button */
+img[src="src/assets/Back_Button.svg"] {
+  margin-left: -1rem;
+}
+
+/* INCLUDES Back to course page button and search bar */
+.top {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 2fr auto auto;
+  grid-template-areas:
+    "backBtn blank"
+    "textArea collapseBtn"
+    "searchArea searchArea";
+  margin: 2rem;
+  margin-left: 2rem;
+  height: fit-content;
+  gap: 0.3rem;
+}
+
+.top p {
+  grid-area: textArea;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+img[src="src/assets/Collapse.svg"] {
+  grid-area: collapseBtn;
+  width: 2.5rem;
+  justify-self: end;
+}
+
+/* For New Chat Part */
+.new_chat {
+  display: flex;
+  align-items: center;
+
+  margin: 1.5rem;
+  margin-top: .5rem;
+  padding: .3rem;
+}
+
+.new_chat p {
+  color: #fff;
+  margin-left: .3rem;
+  font-size: 1rem;
+}
+
+.new_chat img {
+  width: 2.8rem;
+}
+
+/* For File uplaod part (A section) */
+.file_uploaded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* margin-top: 6.875rem; */
+  /* background-color: #2f325a; */
+  padding-left: 1.64rem;
+}
+
+/* File upload text */
+.file_uploaded p {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* Upload file icon */
+img[src="src/assets/Upload.svg"] {
+  padding-right: 1.75rem;
+}
