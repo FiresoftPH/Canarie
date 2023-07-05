@@ -1,7 +1,9 @@
 import styles from "./PillarList.module.css";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 function PillarList(props) {
-  const pillarList = [
+  let pillarList = [
     {
       pillar_name: "Artificial Intelligence Core",
       icon: "src/assets/Artificial Intelligence Core icon.svg",
@@ -31,10 +33,22 @@ function PillarList(props) {
     },
   ];
 
-  const pillar_output = pillarList.map((pillar) => (
-    <div className={styles.pillar_container}>
+  const [clickedIndex, setClickedIndex] = useState(null);
+
+  const handleClick = (index) => {
+    setClickedIndex(index);
+  };
+
+  const pillar_output = pillarList.map((pillar, index) => (
+    <div
+      key={index}
+      className={`${styles.pillar_container} ${
+        clickedIndex === index ? styles.clicked : ""
+      }`}
+      onClick={() => handleClick(index)}
+    >
       <div className={styles.pillar_icon}>
-        <img src={pillar.icon} />
+        <img src={pillar.icon} alt="" />
       </div>
       <div className={styles.pillar_name}>
         <p>{pillar.pillar_name}</p>
@@ -45,11 +59,7 @@ function PillarList(props) {
   return (
     <div className={styles.pillar}>
       <div className={styles.pillar_title}>
-        <section className={styles.pillar_list}>
-          {pillar_output.map((item, index) => (
-            <div key={index}>{item}</div>
-          ))}
-        </section>
+        <section className={styles.pillar_list}>{pillar_output}</section>
       </div>
     </div>
   );

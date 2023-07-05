@@ -19,7 +19,8 @@
   }
 }
 
-.pillar_container:hover {
+.pillar_container:hover,
+.pillar_container.clicked {
   background-color: rgba(118, 115, 131, 0.6);
   padding: auto;
   border-radius: 5rem;
@@ -31,21 +32,13 @@
   }
 }
 
-.pillar_container:focus {
-  background-color: rgba(118, 115, 131, 0.6);
-  padding: auto;
-  border-radius: 5rem;
-  background-color: rgba(118, 115, 131, 0.6);
-  transition: all 0.4s ease-in-out;
-
-  .pillar_name p {
-    color: aquamarine;
-  }
+/* .pillar_container:hover {
+  background-color: #eaeaea;
 }
 
-.pillar_container:hover::after {
-  opacity: 1;
-}
+.pillar_container.clicked {
+  background-color: #ff0000;
+} */
 
 .pillar_icon img {
   padding-right: 0.2rem;
@@ -63,10 +56,4 @@
   width: 100%;
   height: 100%;
   margin-bottom: 0.2rem;
-  /* padding-top: 0.5rem; */
-  /* padding-bottom: 0.5rem; */
-  /* padding-left: 0.5rem; */
-  /* padding-right: 0.5rem; */
-  /* border-radius: 0.5rem; */
-  /* background-color: rgba(118, 115, 131, 0.6); */
 }
