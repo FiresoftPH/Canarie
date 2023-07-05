@@ -5,7 +5,9 @@ const AssignmentCard = (props) => {
   return (
     <div
       className={`${styles.wrapper} ${props.pressed ? styles.pressed : ""}`}
-    //   onClick={() => {}}
+      onClick={() => {
+        props.onSelect(props.id)
+      }}
     >
       {/* <img src={props.icon} /> */}
       <box-icon name='book-open'></box-icon>

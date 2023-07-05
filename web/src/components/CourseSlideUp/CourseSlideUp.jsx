@@ -8,6 +8,7 @@ import styles from "./CourseSlideUp.module.css";
 import DownV from "../../assets/DownV.svg";
 import LeftV from "../../assets/LeftV.svg";
 import UpV from "../../assets/UpV.svg";
+import AssignmentList from "../AssignmentList/AssignmentList";
 
 const CourseSlideUp = (props) => {
   const [hideCourse, setHideCourse] = useState(false);
@@ -51,11 +52,12 @@ const CourseSlideUp = (props) => {
             />
             {hideAss ? (
               <>
-                <div className={styles.assignments}>
+                {/* <div className={styles.assignments}>
                   <AssignmentCard pressed name="Thingy" />
                   <AssignmentCard name="Thingy2" />
                   <AssignmentCard name="Thingy3" />
-                </div>
+                </div> */}
+                <AssignmentList />
               </>
             ) : (
               ""

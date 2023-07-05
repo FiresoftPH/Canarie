@@ -29,12 +29,12 @@ const onChange = useCallback((value,viewUpdate) => {
         <LongSidebar close={toggleClose} />
       )}
       <section className={styles.chat}></section>
-      <CodeMirror
+      {/* <CodeMirror
         value="console.log('helloworld!')"
         theme={ darcula }
         extensions={[javascript({ jsx:true})]}
         onChange = { onChange }
-      />
+      /> */}
       <section className={styles.output}></section>
     </div>
   );
