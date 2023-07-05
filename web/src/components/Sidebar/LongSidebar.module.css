@@ -25,9 +25,9 @@ img[src="src/assets/Back_Button.svg"] {
   grid-template-columns: 3fr 1fr;
   grid-template-rows: 2fr auto auto;
   grid-template-areas:
-    "backBtn blank"
-    "textArea collapseBtn"
-    "searchArea searchArea";
+    "backBtn textArea collapseBtn"
+    "sepline sepline sepline";
+  align-items: center;
   margin: 2rem;
   margin-left: 2rem;
   height: fit-content;
@@ -52,13 +52,13 @@ img[src="src/assets/Collapse.svg"] {
   align-items: center;
 
   margin: 1.5rem;
-  margin-top: .5rem;
-  padding: .3rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem;
 }
 
 .new_chat p {
   color: #fff;
-  margin-left: .3rem;
+  margin-left: 0.3rem;
   font-size: 1rem;
 }
 

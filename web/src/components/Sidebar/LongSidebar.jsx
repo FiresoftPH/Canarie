@@ -41,7 +41,7 @@ function LongSidebar(props) {
       Dimension(document.getElementById("total")) -
       Dimension(document.getElementById("assignment")) -
       Dimension(document.getElementById("chat")) -
-      Dimension(document.getElementById("newChatBtn")) -
+      // Dimension(document.getElementById("newChatBtn")) -
       Dimension(document.getElementById("file-upload"));
 
     setCHeight(height - 15);
@@ -61,11 +61,11 @@ function LongSidebar(props) {
         Dimension(document.getElementById("total")) -
         Dimension(document.getElementById("assignment")) -
         Dimension(document.getElementById("chat")) -
-        Dimension(document.getElementById("newChatBtn")) -
+        // Dimension(document.getElementById("newChatBtn")) -
         Dimension(document.getElementById("file-upload"));
 
       setCHeight(height - 15);
-    }, 100);
+    }, 1000);
   }, []);
 
   const onReRender = () => {
@@ -89,18 +89,18 @@ function LongSidebar(props) {
             }}
             src="src/assets/Collapse.svg"
           />
-          <SearchBox dark holder="Search" />
+          {/* <SearchBox dark holder="Search" /> */}
         </div>
-        <ChatList maxHeight={cHeight / 2} />
-        <section id="newChatBtn" className={styles.new_chat}>
+        {/* <ChatList maxHeight={cHeight / 2} /> */}
+        {/* <section id="newChatBtn" className={styles.new_chat}>
           <img src="src/assets/New button.svg" />
           <p>New Chat</p>
-        </section>
+        </section> */}
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
           <img src="src/assets/Upload.svg" />
         </section>
-        <FileList mh={cHeight / 2} />
+        <FileList mh={cHeight} />
       </div>
       <CourseSlideUp re_render={onReRender} />
     </div>
