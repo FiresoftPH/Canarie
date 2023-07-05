@@ -1,0 +1,20 @@
+.wrapper {
+    all: unset;
+    /* width: 100%; */
+    display: flex;
+    align-items: center;
+    padding: .5rem;
+    background-color: #565879;
+    border-radius: 0.5rem;
+}
+
+.wrapper p {
+    margin-left: .5rem;
+}
+
+.pressed {
+    background-color: #484964;
+    /* border-radius: 10px;
+    border-color: black; */
+    box-shadow: 1px 1px 5px black inset;
+}

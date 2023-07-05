@@ -1,0 +1,18 @@
+.wrapper {
+  overflow-y: scroll;
+}
+
+.wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+.wrapper::-webkit-scrollbar-track {
+  /* background-color: yellow; */
+  opacity: 0.6;
+  border-radius: 0.5rem;
+}
+
+.wrapper::-webkit-scrollbar-thumb {
+  background: #cfd0e2;
+  border-radius: 0.5rem;
+}

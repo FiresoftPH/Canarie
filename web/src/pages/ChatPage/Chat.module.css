@@ -29,3 +29,11 @@
   height: 100%;
   background-color: rgba(80, 80, 80, 1);
 }
+
+.close {
+  grid-template-columns: 0.1fr 1fr 1fr;
+}
+
+.open {
+  grid-template-columns: 0.55fr 1fr 1fr;
+}

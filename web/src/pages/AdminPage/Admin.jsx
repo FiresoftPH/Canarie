@@ -21,8 +21,12 @@ function Admin() {
             </div>
             <div className="navigation">
               <p>Analytics</p>
-              <p>Course</p>
-              <p>Student</p>
+              <a style={{ textDecoration: "none" }} href="/AdminCourse">
+                Courses
+              </a>
+              <a style={{ textDecoration: "none" }} href="/">
+                Student
+              </a>
             </div>
             <div className="chat-page">
               <p>Macow Chat</p>
@@ -62,6 +66,71 @@ function Admin() {
                   <p>Chat with Parrot</p>
                 </section>
               </section>
+              <section className="horizontal-line"></section>
+              <section className="course-nav">
+                <section className="nav-app-Course-icon">
+                  <img src="src/assets/Course-admin-nav-icon.svg" />
+                </section>
+                <section className="nav-app-Course-text">
+                  <p>Course</p>
+                  <p>
+                    See the insight in <br />
+                    each Compentencies
+                  </p>
+                </section>
+              </section>
+              <section className="horizontal-line"></section>
+              <section className="Student-nav">
+                <section className="nav-app-Student-icon">
+                  <img src="src/assets/Student-admin-nav-icon.svg" />
+                </section>
+                <section className="nav-app-Student-text">
+                  <p>Student</p>
+                  <p>
+                    See the Activity <br />
+                    and Chatlog
+                  </p>
+                </section>
+              </section>
+              <section className="horizontal-line"></section>
+            </div>
+            <div className="feedback-dash">
+              <div className="feedback-dash-bar">
+                <img src="src/assets/Feedback icon.svg" />
+                <section className="feedback-text">
+                  <p>Feedback</p>
+                  <p>Performance of the AI model</p>
+                </section>
+              </div>
+            </div>
+            <div className="analytics-dash">
+              <div className="analytics-dash-bar">
+                <img src="src/assets/Analytics icon.svg" />
+                <section className="analytics-text">
+                  <p>Analytics</p>
+                  <p>Total</p>
+                </section>
+              </div>
+            </div>
+            <div className="competencies-rank">
+              <div className="competencies-rank-bar">
+                <section className="competencies-rank-title-left">
+                  <img src="src/assets/Analytics icon.svg" />
+                  <section className="competencies-rank-left-text">
+                    <p>Compentencies</p>
+                    <p>Stats</p>
+                  </section>
+                </section>
+                <section className="competencies-rank-title-right">
+                  <section className="competencies-rank-right-text">
+                    <p>Most Engaged Competency Rank</p>
+                  </section>
+                  <img src="src/assets/Sort icon.svg" />
+                </section>
+              </div>
+              <div className="competencies-rank-list">
+                <p>Compentencies rank</p>
+              </div>
             </div>
           </div>
         </div>
