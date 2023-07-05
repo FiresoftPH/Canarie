@@ -32,14 +32,6 @@
   }
 }
 
-/* .pillar_container:hover {
-  background-color: #eaeaea;
-}
-
-.pillar_container.clicked {
-  background-color: #ff0000;
-} */
-
 .pillar_icon img {
   padding-right: 0.2rem;
   justify-items: center;
