@@ -7,7 +7,7 @@ const FileCard = (props) => {
     <div
       className={`${styles.wrapper} ${props.selected ? styles.selected : ""}`}
       onClick={() => {
-        props.onSelect(props.id)
+        props.onSelect(props.id);
       }}
     >
       {/* <> */}

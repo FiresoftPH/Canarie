@@ -17,9 +17,9 @@
   background-color: white;
 }
 
-.ide {
+.ide *{
   grid-area: IDE;
-  color: black;
+  font-size: 14px;
   /* background-color: rgba(28, 35, 50, 1); */
 }
 
