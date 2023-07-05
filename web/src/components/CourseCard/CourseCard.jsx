@@ -6,7 +6,7 @@ export default function CourseCard(props) {
     <>
       {
         props.data.map((post) => (
-          <Link to={`/Chat/${post}`} className={styles.container}>
+          <Link to={`/Chat`} className={styles.container}>
             <p className={styles.text}>{post}</p>
           </Link>
         ))

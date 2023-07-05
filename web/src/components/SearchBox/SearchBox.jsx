@@ -4,9 +4,9 @@ function SearchBox(props) {
   return (
     <div  className={styles.wrapper}>
       {/* <img className={styles.icon} src="src/assets/SearchIcon.svg" /> */}
-      <input  className={styles.searchbox}
+      <input  className={`${props.dark ? styles.searchbox_dark : styles.searchbox}`}
               type='text' 
-              placeholder='Search up course'
+              placeholder={props.holder ? props.holder : 'Search up course'}
               onChange={props.onInputChange}
               />
     </div>

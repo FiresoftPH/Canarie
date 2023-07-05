@@ -1,0 +1,12 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.wrapper img {
+    width: 2.5rem;
+}
+
+.wrapper p {
+    margin-left: 1rem;
+}

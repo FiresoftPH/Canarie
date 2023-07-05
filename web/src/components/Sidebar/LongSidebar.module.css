@@ -1,0 +1,226 @@
+/* Wrapper */
+.container {
+  grid-area: Sidebar;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #2f325a;
+}
+
+/* Section INCLUDING Search, Chat and File Upload */
+.sidebar_top {
+  width: 100%;
+  height: auto;
+  /* background-color: rgba(38, 41, 82, 1); */
+}
+
+/* Return back to COURSE page button */
+img[src="src/assets/Back_Button.svg"] {
+  margin-left: -1rem;
+}
+
+/* INCLUDES Back to course page button and search bar */
+.top {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 2fr auto auto;
+  grid-template-areas:
+    "backBtn blank"
+    "textArea collapseBtn"
+    "searchArea searchArea";
+  margin: 2rem;
+  margin-left: 2rem;
+  height: fit-content;
+  gap: 0.3rem;
+}
+
+.top p {
+  grid-area: textArea;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+img[src="src/assets/Collapse.svg"] {
+  grid-area: collapseBtn;
+  width: 2.5rem;
+  justify-self: end;
+}
+
+/* For New Chat Part */
+.new_chat p {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.new_chat {
+  font-size: 1.3rem;
+  margin-top: 3rem;
+  padding-left: 1.64rem;
+  display: flex;
+  /* background-color: #2f325a; */
+  align-items: center;
+}
+
+img[src="src/assets/New button.svg"] {
+  padding-right: 0.8rem;
+}
+
+/* For File uplaod part (A section) */
+.file_uploaded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6.875rem;
+  /* background-color: #2f325a; */
+  padding-left: 1.64rem;
+}
+
+/* File upload text */
+.file_uploaded p {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* Upload file icon */
+img[src="src/assets/Upload.svg"] {
+  padding-right: 1.75rem;
+}
+
+/* .file_status { */
+  /* max-height: 4rem;
+
+  display: flex;
+  justify-content: safe;
+  flex-direction: column;
+
+  padding-left: 2rem;
+  margin-top: 1rem;
+
+  overflow-y: scroll; */
+  /* background-color: red; */
+  
+/* } */
+
+.file_status {
+  display: flex;
+  justify-content: safe;
+  flex-direction: column;
+  /* grid-template-columns: 1fr; */
+
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+.file_status > * {
+  margin: 1rem;
+}
+
+.file_status::-webkit-scrollbar {
+  width: 5px;
+}
+
+.file_status::-webkit-scrollbar-track {
+  /* background-color: yellow; */
+  opacity: 0.6;
+  border-radius: 0.5rem;
+}
+
+.file_status::-webkit-scrollbar-thumb {
+  background: #cfd0e2;
+  border-radius: 0.5rem;
+}
+
+
+/* For COURSE section */
+.sidebar_below {
+  background-color: #5e6084;
+
+  display: grid;
+  grid-template-areas:
+    "Cou CouNav"
+    "Sub Sub"
+    "TAss AssNav"
+    "Ass Ass"
+    "Line Line"
+    "Gen Gen"
+  ;
+  grid-template-columns: 5fr 1fr;
+  grid-template-rows: max-content;
+
+  padding: 1rem;
+  padding-top: 1.2rem;
+  align-items: center;
+  /* height: 5rem; */
+}
+
+.sidebar_below img {
+  max-width: 2rem;
+  justify-self: end;
+  align-self: center;
+}
+
+.sidebar_below h2 {
+  font-size: 2rem;
+  align-self: center;
+}
+
+.sidebar_below h3 {
+  all: unset;
+  grid-area: Sub;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+.line {
+  grid-area: Line;
+  width: 100%;
+  height: 0.01rem;
+  background-color: #A4A4AF;
+}
+
+.ass {
+  color: #D0D1D8;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+.assignments {
+  grid-area: Ass;
+  width: 100%;
+  max-height: 8rem;
+  padding: .2rem;
+  background-color: #494B67;
+  /* opacity: .2; */
+  display: flex;
+  border-radius: 0.5rem;
+  flex-direction: column;
+  gap: .2rem;
+  overflow-y: scroll;
+}
+
+.assignments::-webkit-scrollbar {
+  width: 5px;
+}
+
+.assignments::-webkit-scrollbar-track {
+  /* background-color: yellow; */
+  opacity: 0.6;
+  border-radius: .5rem;
+}
+
+.assignments::-webkit-scrollbar-thumb {
+  background: #CFD0E2; 
+  border-radius: 0.5rem;
+}
+
+/* General section */
+.general {
+  font-size: 1.2rem;
+  padding: 1rem;
+  color: white;
+  background-color: #6D6F99;
+  border-radius: 0.5rem;
+  width: 100%;
+  grid-area: Gen;
+}
