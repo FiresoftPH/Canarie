@@ -153,6 +153,13 @@ class Database:
             for row in result:
                 print(row)
 
+    def fetchUserData(self, username):
+        self.cursor.execute("SELECT * FROM users WHERE username = %s", username)
+        result = self.cursor.fetchall()
+        transform_courses = self.arrayFromString(result[0][4])
+        data = {"id": result[0][0], "name": result[0][1], "username": result[0][2], "password": result[0][3], "enrolled_courses": transform_courses, "status": result[0][5]}
+        return data
+    
     # Shows the data from the statistics table. 
     def showStatisticsData(self):
         self.cursor.execute("SELECT username FROM statistics")
@@ -335,3 +342,6 @@ class Database:
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
+
+# test = Database()
+# print(test.fetchUserData("Firesoft"))
