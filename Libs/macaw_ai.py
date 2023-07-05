@@ -35,7 +35,7 @@ class AI:
                         "text-generation",
                         model=self.base_model, 
                         tokenizer=self.tokenizer, 
-                        max_length=1024,
+                        max_length=2048,
                         temperature=0.6,
                         top_p=0.95,
                         repetition_penalty=1.2

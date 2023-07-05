@@ -1,0 +1,15 @@
+.pillar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-right: 1rem;
+}
+
+.pillar-container img {
+  padding-right: 1rem;
+  justify-items: center;
+}

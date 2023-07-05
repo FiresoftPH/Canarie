@@ -24,7 +24,7 @@ function Login() {
           "Calculus 1",
           "Calculus 2",
           "Physics",
-          "Chemistry"
+          "Chemistry",
         ],
         // courses: {
         //   "c1":"Principal Of Computing Applications",
