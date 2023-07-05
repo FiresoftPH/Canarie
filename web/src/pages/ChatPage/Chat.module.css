@@ -17,10 +17,27 @@
   background-color: white;
 }
 
-.ide *{
+.ide_container{
   grid-area: IDE;
+  background-color: rgb(21, 95, 255);
+}
+
+.lang_selection{
+  color: black;
+}
+.lang_selection option{
+  color: black;
+}
+
+.theme_selection{
+  color: black;
+}
+.theme_selection option{
+  color: black;
+}
+
+.ide *{
   font-size: 14px;
-  /* background-color: rgba(28, 35, 50, 1); */
 }
 
 .output {
