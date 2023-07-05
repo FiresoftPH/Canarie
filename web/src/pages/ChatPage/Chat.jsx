@@ -4,6 +4,7 @@ import LongSidebar from "src/components/Sidebar/LongSidebar";
 import ShortSideBar from "../../components/Sidebar/ShortSideBar";
 import CodeMirror from '@uiw/react-codemirror'
 
+import { EditorView } from "@codemirror/view"
 import { javascript } from '@codemirror/lang-javascript'
 import { darcula } from '@uiw/codemirror-theme-darcula'
 
@@ -16,9 +17,13 @@ function Chat() {
     });
   };
 
-const onChange = useCallback((value,viewUpdate) => {
-  console.log('value:', value);
-}, []);
+  const onChange = useCallback((value,viewUpdate) => {
+    console.log('value:', value);
+  }, []);
+  const fixedHeightEditor = EditorView.theme({
+    "&": {height: "40vh"},
+    ".cm-content" : { overflow: "auto"},
+  })
 
   return (
     // <div className={`styles.bg_container ` + (close ? "close" : "open")}>
@@ -30,9 +35,10 @@ const onChange = useCallback((value,viewUpdate) => {
       )}
       <section className={styles.chat}></section>
       <CodeMirror
+        className={styles.ide}
         value="console.log('helloworld!')"
         theme={ darcula }
-        extensions={[javascript({ jsx:true})]}
+        extensions={[javascript({ jsx:true}), fixedHeightEditor, EditorView.lineWrapping]}
         onChange = { onChange }
       />
       <section className={styles.output}></section>

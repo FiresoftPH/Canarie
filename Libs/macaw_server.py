@@ -62,6 +62,10 @@ class DatabaseOperations:
     def getUserChatRoom(self, username):
         return self.db.getUserChatRoom(username)
 
+    # fetch user related data and send to frontend
+    def fetchUserData(self, username):
+        return self.db.fetchUserData(username)
+
 class AIOperations:
     def __init__(self):
         self.ai = macaw_ai.AI()
@@ -109,6 +113,7 @@ class FlaskServer(Flask):
         # Routing applications
         self.route('/login')(self.login)
         self.route('/register')(self.register)
+        self.route('/temp_login')(self.tempLogin)
         self.route('/enrolled_courses')(self.getEnrolledCourse)
 
         # Init class
@@ -116,9 +121,9 @@ class FlaskServer(Flask):
         self.ai = AIOperations()
         self.auth = GAuthentication()
         self.credentials = None
-        self.credentials = ("Firesoft", "111111")
+        self.credentials = ("kokomi", "44444")
         self.current_chat_room = None
-        self.current_chat_room = ["Computer System", None]
+        # self.current_chat_room = ["Computer System", None]
 
     def login(self):
         data = request.json
@@ -145,6 +150,11 @@ class FlaskServer(Flask):
             response = {'message': 'Wrong Username or Password!'}
 
         return json.dumps(response)
+    
+    def tempLogin(self):
+        data = self.db.fetchUserData(self.credentials[0])
+        
+        return json.dumps(data)
 
     def register(self):
         data = request.json
@@ -175,7 +185,7 @@ class FlaskServer(Flask):
         else:
             file_dir = None
         
-        if file.filename is '':
+        if file.filename == '':
             return "File name is empty"
         else:
             try:
@@ -190,8 +200,5 @@ class FlaskServer(Flask):
 
 if __name__ == '__main__':
     app = FlaskServer(__name__)
-    app.run()
+    app.run(port=2424)
 
-
-
-        

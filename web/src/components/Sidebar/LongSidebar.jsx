@@ -10,6 +10,10 @@ import UpV from "../../assets/UpV.svg";
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import ChatCard from "../ChatCard/ChatCard";
+import ChatList from "../ChatList/ChatList";
+import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
+import FileList from "../FileList/FileList";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -24,50 +28,54 @@ function Dimension(el) {
 
 function LongSidebar(props) {
   const nav = useNavigate();
-  const [hideCourse, setHideCourse] = useState(false);
+  // const [hideCourse, setHideCourse] = useState(false);
+  // const [hideAss, setHideAss] = useState(false);
 
   const chatHeight = useRef(null);
   const [cHeight, setCHeight] = useState(0);
 
-  const [hideAss, setHideAss] = useState(false);
+  const [change, setChange] = useState(false);
 
   useEffect(() => {
-    setCHeight(chatHeight.current.height);
-    console.log(chatHeight.current.height);
-
-    // const viewHeight = window.innerHeight;
-
     const height =
       Dimension(document.getElementById("total")) -
       Dimension(document.getElementById("assignment")) -
       Dimension(document.getElementById("chat")) -
-      Dimension(document.getElementById("newChatBtn")) -
+      // Dimension(document.getElementById("newChatBtn")) -
       Dimension(document.getElementById("file-upload"));
 
-    setCHeight(height);
+    setCHeight(height - 15);
 
-    console.log(
-      Dimension(document.getElementById("total")),
-      Dimension(document.getElementById("assignment")),
-      Dimension(document.getElementById("chat")),
-      Dimension(document.getElementById("newChatBtn")),
-      Dimension(document.getElementById("file-upload"))
-    );
+    // console.log(
+    //   Dimension(document.getElementById("total")),
+    //   Dimension(document.getElementById("assignment")),
+    //   Dimension(document.getElementById("chat")),
+    //   Dimension(document.getElementById("newChatBtn")),
+    //   Dimension(document.getElementById("file-upload"))
+    // );
+  }, [change]);
 
-    // const fileHeight =
-    //   document.getElementById("total").offsetHeight -
-    //   document.getElementById("assignment").offsetHeight -
-    //   document.getElementById("chat").offsetHeight -
-    //   document.getElementById("newChatBtn").offsetHeight -
-    //   document.getElementById("file-upload").offsetHeight;
+  useEffect(() => {
+    setTimeout(() => {
+      const height =
+        Dimension(document.getElementById("total")) -
+        Dimension(document.getElementById("assignment")) -
+        Dimension(document.getElementById("chat")) -
+        // Dimension(document.getElementById("newChatBtn")) -
+        Dimension(document.getElementById("file-upload"));
 
-    // console.log(fileHeight);
-  });
+      setCHeight(height - 15);
+    }, 1000);
+  }, []);
+
+  const onReRender = () => {
+    setChange(!change);
+  };
 
   return (
     <div id="total" className={styles.container}>
       <div className={styles.sidebar_top}>
-        <div ref={chatHeight} id="chat" className={styles.top}>
+        <div id="chat" className={styles.top}>
           <img
             onClick={() => {
               nav("/Course");
@@ -81,75 +89,20 @@ function LongSidebar(props) {
             }}
             src="src/assets/Collapse.svg"
           />
-          <SearchBox dark holder="Search" />
+          {/* <SearchBox dark holder="Search" /> */}
         </div>
-        <section id="newChatBtn" className={styles.new_chat}>
+        {/* <ChatList maxHeight={cHeight / 2} /> */}
+        {/* <section id="newChatBtn" className={styles.new_chat}>
           <img src="src/assets/New button.svg" />
           <p>New Chat</p>
-        </section>
+        </section> */}
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
           <img src="src/assets/Upload.svg" />
         </section>
-        <section
-          style={{
-            maxHeight: cHeight,
-          }}
-          className={styles.file_status}
-        >
-          <FileCard selected name="Untitled-1" />
-          <FileCard name="Untitled-2" />
-          <FileCard name="Untitled-3" />
-        </section>
+        <FileList mh={cHeight} />
       </div>
-      <div
-        className={styles.sidebar_below}
-        style={
-          hideCourse
-            ? {
-                gap: "0rem",
-              }
-            : {
-                gap: ".8rem",
-              }
-        }
-        id="assignment"
-      >
-        <h2>Courses</h2>
-        <img
-          onClick={() => {
-            setHideCourse(!hideCourse);
-          }}
-          src={hideCourse ? UpV : DownV}
-        />
-        {hideCourse ? (
-          ""
-        ) : (
-          <>
-            <h3>Discrete Mathematics</h3>
-            <p className={styles.ass}># Assignments</p>
-            <img
-              onClick={() => {
-                setHideAss(!hideAss);
-              }}
-              src={hideAss ? DownV : LeftV}
-            />
-            {hideAss ? (
-              <>
-                <div className={styles.assignments}>
-                  <AssignmentCard pressed name="Thingy" />
-                  <AssignmentCard name="Thingy2" />
-                  <AssignmentCard name="Thingy3" />
-                </div>
-              </>
-            ) : (
-              ""
-            )}
-            <div className={styles.line} />
-            <section className={styles.general}># General</section>
-          </>
-        )}
-      </div>
+      <CourseSlideUp re_render={onReRender} />
     </div>
   );
 }
