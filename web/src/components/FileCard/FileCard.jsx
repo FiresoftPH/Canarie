@@ -1,6 +1,6 @@
 import EditIcon from "../../assets/EditIcon.svg";
 import styles from "./FileCard.module.css";
-import Close from '../../';
+import Close from '../../assets/CloseIcon.svg';
 
 const FileCard = (props) => {
   return (
@@ -9,7 +9,7 @@ const FileCard = (props) => {
         {props.selected ? <div className={styles.backdrop} /> : ""}
         <img className={styles.editIcon} src={EditIcon} />
         <p>{props.name}</p>
-        
+        <img className={styles.delete} src={Close} />
       {/* </> */}
     </div>
   );

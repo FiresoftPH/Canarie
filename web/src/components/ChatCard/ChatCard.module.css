@@ -1,0 +1,33 @@
+.wrapper {
+  display: flex;
+  padding: .4rem;
+}
+
+.wrapper > :nth-child(2) {
+  margin-left: .3rem;
+}
+
+.selected {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+}
+
+.sessionName {
+  font-size: .9rem;
+  font-weight: 200;
+}
+
+.assignment {
+  font-size: .8rem;
+  font-weight: 200;
+
+  color: red;
+}
+
+.chatIcon {
+  width: 2.8rem;
+}
+
+.delete {
+  margin-left: auto;
+}
