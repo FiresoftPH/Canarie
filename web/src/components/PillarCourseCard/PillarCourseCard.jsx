@@ -1,10 +1,14 @@
 import React from "react";
-import Course from "../../mockDB/MOCK_DATA.json";
+import styles from "./PillarCourseCard.module.css";
 
-function PillarCourseCard({ name }) {
+function PillarCourseCard({ courses }) {
   return (
-    <div>
-      <h1>{name}</h1>
+    <div className={styles.container_course}>
+      {courses.map((course, index) => (
+        <div className={styles.text} key={index}>
+          {course}
+        </div>
+      ))}
     </div>
   );
 }

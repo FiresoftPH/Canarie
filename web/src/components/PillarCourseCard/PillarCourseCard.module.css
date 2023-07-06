@@ -1,0 +1,21 @@
+.container_course {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items: center;
+  grid-gap: 1rem;
+  list-style: none;
+  grid-area: main;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.text {
+  display: grid;
+  grid-template: 1.5fr 1fr/ 1fr;
+  background-color: rgb(245, 106, 106);
+  border-radius: 25px;
+  border: 2px solid black;
+  width: 13.125rem;
+  height: 14.375rem;
+}
