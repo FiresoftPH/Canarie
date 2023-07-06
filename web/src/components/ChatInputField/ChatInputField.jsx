@@ -3,7 +3,7 @@ import styles from "./ChatInputField.module.css";
 import FileAttachmentIcon from "src/assets/FileAttachmentIcon.svg";
 import SendIcon from "src/assets/SendIcon.svg";
 
-const ChatInputField = () => {
+const ChatInputField = (props) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.attachment}>

@@ -6,7 +6,7 @@ const AssignmentCard = (props) => {
     <div
       className={`${styles.wrapper} ${props.pressed ? styles.pressed : ""}`}
       onClick={() => {
-        props.onSelect(props.id)
+        props.onSelect(props.id, props.name)
       }}
     >
       {/* <img src={props.icon} /> */}
