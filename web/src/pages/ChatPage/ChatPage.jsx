@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { EditorView } from "@codemirror/view"
 import { langs } from '@uiw/codemirror-extensions-langs'
 import * as alls from '@uiw/codemirror-themes-all'
-import { dracula } from '@uiw/codemirror-theme-dracula'
+// import { dracula } from '@uiw/codemirror-theme-dracula'
 import ChatUI from "../../components/ChatUI/ChatUI";
 
 function Dimension(el) {
