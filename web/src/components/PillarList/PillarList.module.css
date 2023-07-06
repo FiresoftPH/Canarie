@@ -1,38 +1,117 @@
-.App {
-  text-align: center;
+.course_content {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: flex-baseline;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  /* background-color: white; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.course_pillar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 100%;
+  width: 22%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.course_pillar_title {
+  padding: 1rem 0rem 0rem 2rem;
+}
+
+.course_pillar_title p:first-child {
+  font-size: 2rem;
+  font-weight: 500;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.course-pillar-title p:last-child {
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.line {
+  margin-top: 1rem;
+  width: 90%;
+  height: 0.0625rem;
+  background: rgba(118, 115, 131, 0.6);
+  align-self: center;
+}
+
+.pillar {
+  padding-top: 1rem;
+}
+
+.pillar_container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding-top: 0.5rem;
+  /* overflow: auto; */
+  padding-left: 1rem;
+  padding-right: 1rem;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+
+  .pillar_name p {
+    color: rgba(160, 160, 160, 0.8);
   }
-  to {
-    transform: rotate(360deg);
+}
+
+.pillar_container:hover,
+.pillar_container.clicked {
+  background-color: rgba(118, 115, 131, 0.6);
+  padding: auto;
+  border-radius: 5rem;
+  background-color: rgba(118, 115, 131, 0.6);
+  transition: all 0.4s ease-in-out;
+
+  .pillar_name p {
+    color: aquamarine;
   }
+}
+
+.pillar_icon img {
+  padding-right: 0.2rem;
+  justify-items: center;
+}
+
+.pillar_name p {
+  font-size: 0.9rem;
+}
+
+.pillar_name {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 0.2rem;
+}
+
+.course_list_title {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: auto;
+
+  /* background-color: white; */
+  padding: 1rem;
+  overflow: auto;
+}
+
+.pillar_course_name {
+  font-size: 1.5rem;
+  padding-top: 0.5rem;
+  padding-left: 1.5rem;
+  font-weight: 500;
+  align-self: center;
+
+  justify-items: center;
+
+  color: white;
+  margin-bottom: 0.5rem;
 }

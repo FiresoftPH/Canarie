@@ -5,13 +5,13 @@ import CourseList from "src/components/CourseList/CourseList.jsx";
 import SearchBox from "src/components/SearchBox/SearchBox";
 import Data from "../../mockDB/MOCK_DATA.json";
 import { userActions } from "../../store/userSlice";
-import 'boxicons';
+import "boxicons";
 import { useNavigate } from "react-router-dom";
 
 function Course() {
   // Demo data set to user store (Logic will be added at login page)
   const dispatch = useDispatch();
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   const courses = useSelector((state) => state.user.courses);
   const user = useSelector((state) => state.user);
@@ -44,11 +44,14 @@ function Course() {
             </p>
             <div className={styles.user_img}> img </div>
             {"  "}
-            <div onClick={() => {
-              dispatch(userActions.logout())
-              nav("/")
-            }} className={styles.dropdown}>
-            <box-icon color="white" size="3rem" name='log-out'></box-icon>
+            <div
+              onClick={() => {
+                dispatch(userActions.logout());
+                nav("/");
+              }}
+              className={styles.dropdown}
+            >
+              <box-icon color="white" size="3rem" name="log-out"></box-icon>
             </div>
           </header>
           <CourseList displayData={search(courses)} />
