@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useParams } from "react-router-dom";
 
 import AssignmentCard from "../AssignmentCard/AssignmentCard";
 
@@ -14,6 +14,15 @@ const CourseSlideUp = (props) => {
   const [hideCourse, setHideCourse] = useState(false);
   const [hideAss, setHideAss] = useState(false);
 
+  const [chatSelect, setChatSelect] = useState("General");
+
+  const assginmentListSelectHandler = (id) => {
+    setChatSelect("Assignment");
+    console.log(chatSelect)
+  };
+  
+  const { subjectId } = useParams()
+
   return (
     <>
       <div
@@ -24,7 +33,7 @@ const CourseSlideUp = (props) => {
                 gap: "0rem",
               }
             : {
-                gap: ".8rem",
+                gap: ".5rem",
               }
         }
         id="assignment"
@@ -33,7 +42,7 @@ const CourseSlideUp = (props) => {
         <img
           onClick={() => {
             setHideCourse(!hideCourse);
-            props.re_render()
+            props.re_render();
           }}
           src={hideCourse ? UpV : DownV}
         />
@@ -41,15 +50,35 @@ const CourseSlideUp = (props) => {
           ""
         ) : (
           <>
-            <h3>Discrete Mathematics</h3>
-            <p className={styles.ass}># Assignments</p>
-            <img
+            <h3>{subjectId}</h3>
+            <div
+              className={`${styles.assignmentNav} ${
+                chatSelect === "Assignment" ? styles.selected : ""
+              }`}
               onClick={() => {
                 setHideAss(!hideAss);
-                props.re_render()
+                props.re_render();
+                setChatSelect("Assignment");
               }}
-              src={hideAss ? DownV : LeftV}
-            />
+            >
+              <p
+                // onClick={() => {
+                //   setHideAss(!hideAss);
+                //   props.re_render();
+                // }}
+                className={styles.ass}
+              >
+                # Assignments
+              </p>
+              <img
+                // onClick={() => {
+                //   setHideAss(!hideAss);
+                //   props.re_render();
+                // }}
+                className={styles.assDropDown}
+                src={hideAss ? DownV : LeftV}
+              />
+            </div>
             {hideAss ? (
               <>
                 {/* <div className={styles.assignments}>
@@ -57,13 +86,24 @@ const CourseSlideUp = (props) => {
                   <AssignmentCard name="Thingy2" />
                   <AssignmentCard name="Thingy3" />
                 </div> */}
-                <AssignmentList />
+                <AssignmentList onSelect={assginmentListSelectHandler} />
               </>
             ) : (
               ""
             )}
             <div className={styles.line} />
-            <section className={styles.general}># General</section>
+            <section
+              onClick={() => {
+                setChatSelect("General");
+                setHideAss(false)
+                props.re_render()
+              }}
+              className={`${styles.general} ${
+                chatSelect === "General" ? styles.selected : ""
+              }`}
+            >
+              # General
+            </section>
           </>
         )}
       </div>
