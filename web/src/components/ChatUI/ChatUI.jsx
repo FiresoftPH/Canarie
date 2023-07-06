@@ -29,12 +29,23 @@ function Dimension2(el) {
   return Math.ceil(el.offsetHeight + margin);
 }
 
-const ChatUI = (props) => {
-  const [width, setWidth] = useState(0)
-  const [height, setHeight] = useState(0)
+const DUMMY_TEXT_DATA = [
+  { id: 0, sender: "user", message: "i need help with this and stuff and stuff and stuff and stuff and stuff and stuff and stuff and stuff" },
+  { id: 1, sender: "ai", message: "ok sure. which one you need help" },
+];
 
-  const [assignment, setAssignment] = useState("-")
-  
+const ChatUI = (props) => {
+  let chatName = props.mode;
+
+  if (props.mode === "General") {
+    chatName = "-";
+  }
+
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  const [assignment, setAssignment] = useState("-");
+
   return (
     <div className={styles.wrapper}>
       <div
@@ -56,15 +67,14 @@ const ChatUI = (props) => {
       />
       <div className={styles.header}>
         <img src={ChatIconNoBG} />
-        {/* <p>Permutation and Laplacian (naive)</p> */}
-        <p>{}</p>
+        <p>{chatName}</p>
         <img src={RenameIcon} />
         <img src={ClearChatHistoryIcon} />
         <div className={styles.sepLine} />
       </div>
       <div className={styles.chatting}></div>
+      <ChatScreen history={DUMMY_TEXT_DATA} />
       <ChatInputField />
-      <ChatScreen />
     </div>
   );
 };
