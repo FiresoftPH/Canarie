@@ -1,0 +1,28 @@
+[{
+    "pillar_name": "Artificial Intelligence Core",
+    "icon": "src/assets/Artificial Intelligence Core icon.svg",
+    "course": "Artificial Intelligence Core"
+  },
+  {
+    "pillar_name": "Human-Centered Design",
+    "icon": "src/assets/Human-Centered Design icon.svg"
+  },
+  {
+    "pillar_name": "Scalable Systems",
+    "icon": "src/assets/Scalable Systems icon.svg"
+  },
+  { "pillar_name": "Cybersecurity", "icon": "src/assets/Cybersecurity icon.svg" },
+  {
+    "pillar_name": "Entrepreneurship and Innovation",
+    "icon": "src/assets/Entrepreneurship and Innovation icon.svg"
+  },
+  { "pillar_name": "Mathematics", "icon": "src/assets/Mathematics icon.svg" },
+  { "pillar_name": "Science", "icon": "src/assets/Science icon.svg" },
+  {
+    "pillar_name": "Arts, Humanities and Social Sciences",
+    "icon": "src/assets/Arts, Humanities and Social Sciences icon.svg"
+  },
+  {
+    "pillar_name": "Communications and Presentation",
+    "icon": "src/assets/Communications and Presentation icon.svg"
+  }]
