@@ -1,6 +1,8 @@
 import styles from "./PillarList.module.css";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import PillarCourseCard from "src/components/PillarCourseCard/PillarCourseCard";
+// import Course from "../../data.json";
 
 function PillarList(props) {
   let pillarList = [
@@ -33,17 +35,17 @@ function PillarList(props) {
     },
   ];
 
-  const [clickedIndex, setClickedIndex] = useState(null);
+  const [selectedPillar, setSelectedPillar] = useState(null);
 
   const handleClick = (index) => {
-    setClickedIndex(index);
+    setSelectedPillar(index === selectedPillar ? null : index);
   };
 
   const pillar_output = pillarList.map((pillar, index) => (
     <div
       key={index}
       className={`${styles.pillar_container} ${
-        clickedIndex === index ? styles.clicked : ""
+        selectedPillar === index ? styles.clicked : ""
       }`}
       onClick={() => handleClick(index)}
     >
@@ -57,9 +59,35 @@ function PillarList(props) {
   ));
 
   return (
-    <div className={styles.pillar}>
-      <div className={styles.pillar_title}>
-        <section className={styles.pillar_list}>{pillar_output}</section>
+    <div className={styles.course_content}>
+      <div className={styles.course_pillar}>
+        <div className={styles.course_pillar_title}>
+          <p>Courses</p>
+          <p>All courses</p>
+        </div>
+        <section className={styles.line}></section>
+        <div className={styles.pillar}>
+          <div className={styles.pillar_title}>
+            <section className={styles.pillar_list}>{pillar_output}</section>
+          </div>
+        </div>
+      </div>
+      <div className={styles.course_list_container}>
+        <div className={styles.course_list_title}>
+          {selectedPillar !== null && (
+            <div className={styles.pillar_course_name}>
+              {pillarList[selectedPillar].pillar_name}
+              <p>$number Courses</p>
+            </div>
+          )}
+        </div>
+        <div className={styles.course_list}>
+          {selectedPillar !== null && (
+            <div className={styles.pillar_content}>
+              {pillarList[selectedPillar].icon}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

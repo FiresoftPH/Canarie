@@ -36,16 +36,7 @@ function AdminCourse() {
               <img src="src/assets/Linkto.svg" />
             </div>
           </div>
-          <div className="course-content">
-            <div className="course-pillar">
-              <div className="course-pillar-title">
-                <p>Courses</p>
-                <p>All courses</p>
-              </div>
-              <section className="line"></section>
-              <PillarList />
-            </div>
-          </div>
+          <PillarList />
         </div>
       </div>
     </>
