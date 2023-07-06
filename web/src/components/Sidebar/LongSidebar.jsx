@@ -8,7 +8,7 @@ import DownV from "../../assets/DownV.svg";
 import LeftV from "../../assets/LeftV.svg";
 import UpV from "../../assets/UpV.svg";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import ChatCard from "../ChatCard/ChatCard";
 import ChatList from "../ChatList/ChatList";
@@ -64,7 +64,7 @@ function LongSidebar(props) {
         // Dimension(document.getElementById("newChatBtn")) -
         Dimension(document.getElementById("file-upload"));
 
-      setCHeight(height - 15);
+      setCHeight(height - 20);
     }, 1000);
   }, []);
 
@@ -80,15 +80,16 @@ function LongSidebar(props) {
             onClick={() => {
               nav("/Course");
             }}
-            src="src/assets/Back_Button.svg"
+            src="/src/assets/Back_Button.svg"
           />
           <p>Macaw Chat</p>
           <img
             onClick={() => {
               props.close();
             }}
-            src="src/assets/Collapse.svg"
+            src="/src/assets/Collapse.svg"
           />
+          <div className={styles.sepLine} />
           {/* <SearchBox dark holder="Search" /> */}
         </div>
         {/* <ChatList maxHeight={cHeight / 2} /> */}
@@ -98,7 +99,7 @@ function LongSidebar(props) {
         </section> */}
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
-          <img src="src/assets/Upload.svg" />
+          <img src="/src/assets/Upload.svg" />
         </section>
         <FileList mh={cHeight} />
       </div>

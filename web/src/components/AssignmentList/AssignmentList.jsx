@@ -5,7 +5,10 @@ import styles from "./AssignmentList.module.css";
 const DUMMY_DATA = [
   { id: 1, name: "Assignment 1" },
   { id: 2, name: "Assignment 2" },
-  { id: 3, name: "Lab 1" },
+  { id: 3, name: "Assignment 3" },
+  { id: 4, name: "Lab 1" },
+  { id: 5, name: "Lab 2" },
+  { id: 6, name: "Lab 3" },
 ];
 
 const AssignmentList = (props) => {
@@ -17,6 +20,7 @@ const AssignmentList = (props) => {
   const assginmentSelectHandler = (id) => {
     console.log(id)
     setSelectedAssignment(id)
+    props.onSelect()
   }
 
   return (
