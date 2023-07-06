@@ -2,7 +2,7 @@ import styles from "./PillarList.module.css";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import PillarCourseCard from "src/components/PillarCourseCard/PillarCourseCard";
-import Course from "../../data.json";
+// import Course from "../../data.json";
 
 function PillarList(props) {
   let pillarList = [
