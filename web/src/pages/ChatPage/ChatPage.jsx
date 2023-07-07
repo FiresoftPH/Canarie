@@ -4,12 +4,12 @@ import LongSidebar from "src/components/Sidebar/LongSidebar";
 import ShortSideBar from "../../components/Sidebar/ShortSideBar";
 import { useParams } from "react-router-dom";
 import ChatUI from "../../components/ChatUI/ChatUI";
+import axios from 'axios'
 
 import CodeMirror from '@uiw/react-codemirror'
 import { EditorView } from "@codemirror/view"
 import { langs } from '@uiw/codemirror-extensions-langs'
 import * as alls from '@uiw/codemirror-themes-all'
-import { javascript } from "@codemirror/lang-javascript";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -38,6 +38,8 @@ function Chat() {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [language, setLanguage] = useState('javascript');
+  const [code, setCode] = useState('');
+  const [output, setOutput] = useState('');
 
   const [mode, setMode] = useState("General")
 
@@ -67,9 +69,25 @@ function Chat() {
   };
 
   // IDE stuff //
-  const onChange = useCallback((value,viewUpdate) => {
-    console.log('value:', value);
+  const onChange = ((value) => {
+    setCode(value)
   }, []);
+  const executeCode = async () => {
+    try {
+      // Make a POST request to the code execution API
+      const response = await axios.post('https://runkit.io/api/run', {
+        nodeVersion: '14.x',
+        env: {},
+        code,
+      });
+
+      // Set the output with the response data
+      setOutput(response.data);
+    } catch (error) {
+      // Set the output with the error message if any
+      setOutput(error.message);
+    }
+  };
   const fixedHeightEditor = EditorView.theme({
     "&": {height: "40vh"},
     ".cm-content" : { overflow: "auto"},
@@ -123,15 +141,18 @@ function Chat() {
             })}
           </select>
         </label>
+        <button onClick={executeCode}>RUN</button>
         <CodeMirror
           className={styles.ide}
           value="console.log('helloworld!')"
-          theme={ [alls.githubDark] }
+          theme={ [alls.okaidia] }
           extensions={[langTemplate[language], fixedHeightEditor, EditorView.lineWrapping]}
           onChange = { onChange }
         />
       </section>
-      <section className={styles.output}></section>
+      <section className={styles.output}>
+        {output}
+      </section>
     </div>
   );
 }
