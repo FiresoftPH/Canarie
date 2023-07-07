@@ -1,11 +1,13 @@
 [{
     "pillar_name": "Artificial Intelligence Core",
     "icon": "src/assets/Artificial Intelligence Core icon.svg",
+    "number_courses": 4,
     "courses": ["Algorithmic Thinking & Problem Solving","Intro to Programming","Programming Multi-module Applications","Object Oriented Programming","Functional Programming","Dataflow Programming","Fundamental Data Structures","Advanced Data Structures and Algorithms"]
   },
   {
     "pillar_name": "Human-Centered Design",
     "icon": "src/assets/Human-Centered Design icon.svg",
+    "number_courses": 2,
     "courses": ["Visualization","User experience and Interface design"]
   },
   {
