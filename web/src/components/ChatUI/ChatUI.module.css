@@ -1,18 +1,27 @@
 /* BACKDROP CSS */
 .backdrop {
-  height: 50%;
-  /* width: 100%; */
-
   /* chatzone main bg */
 
   box-sizing: border-box;
   background: #262952;
+
+  /* width: 50%;
+  height: auto;
+  margin-bottom: auto; */
   /* box-shadow: inset 2px 1px 1px rgba(0, 0, 0, 0.25); */
+  margin: 0px auto;
 
   position: absolute;
   z-index: -2;
   overflow: hidden;
   /* overflow-x: hidden; */
+}
+
+.wrapper {
+  /* width: auto;
+  height: auto; */
+  width: 100%;
+  height: 100%;
 }
 
 .redCircle {
@@ -47,6 +56,9 @@
 
   position: absolute;
   z-index: -1;
+
+  /* width: 100%;
+  height: 100%; */
 }
 
 /* HEADER */

@@ -17,10 +17,10 @@ const AssignmentList = (props) => {
     DUMMY_DATA[0].id
   );
 
-  const assginmentSelectHandler = (id) => {
+  const assginmentSelectHandler = (id, name) => {
     console.log(id)
     setSelectedAssignment(id)
-    props.onSelect()
+    props.onSelect(name)
   }
 
   return (

@@ -1,15 +1,19 @@
 [{
     "pillar_name": "Artificial Intelligence Core",
     "icon": "src/assets/Artificial Intelligence Core icon.svg",
-    "course": "Artificial Intelligence Core"
+    "number_courses": 4,
+    "courses": ["Algorithmic Thinking & Problem Solving","Intro to Programming","Programming Multi-module Applications","Object Oriented Programming","Functional Programming","Dataflow Programming","Fundamental Data Structures","Advanced Data Structures and Algorithms"]
   },
   {
     "pillar_name": "Human-Centered Design",
-    "icon": "src/assets/Human-Centered Design icon.svg"
+    "icon": "src/assets/Human-Centered Design icon.svg",
+    "number_courses": 2,
+    "courses": ["Visualization","User experience and Interface design"]
   },
   {
     "pillar_name": "Scalable Systems",
-    "icon": "src/assets/Scalable Systems icon.svg"
+    "icon": "src/assets/Scalable Systems icon.svg",
+    "courses": ["Operating Systems (Unix Basics)","Distributed Systems","Cloud Computing","Database Systems","Big Data Systems","Software Engineering","Software Architecture","Software Testing","Software Security","Software Project Management"]
   },
   { "pillar_name": "Cybersecurity", "icon": "src/assets/Cybersecurity icon.svg" },
   {

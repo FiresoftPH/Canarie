@@ -18,6 +18,7 @@ const CourseSlideUp = (props) => {
 
   const assginmentListSelectHandler = (id) => {
     setChatSelect("Assignment");
+    props.onSelectMode(id)
     console.log(chatSelect)
   };
   
@@ -59,6 +60,7 @@ const CourseSlideUp = (props) => {
                 setHideAss(!hideAss);
                 props.re_render();
                 setChatSelect("Assignment");
+                props.onSelectMode("Assignment 1")
               }}
             >
               <p
@@ -96,6 +98,7 @@ const CourseSlideUp = (props) => {
               onClick={() => {
                 setChatSelect("General");
                 setHideAss(false)
+                props.onSelectMode("General")
                 props.re_render()
               }}
               className={`${styles.general} ${

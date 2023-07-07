@@ -39,6 +39,18 @@ function Chat() {
   const [height, setHeight] = useState(0);
   const [language, setLanguage] = useState('javascript');
 
+  const [mode, setMode] = useState("General")
+
+  useEffect(() => {
+    setTimeout(() => {
+      const getWidth = window.innerWidth - Dimension(document.getElementById("total"))
+
+      const getHeight = window.innerHeight - Dimension2(document.getElementById("coding"))
+      setWidth(getWidth);
+      setHeight(getHeight)
+    }, 100);
+  }, []);
+
   const toggleClose = (val) => {
     setClose((state) => {
       return !state;
@@ -84,26 +96,19 @@ function Chat() {
   }
   // IDE stuff //
 
-  useEffect(() => {
-    setTimeout(() => {
-      const getWidth = window.innerWidth - Dimension(document.getElementById("total"))
-
-      const getHeight = window.innerHeight - Dimension2(document.getElementById("coding"))
-      setWidth(getWidth);
-      setHeight(getHeight)
-    }, 100);
-  }, []);
-
   return (
     // <div className={`styles.bg_container ` + (close ? "close" : "open")}>
     <div className={`${styles.bg_container} ${close ? styles.close : styles.open}`}>
       {close ? (
         <ShortSideBar open={toggleClose} />
       ) : (
-        <LongSidebar close={toggleClose} />
+        <LongSidebar onSelectMode={(id) => {
+          setMode(id)
+          console.log("ID: ", id)
+        }} close={toggleClose} />
       )}
       <section className={styles.chat}>
-        <ChatUI height={height} width={width} />
+        <ChatUI mode={mode} height={height} width={width} />
       </section>
       <section id="coding" className={styles.ide_container}>
         <label >

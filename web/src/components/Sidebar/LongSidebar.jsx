@@ -35,13 +35,13 @@ function LongSidebar(props) {
   const [cHeight, setCHeight] = useState(0);
 
   const [change, setChange] = useState(false);
+  const [mode, setMode] = useState("General");
 
   useEffect(() => {
     const height =
       Dimension(document.getElementById("total")) -
       Dimension(document.getElementById("assignment")) -
       Dimension(document.getElementById("chat")) -
-      // Dimension(document.getElementById("newChatBtn")) -
       Dimension(document.getElementById("file-upload"));
 
     setCHeight(height - 15);
@@ -61,7 +61,6 @@ function LongSidebar(props) {
         Dimension(document.getElementById("total")) -
         Dimension(document.getElementById("assignment")) -
         Dimension(document.getElementById("chat")) -
-        // Dimension(document.getElementById("newChatBtn")) -
         Dimension(document.getElementById("file-upload"));
 
       setCHeight(height - 20);
@@ -71,6 +70,12 @@ function LongSidebar(props) {
   const onReRender = () => {
     setChange(!change);
   };
+
+  const selectModeHandler = (id) => {
+    setMode(id)
+    console.log(id)
+    props.onSelectMode(id)
+  }
 
   return (
     <div id="total" className={styles.container}>
@@ -103,7 +108,7 @@ function LongSidebar(props) {
         </section>
         <FileList mh={cHeight} />
       </div>
-      <CourseSlideUp re_render={onReRender} />
+      <CourseSlideUp onSelectMode={selectModeHandler} re_render={onReRender} />
     </div>
   );
 }

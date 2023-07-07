@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/userSlice";
 
+import Cookies from 'js-cookie';
+
 function Login() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +37,12 @@ function Login() {
         status: "user",
       })
     );
+
+    Cookies.set("Screen_Width", window.innerWidth)
+    Cookies.set("Screen_Height", window.innerHeight)
   }, []);
+
+
 
   const modalToggle = () => {
     setShow(!show);
@@ -44,7 +51,7 @@ function Login() {
   return (
     <div className={styles.background}>
       <div className={styles.content}>
-        <img className={styles.logo} src="src/assets/Logo.svg" />
+        <img className={styles.logo} src="/src/assets/Logo.svg" />
         <p className={styles.app_name}>Macaw</p>
         <div className={styles.quote}>
           <section className={styles.left_text}>
@@ -57,7 +64,7 @@ function Login() {
         <div className={styles.group}>
           <div className={styles.api_button}>
             <div className={styles.api}>
-              <img src="src/assets/CMKL logo.svg" />
+              <img src="/src/assets/CMKL logo.svg" />
               <p>Sign in with CMKL account</p>
             </div>
           </div>
