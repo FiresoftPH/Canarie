@@ -2,14 +2,14 @@ import { useState, useCallback, useEffect } from "react";
 import styles from "./ChatPage.module.css";
 import LongSidebar from "src/components/Sidebar/LongSidebar";
 import ShortSideBar from "../../components/Sidebar/ShortSideBar";
-import CodeMirror from '@uiw/react-codemirror'
 import { useParams } from "react-router-dom";
+import ChatUI from "../../components/ChatUI/ChatUI";
 
+import CodeMirror from '@uiw/react-codemirror'
 import { EditorView } from "@codemirror/view"
 import { langs } from '@uiw/codemirror-extensions-langs'
 import * as alls from '@uiw/codemirror-themes-all'
-// import { dracula } from '@uiw/codemirror-theme-dracula'
-import ChatUI from "../../components/ChatUI/ChatUI";
+import { javascript } from "@codemirror/lang-javascript";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -35,8 +35,9 @@ function Dimension2(el) {
 
 function Chat() {
   const [close, setClose] = useState(false);
-  const [width, setWidth] = useState(0)
-  const [height, setHeight] = useState(0)
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [language, setLanguage] = useState('javascript');
 
   const [mode, setMode] = useState("General")
 
@@ -65,6 +66,7 @@ function Chat() {
     }, 100);
   };
 
+  // IDE stuff //
   const onChange = useCallback((value,viewUpdate) => {
     console.log('value:', value);
   }, []);
@@ -72,6 +74,27 @@ function Chat() {
     "&": {height: "40vh"},
     ".cm-content" : { overflow: "auto"},
   })
+  const langTemplate = { 
+    python: langs.python(),
+    java : langs.java(),
+    javascript: langs.javascript(),
+    typescript : langs.typescript(),
+    c : langs.c(),
+    css : langs.css(),
+    csharp : langs.csharp(),
+    dockerfile : langs.dockerfile(),
+    dart : langs.dart(),
+    go : langs.go(),
+    html : langs.html(),
+    jsx : langs.jsx(),
+    lua : langs.lua(),
+    mysql : langs.mysql(),
+    php : langs.php(),
+  };
+  function handleLangChange(lang) {
+    setLanguage(lang)
+  }
+  // IDE stuff //
 
   return (
     // <div className={`styles.bg_container ` + (close ? "close" : "open")}>
@@ -90,8 +113,8 @@ function Chat() {
       <section id="coding" className={styles.ide_container}>
         <label >
           Languages:
-          <select className={styles.lang_selection} id="">
-            {Object.keys(langs).sort().map((item, key) => {
+          <select className={styles.lang_selection} onChange={(evn) => handleLangChange(evn.target.value)}>
+            {Object.keys(langTemplate).sort().map((item, key) => {
               return (
                 <option key = {key}>
                   {item}
@@ -104,8 +127,7 @@ function Chat() {
           className={styles.ide}
           value="console.log('helloworld!')"
           theme={ [alls.githubDark] }
-          // theme={ dracula }
-          extensions={[langs.python(), fixedHeightEditor, EditorView.lineWrapping]}
+          extensions={[langTemplate[language], fixedHeightEditor, EditorView.lineWrapping]}
           onChange = { onChange }
         />
       </section>
