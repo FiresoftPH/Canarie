@@ -11,10 +11,12 @@ const ChatScreen = (props) => {
     props.onRate(rate, id)
   };
 
+  console.log(props.history)
+
   return (
     <>
       <div className={styles.wrapper}>
-        {props.history.map((message) => {
+        {props.history.chatHistory.map((message) => {
           if (message.sender === "ai") {
             return (
               <ChattingCardAI

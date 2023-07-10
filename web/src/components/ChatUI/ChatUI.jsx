@@ -31,44 +31,9 @@ function Dimension2(el) {
   return Math.ceil(el.offsetHeight + margin);
 }
 
-// const DUMMY_TEXT_DATA = {
-//   w1: [
-//     {
-//       id: 0,
-//       sender: "user",
-//       message: "hey",
-//     },
-//     {
-//       id: 1,
-//       sender: "ai",
-//       message: "hi, any questions?",
-//       rating: "none",
-//     },
-//   ],
-//   w2: [],
-//   w3: [],
-//   w4: [],
-//   w5: [],
-//   w6: [],
-//   General: [
-//     // {
-//     //   id: 0,
-//     //   sender: "user",
-//     //   message:
-//     //     "i need help with this and stuff and stuff and stuff and stuff and stuff and stuff and stuff and stuff",
-//     // },
-//     // {
-//     //   id: 1,
-//     //   sender: "ai",
-//     //   message:
-//     //     "ok sure. which one you need help. i am here to help na Lorem ipsum fda dfsdsafdsa dfdsfdsa asdfdsafdsa",
-//     // },
-//   ],
-// };
-
 const DUMMY_TEXT_DATA = [
   {
-    subjectId: "",
+    assginmentId: "w0",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
@@ -80,7 +45,7 @@ const DUMMY_TEXT_DATA = [
     ],
   },
   {
-    subjectId: "",
+    assginmentId: "w1",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
@@ -92,7 +57,7 @@ const DUMMY_TEXT_DATA = [
     ],
   },
   {
-    subjectId: "",
+    assginmentId: "w2",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
@@ -104,7 +69,7 @@ const DUMMY_TEXT_DATA = [
     ],
   },
   {
-    subjectId: "",
+    assginmentId: "w3",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
@@ -116,7 +81,7 @@ const DUMMY_TEXT_DATA = [
     ],
   },
   {
-    subjectId: "",
+    assginmentId: "w4",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
@@ -128,7 +93,7 @@ const DUMMY_TEXT_DATA = [
     ],
   },
   {
-    subjectId: "",
+    assignmentId: "w5",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
@@ -139,43 +104,22 @@ const DUMMY_TEXT_DATA = [
       },
     ],
   },
-  {
-    subjectId: "",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-];
-
-const DUMMY_DATA = [
-  { id: "w1", name: "Assignment 1" },
-  { id: "w2", name: "Assignment 2" },
-  { id: "w3", name: "Assignment 3" },
-  { id: "w4", name: "Lab 1" },
-  { id: "w5", name: "Lab 2" },
-  { id: "w6", name: "Lab 3" },
 ];
 
 const ChatUI = (props) => {
   // let chatName = props.mode;
   let chatName = useParams().assignmentId;
 
-  if (props.mode === "General") {
+  if (chatName === "General") {
     chatName = "-";
   } else {
     chatName = chatName.replace(" ", "_");
   }
 
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  // const [width, setWidth] = useState(0);
+  // const [height, setHeight] = useState(0);
 
-  const [assignment, setAssignment] = useState("-");
+  // const [assignment, setAssignment] = useState("-");
 
   const [history, setHistory] = useState(DUMMY_TEXT_DATA);
 
@@ -219,18 +163,19 @@ const ChatUI = (props) => {
     //   ...prevState,
     //   [chatName]: [...prevState[chatName], ...prevState[chatName][id] = 1],
     // }));
-    const updatedChat = history.map((assginment) => {
-      return assginment.map((chat) => {
-        if (chat.id === id) {
-          return {
-            ...chat,
-            rating: rating,
-          };
-        } else {
-          return chat;
-        }
-      });
-    });
+
+    // const updatedChat = history.map((assginment) => {
+    //   return assginment.map((chat) => {
+    //     if (chat.id === id) {
+    //       return {
+    //         ...chat,
+    //         rating: rating,
+    //       };
+    //     } else {
+    //       return chat;
+    //     }
+    //   });
+    // });
   };
 
   return (
@@ -262,7 +207,7 @@ const ChatUI = (props) => {
         <div className={styles.sepLine} />
       </div>
       <div className={styles.chatting}></div>
-      <ChatScreen onRate={ratingHandler} history={history[chatName]} />
+      <ChatScreen onRate={ratingHandler} history={history.filter(ass => ass.assginmentId === chatName)[0]} />
       <ChatInputField onSend={askAIHandler} />
     </div>
   );
