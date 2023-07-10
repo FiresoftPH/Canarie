@@ -24,7 +24,7 @@ function App() {
         <Route path="/Term" element={<Term/>}/>
         <Route path="/Course" element={<Course/>}/>
         {/* <Route path="/Chat/:subject" element={<Chat/>}/> */}
-        <Route path="/Chat/:subjectId" element={<ChatPage/>}/>
+        <Route path="/Chat/:subjectId/:assignmentId" element={<ChatPage/>}/>
         <Route path="/Admin" element={<Admin />} />
         <Route path="/AdminCourse" element={<AdminCourse />} />
       </Routes>

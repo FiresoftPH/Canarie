@@ -6,7 +6,7 @@
 
 // }
 
-// const miscSlice = createSlice({
+// const chatSlice = createSlice({
 //   name: 'user',
 //   initialState,
 //   reducers: {

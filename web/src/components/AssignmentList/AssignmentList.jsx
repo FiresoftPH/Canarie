@@ -1,14 +1,15 @@
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AssignmentCard from "../AssignmentCard/AssignmentCard";
 import styles from "./AssignmentList.module.css";
 
 const DUMMY_DATA = [
-  { id: 1, name: "Assignment 1" },
-  { id: 2, name: "Assignment 2" },
-  { id: 3, name: "Assignment 3" },
-  { id: 4, name: "Lab 1" },
-  { id: 5, name: "Lab 2" },
-  { id: 6, name: "Lab 3" },
+  { id: "w1", name: "Assignment 1" },
+  { id: "w2", name: "Assignment 2" },
+  { id: "w3", name: "Assignment 3" },
+  { id: "w4", name: "Lab 1" },
+  { id: "w5", name: "Lab 2" },
+  { id: "w6", name: "Lab 3" },
 ];
 
 const AssignmentList = (props) => {
@@ -17,10 +18,17 @@ const AssignmentList = (props) => {
     DUMMY_DATA[0].id
   );
 
+  const { subjectId } = useParams()
+  const nav = useNavigate()
+
   const assginmentSelectHandler = (id, name) => {
     console.log(id)
     setSelectedAssignment(id)
     props.onSelect(name)
+
+    nav(`../Chat/${subjectId}/${id}`, {
+      replace: true,
+    });
   }
 
   return (
