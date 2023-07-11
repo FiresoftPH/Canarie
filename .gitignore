@@ -8,3 +8,5 @@ test.py
 stuff.obj
 uploads
 node_modules
+models
+.vscode

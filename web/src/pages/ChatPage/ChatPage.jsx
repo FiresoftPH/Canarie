@@ -19,7 +19,7 @@ function Dimension(el) {
   var margin =
     parseFloat(styles["marginLeft"]) + parseFloat(styles["marginRight"]);
 
-  return Math.ceil(el.offsetWidth + margin);
+  return el.offsetWidth + margin;
 }
 
 function Dimension2(el) {
@@ -30,7 +30,7 @@ function Dimension2(el) {
   var margin =
     parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
 
-  return Math.ceil(el.offsetHeight + margin);
+  return el.offsetHeight + margin;
 }
 
 function Chat() {

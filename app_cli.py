@@ -120,7 +120,8 @@ class appCLI:
         while True:
             choice = str(input("Upload any file?: "))
             if choice == "yes":
-                file_dir = str(input("Directory of the file: "))
+                # file_dir = str(input("Directory of the file: "))
+                file_dir = "test_files/UwU.py"
                 question = str(input("What is your question?: "))
                 prompt = self.ai.getPrompt(question, file_dir)
                 print(self.ai.getResponse(prompt))
@@ -134,7 +135,7 @@ class appCLI:
                 break
             else:
                 print("invalid_choice")
-                choice = str(input("Upload any file?: "))
+                # choice = str(input("Upload any file?: "))
 
     def assignmentChatRoom(self):
         pass

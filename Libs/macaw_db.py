@@ -153,12 +153,20 @@ class Database:
             for row in result:
                 print(row)
 
+    # Use together with flask webserver to fetch the user whole information
     def fetchUserData(self, username):
         self.cursor.execute("SELECT * FROM users WHERE username = %s", username)
         result = self.cursor.fetchall()
         transform_courses = self.arrayFromString(result[0][4])
         data = {"id": result[0][0], "name": result[0][1], "username": result[0][2], "password": result[0][3], "enrolled_courses": transform_courses, "status": result[0][5]}
         return data
+    
+    # Use together with flask webserver to fetch the course data enrolled by a given user.
+    def fetchUserCourseData(self, username):
+        self.cursor.execute("SELECT enrolled_courses WHERE username = %s", username)
+        result = self.cursor.fetchall()
+        transform_courses = self.arrayFromString(result[0][0])
+        return transform_courses
     
     # Shows the data from the statistics table. 
     def showStatisticsData(self):
@@ -326,6 +334,7 @@ class Database:
                 return False
             
         return False
+        
         # history = pickle.loads(history[0])
         # return history
 
@@ -336,7 +345,6 @@ class Database:
     def getUserChatRoom(self, username):
         self.cursor.execute("SELECT assignment_name from chat_history WHERE username = %s", username)
         result = self.cursor.fetchall()
-        
         print(result)
     
 """
@@ -344,4 +352,5 @@ TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
 
 # test = Database()
+# test.enrollCourse("hutao", ["Calculus 1", "Computer System", "Principal Of Computing Application"])
 # print(test.fetchUserData("Firesoft"))
