@@ -10,6 +10,7 @@ import CodeMirror from '@uiw/react-codemirror'
 import { EditorView } from "@codemirror/view"
 import { langs } from '@uiw/codemirror-extensions-langs'
 import * as alls from '@uiw/codemirror-themes-all'
+import { javascript } from "@codemirror/lang-javascript";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -96,27 +97,40 @@ function Chat() {
   };
 
   const excutePythonCode = (code) => {
-    localStorage.setItem('python:',code);
-    // console.log('code:', code)
-  }
+    // CacheStorage.bind('python:',code);
+    const cacheName = 'file.py';
+    const fileContent = code;
+
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+
+    const cachePromise = caches.open(cacheName).then((cache) => {
+      const request = new Request(cacheName);
+      const response = new Response(blob);
+      return cache.put(request, response);
+    });
+    cachePromise.catch((error) => {
+      console.error('Error saving code to cache:', error);
+    });
+  };
+  
   const getSavedCodeFromLocalSorage = () => {
     return localStorage.getItem('python')
   }
 
   const excuteJavascriptCode = (code) => {
-    const filename = 'temp.js';
+    const cacheName = 'file.js';
     const fileContent = code;
 
-    const blob = new Blob([fileContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+    // const blob = new Blob([fileContent], { type: 'text/plain' });
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-
-    link.click();
-    // console.log('code:', code)
-    window.URL.revokeObjectURL(url);
+    const cachePromise = caches.open(cacheName).then((cache) => {
+      const request = new Request(cacheName);
+      const response = new Response(fileContent);
+      return cache.put(request, response);
+    });
+    cachePromise.catch((error) => {
+      console.error('Error saving code to cache:', error);
+    });
   }
   
   const fixedHeightEditor = EditorView.theme({
@@ -163,10 +177,10 @@ function Chat() {
       <section id="coding" className={styles.ide_container}>
         <label >
           Languages:
-          <select className={styles.lang_selection} onChange={(evn) => handleLangChange(evn.target.value)}>
+          <select className={styles.lang_selection} value={language} onChange={(evn) => handleLangChange(evn.target.value)}>
             {Object.keys(langTemplate).sort().map((item, key) => {
               return (
-                <option key = {key}>
+                <option key = {key} value={item}>
                   {item}
                 </option>
               )
@@ -177,7 +191,7 @@ function Chat() {
         <CodeMirror
           className={styles.ide}
           value="console.log('helloworld!')"
-          theme={ [alls.okaidia] }
+          theme={ [alls.atomone] }
           extensions={[langTemplate[language], fixedHeightEditor, EditorView.lineWrapping]}
           onChange = { onChange }
         />
