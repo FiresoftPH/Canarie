@@ -15,7 +15,7 @@ const ChatScreen = (props) => {
 
   return (
     <>
-      <div className={styles.wrapper}>
+      <div id="chatScroll" className={styles.wrapper}>
         {props.history.chatHistory.map((message) => {
           if (message.sender === "ai") {
             return (

@@ -33,60 +33,48 @@ function Dimension2(el) {
 
 const DUMMY_TEXT_DATA = [
   {
-    assginmentId: "w0",
+    assignmentId: "w1",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
         chatId: 1,
-        message: "Hi, any help u need?",
+        message: "Hi, any help u need with assignment 1?",
         sender: "ai",
         rating: "none",
       },
     ],
   },
   {
-    assginmentId: "w1",
+    assignmentId: "w2",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
         chatId: 1,
-        message: "Hi, any help u need?",
+        message: "Hi, any help u need with assignment 2?",
         sender: "ai",
         rating: "none",
       },
     ],
   },
   {
-    assginmentId: "w2",
+    assignmentId: "w3",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
         chatId: 1,
-        message: "Hi, any help u need?",
+        message: "Hi, any help u need with assignment 3?",
         sender: "ai",
         rating: "none",
       },
     ],
   },
   {
-    assginmentId: "w3",
+    assignmentId: "w4",
     chatHistory: [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
         chatId: 1,
-        message: "Hi, any help u need?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-  {
-    assginmentId: "w4",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need?",
+        message: "Hi, any help u need wiht lab 1?",
         sender: "ai",
         rating: "none",
       },
@@ -98,7 +86,19 @@ const DUMMY_TEXT_DATA = [
       { chatId: 0, message: "Hello.", sender: "user" },
       {
         chatId: 1,
-        message: "Hi, any help u need?",
+        message: "Hi, any help u need with lab 2?",
+        sender: "ai",
+        rating: "none",
+      },
+    ],
+  },
+  {
+    assignmentId: "w6",
+    chatHistory: [
+      { chatId: 0, message: "Hello.", sender: "user" },
+      {
+        chatId: 1,
+        message: "Hi, any help u need with lab 3?",
         sender: "ai",
         rating: "none",
       },
@@ -126,36 +126,50 @@ const ChatUI = (props) => {
   const askAIHandler = (question) => {
     console.log(question);
 
-    // console.log(history[chatName][history[chatName].length - 1].id)
+    setHistory((prevState) =>
+      prevState.map((assignment) => {
+        if (assignment.assignmentId === chatName) {
+          return {
+            ...assignment,
+            chatHistory: [
+              ...assignment["chatHistory"],
+              {
+                chatId: Math.random(),
+                message: question,
+                sender: "user",
+              },
+            ],
+          };
+        } else {
+          return assignment;
+        }
+      })
+    );
 
-    let index = Math.random();
+    setHistory((prevState) =>
+      prevState.map((assignment) => {
+        if (assignment.assignmentId === chatName) {
+          return {
+            ...assignment,
+            chatHistory: [
+              ...assignment["chatHistory"],
+              {
+                chatId: Math.random(),
+                message: "No. You can do it yourself.",
+                sender: "ai",
+                rating: "none",
+              },
+            ],
+          };
+        } else {
+          return assignment;
+        }
+      })
+    );
 
-    setHistory((prevState) => ({
-      ...prevState,
-      [chatName]: [
-        ...prevState[chatName],
-        {
-          id: index + 1,
-          sender: "user",
-          message: question,
-        },
-      ],
-    }));
+    const scrollBar = document.getElementById("chatScroll")
 
-    setHistory((prevState) => ({
-      ...prevState,
-      [chatName]: [
-        ...prevState[chatName],
-        {
-          id: index + 2,
-          sender: "ai",
-          message: "no. do it urself",
-          rating: "none",
-        },
-      ],
-    }));
-
-    console.log(history);
+    scrollBar.scrollTo()
   };
 
   const ratingHandler = (rating, id) => {
@@ -163,7 +177,6 @@ const ChatUI = (props) => {
     //   ...prevState,
     //   [chatName]: [...prevState[chatName], ...prevState[chatName][id] = 1],
     // }));
-
     // const updatedChat = history.map((assginment) => {
     //   return assginment.map((chat) => {
     //     if (chat.id === id) {
@@ -207,7 +220,10 @@ const ChatUI = (props) => {
         <div className={styles.sepLine} />
       </div>
       <div className={styles.chatting}></div>
-      <ChatScreen onRate={ratingHandler} history={history.filter(ass => ass.assginmentId === chatName)[0]} />
+      <ChatScreen
+        onRate={ratingHandler}
+        history={history.filter((ass) => ass.assignmentId === chatName)[0]}
+      />
       <ChatInputField onSend={askAIHandler} />
     </div>
   );
