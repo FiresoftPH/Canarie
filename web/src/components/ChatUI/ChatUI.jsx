@@ -5,7 +5,7 @@ import RenameIcon from "src/assets/RenameIcon.svg";
 import ClearChatHistoryIcon from "src/assets/ClearChatHistoryIcon.svg";
 import ChatInputField from "../ChatInputField/ChatInputField";
 import ChatScreen from "../ChatScreen/ChatScreen";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import userSlice from "../../store/userSlice";
 
@@ -106,6 +106,7 @@ const DUMMY_TEXT_DATA = [
   },
 ];
 
+let shouldUpdate = false;
 const ChatUI = (props) => {
   // let chatName = props.mode;
   let chatName = useParams().assignmentId;
@@ -116,12 +117,9 @@ const ChatUI = (props) => {
     chatName = chatName.replace(" ", "_");
   }
 
-  // const [width, setWidth] = useState(0);
-  // const [height, setHeight] = useState(0);
-
-  // const [assignment, setAssignment] = useState("-");
-
   const [history, setHistory] = useState(DUMMY_TEXT_DATA);
+
+  // const [shouldUpdate, setShouldUpdate] = useState(false)
 
   const askAIHandler = (question) => {
     console.log(question);
@@ -166,65 +164,92 @@ const ChatUI = (props) => {
         }
       })
     );
-
-    const scrollBar = document.getElementById("chatScroll")
-
-    scrollBar.scrollTo()
   };
 
   const ratingHandler = (rating, id) => {
-    // setHistory((prevState) => ({
-    //   ...prevState,
-    //   [chatName]: [...prevState[chatName], ...prevState[chatName][id] = 1],
-    // }));
-    // const updatedChat = history.map((assginment) => {
-    //   return assginment.map((chat) => {
-    //     if (chat.id === id) {
-    //       return {
-    //         ...chat,
-    //         rating: rating,
-    //       };
-    //     } else {
-    //       return chat;
-    //     }
-    //   });
-    // });
+    shouldUpdate = true;
+    // console.log(rating, id)
+
+    setHistory((prevState) =>
+      prevState.map((assignment) => {
+        if (assignment.assignmentId === chatName) {
+          const ratedChat = assignment.chatHistory.map((chat) => {
+            if (chat.sender === "ai" && chat.chatId === id) {
+              return {
+                ...chat,
+                rating: rating,
+              };
+            } else {
+              return chat;
+            }
+          });
+
+          return {
+            ...assignment,
+            chatHistory: ratedChat,
+          };
+        } else {
+          return assignment;
+        }
+      })
+    );
   };
+
+  useEffect(() => {
+    console.log("I run after");
+    console.log(shouldUpdate);
+    if (shouldUpdate === false) {
+      const scrollBar = document.getElementById("chatScroll");
+      scrollBar.scrollTop = scrollBar.scrollHeight;
+      // console.log("Go to bottom")
+    } else {
+      shouldUpdate = false;
+    }
+  }, [
+    <ChatScreen
+      onRate={ratingHandler}
+      history={history.filter((ass) => ass.assignmentId === chatName)[0]}
+    />,
+  ]);
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.backdrops}>
-        <div
-          style={{
-            width: props.width,
-            height: props.height,
-          }}
-          className={styles.backdrop}
-        >
-          <div className={styles.yellowCircle} />
-          <div className={styles.redCircle} />
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <img src={ChatIconNoBG} />
+          <p>{chatName}</p>
+          <img src={RenameIcon} />
+          <img src={ClearChatHistoryIcon} />
+          <div className={styles.sepLine} />
         </div>
-        <div
-          style={{
-            width: props.width,
-            height: props.height,
-          }}
-          className={styles.backdrop1}
+        <div className={styles.chatting}></div>
+        <ChatScreen
+          onRate={ratingHandler}
+          history={history.filter((ass) => ass.assignmentId === chatName)[0]}
         />
+        <ChatInputField onSend={askAIHandler} />
       </div>
-      <div className={styles.header}>
-        <img src={ChatIconNoBG} />
-        <p>{chatName}</p>
-        <img src={RenameIcon} />
-        <img src={ClearChatHistoryIcon} />
-        <div className={styles.sepLine} />
-      </div>
-      <div className={styles.chatting}></div>
-      <ChatScreen
-        onRate={ratingHandler}
-        history={history.filter((ass) => ass.assignmentId === chatName)[0]}
-      />
-      <ChatInputField onSend={askAIHandler} />
+      {/* <div className={styles.temp}> */}
+        <div className={styles.backdrops}>
+          <div
+            // style={{
+            //   width: props.width,
+            //   height: props.height,
+            // }}
+            className={styles.backdrop}
+          >
+            <div className={styles.yellowCircle} />
+            <div className={styles.redCircle} />
+          </div>
+          <div
+            // style={{
+            //   width: props.width,
+            //   height: props.height,
+            // }}
+            className={styles.backdrop1}
+          />
+        </div>
+      {/* </div> */}
     </div>
   );
 };
