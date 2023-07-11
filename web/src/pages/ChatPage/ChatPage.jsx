@@ -51,6 +51,7 @@ function Chat() {
       setWidth(getWidth);
       setHeight(getHeight)
     }, 100);
+    
   }, []);
 
   const toggleClose = (val) => {
@@ -58,7 +59,6 @@ function Chat() {
       return !state;
     });
 
-    
     setTimeout(() => {
       const getWidth = window.innerWidth - Dimension(document.getElementById("total"))
 
@@ -69,25 +69,56 @@ function Chat() {
   };
 
   // IDE stuff //
-  const onChange = ((value) => {
+  const onChange = useCallback((value) => {
     setCode(value)
   }, []);
-  const executeCode = async () => {
+  const executeCode = () => {
     try {
-      // Make a POST request to the code execution API
-      const response = await axios.post('https://runkit.io/api/run', {
-        nodeVersion: '14.x',
-        env: {},
-        code,
-      });
-
-      // Set the output with the response data
-      setOutput(response.data);
+      let result;
+      switch (language) {
+        case 'javascript':
+          result = excuteJavascriptCode(code);
+          console.log('1');
+          break;
+        case 'python':
+          result = excutePythonCode(code);
+          console.log('2');
+          break;
+        default:
+          throw new Error(`Language mode "${language}" is not supported.`);
+      }
+      // Set the output with the result of code execution
+      setOutput(result);
     } catch (error) {
       // Set the output with the error message if any
-      setOutput(error.message);
+      setOutput(error.toString());
     }
   };
+
+  const excutePythonCode = (code) => {
+    localStorage.setItem('python:',code);
+    // console.log('code:', code)
+  }
+  const getSavedCodeFromLocalSorage = () => {
+    return localStorage.getItem('python')
+  }
+
+  const excuteJavascriptCode = (code) => {
+    const filename = 'temp.js';
+    const fileContent = code;
+
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+
+    link.click();
+    // console.log('code:', code)
+    window.URL.revokeObjectURL(url);
+  }
+  
   const fixedHeightEditor = EditorView.theme({
     "&": {height: "40vh"},
     ".cm-content" : { overflow: "auto"},
@@ -112,6 +143,7 @@ function Chat() {
   function handleLangChange(lang) {
     setLanguage(lang)
   }
+
   // IDE stuff //
 
   return (
