@@ -3,6 +3,9 @@
   grid-template-columns: 1fr 10fr;
   width: 80%;
   margin-left: 10%;
+
+  position: absolute;
+  bottom: 1rem;
   /* justify-content: center;
     align-items: center; */
 }
