@@ -46,6 +46,7 @@
   all: unset;
   margin-left: 0.5rem;
   color: black;
+  width: 100%;
 }
 
 .send {

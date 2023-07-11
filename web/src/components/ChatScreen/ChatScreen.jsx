@@ -1,17 +1,21 @@
+import { useEffect, useState } from "react";
 import ChattingCardAI from "../ChattingCard/ChattingCardAI";
 import ChattingCardUser from "../ChattingCard/ChattingCardUser";
 import styles from "./ChatScreen.module.css";
 
 const ChatScreen = (props) => {
+  const [update, setUpdate] = useState(false)
+  const [prevUpdate, setPrevUpdate] = useState(false)
+
   if (props.history == undefined) {
     return <div className={styles.wrapper}></div>;
   }
 
+  console.log('I run brfore')
+
   const ratingHandler = (rate, id) => {
     props.onRate(rate, id)
   };
-
-  console.log(props.history)
 
   return (
     <>
@@ -23,7 +27,7 @@ const ChatScreen = (props) => {
                 onRate={ratingHandler}
                 rating={message.rating}
                 message={message.message}
-                id={message.id}
+                id={message.chatId}
               />
             );
           }

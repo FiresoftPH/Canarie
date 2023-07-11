@@ -1,0 +1,464 @@
+[
+  {
+    "class": "Principal Of Computing Applications",
+    "data": [
+      {
+        "assignmentId": "w1",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "Computer Systems",
+    "data": [
+      {
+        "assignmentId": "w1",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "Calculus 1",
+    "data": [
+      {
+        "assignmentId": "w1",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "Calculus 2",
+    "data": [
+      {
+        "assignmentId": "w1",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "Physics",
+    "data": [
+      {
+        "assignmentId": "w1",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "class": "Chemistry",
+    "data": [
+      {
+        "assignmentId": "w1",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "chatHistory": [
+          { "chatId": 0, "message": "Hello.", "sender": "user" },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ]
+      }
+    ]
+  }
+]
