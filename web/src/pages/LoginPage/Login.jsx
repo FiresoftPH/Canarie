@@ -7,6 +7,8 @@ import { userActions } from "../../store/userSlice";
 
 import Cookies from 'js-cookie';
 
+import CourseNames from './CourseNames.json';
+
 function Login() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
@@ -20,20 +22,7 @@ function Login() {
         name: "Napoleon",
         username: "nwagenen0",
         password: "cG5(SH9M",
-        courses: [
-          "Principal Of Computing Applications",
-          "Computer Systems",
-          "Calculus 1",
-          "Calculus 2",
-          "Physics",
-          "Chemistry",
-        ],
-        // courses: {
-        //   "c1":"Principal Of Computing Applications",
-        //   "c2":"Computer Systems",
-        //   "c3":"Calculus 1",
-        //   "c4":"Calculus 2",
-        // },
+        courses: CourseNames,
         status: "user",
       })
     );

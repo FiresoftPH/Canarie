@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import AssignmentCard from "../AssignmentCard/AssignmentCard";
 
@@ -10,11 +10,15 @@ import LeftV from "../../assets/LeftV.svg";
 import UpV from "../../assets/UpV.svg";
 import AssignmentList from "../AssignmentList/AssignmentList";
 
+import BigData from '../ChatUI/BigData.json';
+
 const CourseSlideUp = (props) => {
   const [hideCourse, setHideCourse] = useState(false);
   const [hideAss, setHideAss] = useState(false);
 
   const [chatSelect, setChatSelect] = useState("General");
+
+  const nav = useNavigate()
 
   const assginmentListSelectHandler = (id) => {
     setChatSelect("Assignment");
@@ -60,7 +64,11 @@ const CourseSlideUp = (props) => {
                 setHideAss(!hideAss);
                 props.re_render();
                 setChatSelect("Assignment");
-                props.onSelectMode("Assignment 1")
+                // props.onSelectMode("Assignment 1")
+                // console.log(BigData.filter(sub => sub.course === subjectId)[0].assignments[0].assignmentId)
+                nav(`../Chat/${subjectId}/${BigData.filter(sub => sub.course === subjectId)[0].assignments[0].assignmentId}`, {
+                  replace: true,
+                });
               }}
             >
               <p

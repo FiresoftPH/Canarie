@@ -1,0 +1,63 @@
+[
+  {
+    "course": "Principal Of Computing Applications",
+    "assignments": [
+      { "id": "w1", "name": "Assignment 1" },
+      { "id": "w2", "name": "Assignment 2" },
+      { "id": "w3", "name": "Assignment 3" },
+      { "id": "w4", "name": "Lab 1" },
+      { "id": "w5", "name": "Lab 2" },
+      { "id": "w6", "name": "Lab 3" }
+    ]
+  },
+  {
+    "course": "Computer Systems",
+    "assignments": [
+      { "id": "w1", "name": "Assignment 1" },
+      { "id": "w2", "name": "Assignment 2" },
+      { "id": "w4", "name": "Lab 1" },
+      { "id": "w5", "name": "Lab 2" },
+      { "id": "w6", "name": "Lab 3" }
+    ]
+  },
+  {
+    "course": "Calculus 1",
+    "assignments": [
+      { "id": "w1", "name": "Assignment 1" },
+      { "id": "w3", "name": "Assignment 3" },
+      { "id": "w4", "name": "Lab 1" },
+      { "id": "w5", "name": "Lab 2" },
+      { "id": "w6", "name": "Lab 3" }
+    ]
+  },
+  {
+    "course": "Calculus 2",
+    "assignments": [
+      { "id": "w1", "name": "Assignment 1" },
+      { "id": "w2", "name": "Assignment 2" },
+      { "id": "w3", "name": "Assignment 3" },
+      { "id": "w4", "name": "Lab 1" },
+      { "id": "w6", "name": "Lab 3" }
+    ]
+  },
+  {
+    "course": "Physics",
+    "assignments": [
+      { "id": "w1", "name": "Assignment 1" },
+      { "id": "w2", "name": "Assignment 2" },
+      { "id": "w3", "name": "Assignment 3" },
+      { "id": "w4", "name": "Lab 1" },
+      { "id": "w5", "name": "Lab 2" }
+    ]
+  },
+  {
+    "course": "Chemistry",
+    "assignments": [
+      { "id": "w2", "name": "Assignment 2" },
+      { "id": "w3", "name": "Assignment 3" },
+      { "id": "w4", "name": "Lab 1" },
+      { "id": "w5", "name": "Lab 2" },
+      { "id": "w6", "name": "Lab 3" }
+    ]
+  }
+]

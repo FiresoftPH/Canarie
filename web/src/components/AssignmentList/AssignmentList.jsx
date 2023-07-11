@@ -3,33 +3,48 @@ import { useNavigate, useParams } from "react-router-dom";
 import AssignmentCard from "../AssignmentCard/AssignmentCard";
 import styles from "./AssignmentList.module.css";
 
-const DUMMY_DATA = [
-  { id: "w1", name: "Assignment 1" },
-  { id: "w2", name: "Assignment 2" },
-  { id: "w3", name: "Assignment 3" },
-  { id: "w4", name: "Lab 1" },
-  { id: "w5", name: "Lab 2" },
-  { id: "w6", name: "Lab 3" },
-];
+// const DUMMY_DATA = [
+//   { id: "w1", name: "Assignment 1" },
+//   { id: "w2", name: "Assignment 2" },
+//   { id: "w3", name: "Assignment 3" },
+//   { id: "w4", name: "Lab 1" },
+//   { id: "w5", name: "Lab 2" },
+//   { id: "w6", name: "Lab 3" },
+// ];
+
+// import DUMMY_DATA_ASSIGNMENT from "./Assignments.json";
+import BigData from '../ChatUI/BigData.json';
 
 const AssignmentList = (props) => {
   //   const [assignments, setAssignments] = useState(DUMMY_DATA)
+
+  const { subjectId } = useParams();
+  const nav = useNavigate();
+
+  let DUMMY_DATA = BigData.filter((subject) => {
+    return subject.course == subjectId;
+  })[0].assignments;
+
+  DUMMY_DATA = DUMMY_DATA.map(ass => {
+    return {
+      id: ass.assignmentId,
+      name: ass.name
+    }
+  })
+
   const [selectedAssignment, setSelectedAssignment] = useState(
     DUMMY_DATA[0].id
   );
 
-  const { subjectId } = useParams()
-  const nav = useNavigate()
-
   const assginmentSelectHandler = (id, name) => {
-    console.log(id)
-    setSelectedAssignment(id)
-    props.onSelect(name)
+    console.log(id);
+    setSelectedAssignment(id);
+    props.onSelect(id);
 
     nav(`../Chat/${subjectId}/${id}`, {
       replace: true,
     });
-  }
+  };
 
   return (
     <>

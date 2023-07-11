@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import ChattingCardAI from "../ChattingCard/ChattingCardAI";
 import ChattingCardUser from "../ChattingCard/ChattingCardUser";
-import styles from "./ChatScreen.module.css";
+import styles from "./ChatScreenInitialized.module.css";
 
-const ChatScreen = (props) => {
+const ChatScreenInitialized = (props) => {
   const [update, setUpdate] = useState(false)
   const [prevUpdate, setPrevUpdate] = useState(false)
 
@@ -39,4 +39,4 @@ const ChatScreen = (props) => {
   );
 };
 
-export default ChatScreen;
+export default ChatScreenInitialized;
