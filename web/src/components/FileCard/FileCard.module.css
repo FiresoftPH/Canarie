@@ -5,6 +5,10 @@
     padding: 0.5rem;
 }
 
+.wrapper:hover {
+    /* cursor: pointer; */
+}
+
 .editIcon {
     width: 2.5rem;
 }

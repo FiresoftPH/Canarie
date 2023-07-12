@@ -14,13 +14,13 @@ const FileCard = (props) => {
       {props.selected ? <div className={styles.backdrop} /> : ""}
       <img className={styles.editIcon} src={EditIcon} />
       <p>{props.name}</p>
-      <img
+      {props.noDelete ? "" : <img
         className={styles.delete}
         src={Close}
         onClick={() => {
           props.onDelete(props.id);
         }}
-      />
+      />}
       {/* </> */}
     </div>
   );

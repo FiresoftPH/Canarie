@@ -13,8 +13,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 const ChattingCardAI = (props) => {
   const [rate, setRate] = useState();
 
-  const nav = useNavigate()
-  const { subjectId } = useParams()
+  const nav = useNavigate();
+  const { subjectId } = useParams();
 
   return (
     <div className={styles.wrapper}>
@@ -26,7 +26,18 @@ const ChattingCardAI = (props) => {
             {props.assignments
               ? props.assignments.map((assignment) => {
                   if (assignment !== undefined) {
-                    return <><Link onClick={() => { props.chooseSubject() }} to={`/Chat/${subjectId}/${assignment.id}`}>{assignment.name}</Link>&nbsp;&nbsp;&nbsp;</>;
+                    return (
+                      <>
+                        <p
+                          onClick={() => {
+                            props.chooseSubject(assignment.id);
+                          }}
+                        >
+                          {assignment.name}
+                        </p>
+                        &nbsp;&nbsp;&nbsp;
+                      </>
+                    );
                   }
                 })
               : ""}

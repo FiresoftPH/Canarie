@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import ChattingCardAI from "../ChattingCard/ChattingCardAI";
 import ChattingCardUser from "../ChattingCard/ChattingCardUser";
 import styles from "./ChatScreenNotInit.module.css";
@@ -7,6 +8,9 @@ const ChatScreenNotInit = (props) => {
    const [update, setUpdate] = useState(false)
   const [prevUpdate, setPrevUpdate] = useState(false)
 
+  const nav = useNavigate()
+  const { subjectId } = useParams()
+
   if (props.history == undefined) {
     return <div className={styles.wrapper}></div>;
   }
@@ -14,6 +18,11 @@ const ChatScreenNotInit = (props) => {
   const ratingHandler = (rate, id) => {
     props.onRate(rate, id)
   };
+
+  const choseHandler = (id) => {
+    props.onChose()
+    nav(`/Chat/${subjectId}/${id}`, { state: props.history.chatHistory[0] });
+  }
 
   return (
     <>
@@ -29,7 +38,7 @@ const ChatScreenNotInit = (props) => {
                 message={message.message}
                 id={message.chatId}
                 assignments={message.assignment}
-                chooseSubject={() => { props.onChose() }}
+                chooseSubject={choseHandler}
               />
             );
           }

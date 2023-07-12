@@ -32,7 +32,9 @@ const ChatScreenInitialized = (props) => {
             );
           }
 
-          return <ChattingCardUser message={message.message} file_attachment />;
+          console.log(message)
+
+          return <ChattingCardUser message={message.message} file_attachment={message.file_attachments} />;
         })}
       </div>
     </>

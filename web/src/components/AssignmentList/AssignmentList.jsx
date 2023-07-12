@@ -23,7 +23,7 @@ const AssignmentList = (props) => {
 
   let DUMMY_DATA = BigData.filter((subject) => {
     return subject.course == subjectId;
-  })[0].assignments;
+  })[0].assignments.filter(ass => ass.assignmentId !== "General");
 
   DUMMY_DATA = DUMMY_DATA.map(ass => {
     return {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileCard from "../FileCard/FileCard";
 
 import styles from "./FileList.module.css";
@@ -12,12 +12,28 @@ import styles from "./FileList.module.css";
 //   { id: 6, name: "Untitled-6" },
 // ];
 
-import DUMMY_DATA from './FileNames.json'
+// import DUMMY_DATA from './FileNames.json'
+import BigData from '../ChatUI/BigData.json';
+import { useParams } from "react-router-dom";
 
 const FileList = (props) => {
+  const { subjectId, assignmentId } = useParams()
+
+  const [files, setFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState()
+  const [show, setShow] = useState(false)
+
   //   const mh = props.maxHeight;
-  const [files, setFiles] = useState(DUMMY_DATA);
-  const [selectedFile, setSelectedFile] = useState(DUMMY_DATA[0].id)
+  useEffect(() => {
+    if (assignmentId !== "General") {
+      setShow(true)
+  
+      const transformedData = BigData.filter(sub => sub.course === subjectId)[0].assignments.filter(ass => ass.assignmentId === assignmentId)[0].files
+      // console.log(transformedData)
+      setFiles(transformedData)
+      setSelectedFile(transformedData[0].id)
+    }
+  }, [assignmentId])
 
   const fileDeleteHandler = (id) => {
     setFiles(
@@ -43,15 +59,9 @@ const FileList = (props) => {
         {/* <FileCard selected name="Untitled-1" />
         <FileCard name="Untitled-2" />
         <FileCard name="Untitled-3" /> */}
-        {files.map((file) => {
-          let selected = false
-          
-          if (selectedFile === file.id) {
-            selected = true
-          }
-
-          return <FileCard onSelect={fileSelectHandler} name={file.name} id={file.id} onDelete={fileDeleteHandler} selected={selected} />;
-        })}
+        {show ? files.map((file) => {
+          return <FileCard onSelect={fileSelectHandler} name={file.name} id={file.id} onDelete={fileDeleteHandler} selected={selectedFile === file.id} />;
+        }) : "Please select an assignment to work on"}
       </section>
     </>
   );
