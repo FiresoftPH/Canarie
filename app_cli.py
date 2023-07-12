@@ -7,11 +7,13 @@ from Libs import macaw_server as server
 class appCLI:
     def __init__(self):
         self.db = server.DatabaseOperations()
+        self.ai = server.AIOperations()
         self.credentials = None
+        self.current_chat_room = None
         # self.global_command_list = ["abort"]
 
     def firstPage(self):
-        print("Welcome to Phoenix, your friendly fiery mentor.")
+        print("Welcome to Macaw, your friendly A.I. tutor.")
         while True:
             print("What do you want to do? [login, register]")
             choices = ["login", "register"]
@@ -63,9 +65,11 @@ class appCLI:
                 print("Wrong username and password (TE)")
         
         initial = self.db.checkInitialSetup(self.credentials[0])
-        if initial is False:
+        if initial == False:
             self.courseEnroll()
         else:
+            # confirm = str(input("Do you want to enroll any courses?: "))
+            # # if +
             self.courseSelection()
         self.printSpace()
 
@@ -74,7 +78,7 @@ class appCLI:
         stop_choice = ["yes", "no"]
         while True:
             self.db.showCourseData(2)
-            chosen = str(input("Which course do you want to enroll: "))
+            chosen = str(input("Which course do you want to enroll: ")).strip().lower()
             check_course = self.db.checkRegisteredCourse(chosen)
             if check_course is False:
                 print("Course does not exist")
@@ -99,15 +103,41 @@ class appCLI:
             choice = str(input("Which course do you want to ask? (Type exit if you want to log out): "))
             if choice in course_list:
                 print("You chose "+ choice)
-                break
+                self.current_chat_room = [choice, ""]
+                self.generalChatRoom()
+
             elif choice == "exit":
                 break
             else:
                 print("Invalid choice")
-            
+        
         self.printSpace()
 
-    def chatRoomSelection(self):
+    def generalChatRoom(self):
+        print(self.current_chat_room[0] + " chat room")
+        choice = ["yes", "no", "exit"]
+        self.ai.loadChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
+        while True:
+            choice = str(input("Upload any file?: "))
+            if choice == "yes":
+                # file_dir = str(input("Directory of the file: "))
+                file_dir = "test_files/UwU.py"
+                question = str(input("What is your question?: "))
+                prompt = self.ai.getPrompt(question, file_dir)
+                print(self.ai.getResponse(prompt))
+            elif choice == "no":
+                file_dir = ""
+                question = str(input("What is your question?: "))
+                prompt = self.ai.getPrompt(question, file_dir)
+                print(self.ai.getResponse(prompt))
+            elif choice == "exit":
+                self.ai.storeChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
+                break
+            else:
+                print("invalid_choice")
+                # choice = str(input("Upload any file?: "))
+
+    def assignmentChatRoom(self):
         pass
 
     def adminPage(self):

@@ -1,6 +1,8 @@
 import pymysql.cursors
 import numpy as np
 from dotenv import dotenv_values
+import json
+import pickle
 
 class Database:
     def __init__(self):
@@ -40,8 +42,14 @@ class Database:
             pass
 
         try:
-            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log VARCHAR(255))"
+            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log BLOB)"
             self.cursor.execute(command_3)
+        except pymysql.err.OperationalError:
+            pass
+
+        try:
+            command_4 = "CREATE TABLE assignments (id INT AUTO_INCREMENT PRIMARY KEY, assignment_name VARCHAR(255), assignment_details VARCHAR(255))"
+            self.cursor.execute(command_4)
         except pymysql.err.OperationalError:
             pass
 
@@ -49,7 +57,8 @@ class Database:
     def resetTable(self):
         # self.cursor.execute("DROP TABLE courses")
         # self.cursor.execute("DROP TABLE users")
-        self.cursor.execute("DROP TABLE statistics")
+        # self.cursor.execute("DROP TABLE statistics")
+        self.cursor.execute("DROP TABLE chat_history")
 
     # Alter the table columns to add more functionalities. This is used for development only
     def alterTable(self):
@@ -144,6 +153,21 @@ class Database:
             for row in result:
                 print(row)
 
+    # Use together with flask webserver to fetch the user whole information
+    def fetchUserData(self, username):
+        self.cursor.execute("SELECT * FROM users WHERE username = %s", username)
+        result = self.cursor.fetchall()
+        transform_courses = self.arrayFromString(result[0][4])
+        data = {"id": result[0][0], "name": result[0][1], "username": result[0][2], "password": result[0][3], "enrolled_courses": transform_courses, "status": result[0][5]}
+        return data
+    
+    # Use together with flask webserver to fetch the course data enrolled by a given user.
+    def fetchUserCourseData(self, username):
+        self.cursor.execute("SELECT enrolled_courses WHERE username = %s", username)
+        result = self.cursor.fetchall()
+        transform_courses = self.arrayFromString(result[0][0])
+        return transform_courses
+    
     # Shows the data from the statistics table. 
     def showStatisticsData(self):
         self.cursor.execute("SELECT username FROM statistics")
@@ -224,7 +248,7 @@ class Database:
         command = "SELECT enrolled_courses FROM users WHERE username = %s"
         self.cursor.execute(command, username)
         enrolled_courses = self.cursor.fetchall()
-        if enrolled_courses == '':
+        if enrolled_courses[0][0] == '':
             return False
         else:
             return True
@@ -265,29 +289,68 @@ class Database:
         command = "INSERT INTO chat_history (username, course_name, assignment_name) VALUES (%s, %s, %s)"
         self.cursor.execute(command, (username, course, assignment))
 
+    # Show all chat history stored in the database
     def showChatHistory(self):
         self.cursor.execute("SELECT * FROM chat_history")
         result = self.cursor.fetchall()
         for row in result:
             print(row)
 
+    # Show all tables listed in the database.
     def showAllTables(self):
         self.cursor.execute("SHOW TABLES")
         result = self.cursor.fetchall()
         for row in result:
-            print(row)               
+            print(row)
 
+    # Update chat history in the database. This will be updated when the session ends.
+    def storeChatHistory(self, username, course, assignment, history):
+        history = pickle.dumps(history)
+        self.cursor.execute("SELECT username, course_name, assignment_name from chat_history WHERE username = %s", username)
+        enrolled_data = self.cursor.fetchall()
+        values = (username, course, assignment)
+        if values not in enrolled_data:
+            self.cursor.execute("INSERT INTO chat_history (username, course_name, assignment_name, log) VALUES (%s, %s, %s, %s)", (username, course, assignment, history))
+            self.connection.commit()
+        else:
+            # self.cursor.execute("UPDATE chat_history SET history WHERE (username, course_name, assignment_name) = (%s, %s, %s)", (username, course, assignment, history))
+            self.cursor.execute("SELECT id, username, course_name, assignment_name from chat_history WHERE username = %s", username)
+            related_id = self.cursor.fetchall()
+            for data in related_id:
+                if (username, course, assignment) == (data[1], data[2], data[3]):
+                    user_id = data[0]
+
+            self.cursor.execute("UPDATE chat_history SET log = %s WHERE id = %s", (history, user_id))
+            self.connection.commit()
+
+    def loadChatHistory(self, username, course, assignment):
+        self.cursor.execute("SELECT course_name, assignment_name, log FROM chat_history WHERE username = %s", username)
+        all_history = self.cursor.fetchall()
+        for data in all_history:
+            if (course, assignment) == (data[0], data[1]):
+                temp = data[2]
+                return pickle.loads(temp)
+            else:
+                return False
+            
+        return False
+        
+        # history = pickle.loads(history[0])
+        # return history
+
+    def showColumnNames(self):
+        self.cursor.execute("SELECT * from chat_history")
+        print(self.cursor.description)
+
+    def getUserChatRoom(self, username):
+        self.cursor.execute("SELECT assignment_name from chat_history WHERE username = %s", username)
+        result = self.cursor.fetchall()
+        print(result)
+    
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
+
 # test = Database()
-# test.showAllTables()
-# test.showChatHistory()
-# test.resetTable()
-# test.alterTable()
-# test.showStatisticsData()
-# test.showCourseData(1)
-# test.showUserEnrolledCourse("OTorku")
-# print(test.adminLogin("Firesoft", "111111"))
-# test.promoteUser("Firesoft")
-# test.showUserData(1)
+# test.enrollCourse("hutao", ["Calculus 1", "Computer System", "Principal Of Computing Application"])
+# print(test.fetchUserData("Firesoft"))

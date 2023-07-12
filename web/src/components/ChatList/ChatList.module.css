@@ -1,0 +1,22 @@
+.chatList {
+  padding: 1.5rem;
+  padding-bottom: 0;
+
+  overflow-y: scroll;
+}
+
+/* Make chat list scrollable */
+.chatList::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chatList::-webkit-scrollbar-track {
+  /* background-color: yellow; */
+  opacity: 0.6;
+  border-radius: 0.5rem;
+}
+
+.chatList::-webkit-scrollbar-thumb {
+  background: #cfd0e2;
+  border-radius: 0.5rem;
+}

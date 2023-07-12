@@ -1,20 +1,83 @@
-@media screen {
-  .box{
-    display: flex;
-    align-items: center;
-    width: 70%;
-    height: 30%;
-    background-color: #F2f2f2;
-    border-radius: 2.5rem;
-    padding-left: 1rem;
-  }
-  
-  .icon{
-    position: relative;
-  }
+.wrapper{
+  grid-area: searchArea;
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+}
 
-  .placeholder{
-    color: rgba(160, 160, 160, 1);
-    padding-left: 1rem;
-  }
+.searchbox{
+  background-color: #F2f2f2;
+  background-image: url(src/assets/SearchIcon.svg);
+  background-repeat: no-repeat;
+  background-position: 1rem;
+  border: none;
+  border-radius: 2.5rem;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.25) inset;
+  width: 100%;
+  height: 100%;
+  padding-left: 10%;
+  display: flex;
+  padding-left: 3rem;
+  align-items: center;
+}
+
+.searchbox_dark {
+  all: unset;
+
+  background-color: #000000;
+  background-image: url(src/assets/SearchIcon.svg);
+  background-repeat: no-repeat;
+  background-position: 1rem;
+  border: none;
+  border-radius: 2.5rem;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.25) inset;
+  width: 100%;
+  height: 100%;
+  padding-left: 10%;
+  display: flex;
+  padding-left: 3rem;
+  align-items: center;
+}
+
+.searchbox:hover {
+  background-color: #949494;
+  color: #F2f2f2;
+  background-image: url(src/assets/SearchIconwhite.svg);
+}
+.searchbox:hover::-webkit-input-placeholder {
+  color: #F2f2f2;
+}
+.searchbox:hover::-moz-placeholder {
+  color: #F2f2f2;
+}
+.searchbox:hover:-ms-input-placeholder {
+  color: #F2f2f2;
+}
+.searchbox:hover:-moz-placeholder {
+  color: #F2f2f2;
+}
+.searchbox::-webkit-input-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+.searchbox::-moz-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+.searchbox:-ms-input-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+.searchbox:-moz-placeholder {
+  color: rgba(148, 148, 148, 1);
+}
+
+.wrapper:hover > .icon{
+  filter: brightness(0) invert(1);
+}
+
+.searchbox:focus{
+  outline: none;
+  color: black;
+}
+.searchbox:focus:hover{
+  color: #F2f2f2;
 }

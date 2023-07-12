@@ -1,0 +1,189 @@
+.background {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(47, 50, 90);
+}
+
+.content {
+  display: grid;
+  position: absolute;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.3fr 0.05fr 1fr;
+  grid-template-areas:
+    "Logo Api"
+    "AppName Api"
+    "Quote Api";
+  /* Setting the size of the upper layer to 80% of the screen size*/
+  height: 85vh;
+  width: 92.5vw;
+  align-items: center;
+  /* justify-content: space-between; */
+  padding: 110px;
+
+  /*the alpha value controls the transparency*/
+  background: rgba(30, 34, 80, 0.63);
+
+  /* This controls the blurring effect*/
+  backdrop-filter: blur(70px);
+
+  /*Adding the shadow*/
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
+  border-radius: 1.3rem;
+  z-index: 4;
+  overflow: hidden;
+}
+
+.mask-A {
+  height: 85vh;
+  width: 92.5vw;
+  border-radius: 1.3rem;
+  overflow: hidden;
+}
+
+.red-circle-A {
+  background: #ea4335;
+  display: inline-block;
+  position: relative;
+  top: 46%;
+  left: -8%;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 50%;
+}
+
+.yellow-circle-A {
+  background: #fbbc05;
+  display: inline-block;
+  position: relative;
+  top: 60%;
+  left: -8%;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+}
+
+.logo {
+  grid-area: Logo;
+  width: 6rem;
+  height: auto;
+  display: flex;
+  justify-content: start;
+  /* align-items: center; */
+}
+
+.app_name {
+  grid-area: AppName;
+  height: 100%;
+  width: 100%;
+  font-size: 3rem;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.quote {
+  grid-area: Quote;
+  height: 100%;
+  width: 100%;
+  font-size: 8.40038rem;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.left_text {
+  background-image: linear-gradient(
+    180deg,
+    rgba(222, 222, 222, 1),
+    rgba(203, 203, 203, 0.6)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -moz-text-fill-color: transparent;
+  font-size: 8.40038rem;
+  font-weight: 600;
+  line-height: 105.733%;
+}
+
+.group {
+  grid-area: Api;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  height: auto;
+  width: auto;
+}
+
+.api {
+  display: flex;
+  position: relative;
+  grid-area: Api;
+  /* padding: 1.5rem;   */
+  align-items: center;
+  justify-content: center;
+  width: 28.25rem;
+  height: 5.0625rem;
+  background: linear-gradient(180deg, black, black) padding-box,
+    linear-gradient(
+        90deg,
+        rgba(251, 75, 129, 1),
+        rgba(164, 79, 192, 1),
+        rgba(82, 85, 253, 1)
+      )
+      border-box;
+  border-width: 0.4rem;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 1.3rem;
+}
+
+.api p {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.api [src="src/assets/CMKL logo.svg"] {
+  margin-right: 1.375rem;
+}
+
+.Term {
+  position: relative;
+  text-align: end;
+  grid-area: Api;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-top: 1rem;
+}
+
+.accept_button {
+  height: 24px;
+  width: 24px;
+  border-radius: 1.5rem;
+  border-style: solid;
+  border-color: #c0c0c0;
+  margin-left: 1rem;
+}
+
+@media only screen and (max-width: 1600px) {
+  .logo {
+    width: 4rem;
+  }
+
+  .app_name {
+    font-size: 3rem;
+  }
+
+  .left_text {
+    font-size: 6rem;
+  }
+
+  .content {
+    padding: 80px;
+  }
+}

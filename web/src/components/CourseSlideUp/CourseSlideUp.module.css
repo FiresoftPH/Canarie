@@ -1,0 +1,94 @@
+.sidebar_below {
+  background-color: #5e6084;
+
+  display: grid;
+  grid-template-areas:
+    "Cou CouNav"
+    "Sub Sub"
+    "AssNav AssNav"
+    "Ass Ass"
+    "Line Line"
+    "Gen Gen";
+  grid-template-columns: 5fr 1fr;
+  grid-template-rows: max-content;
+
+  padding: 1rem;
+  padding-top: 1.2rem;
+  align-items: center;
+
+  
+  /* height: 5rem; */
+}
+
+.assDropDown {
+  /* all: unset; */
+
+  max-width: 2rem;
+  justify-self: center;
+  align-self: center;
+}
+
+.assignmentNav {
+  grid-area: AssNav;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  align-items: center;
+  /* background-color: red; */
+  border-radius: .5rem;
+}
+
+.sidebar_below h2 {
+  font-size: 2rem;
+  align-self: center;
+}
+
+.sidebar_below h3 {
+  all: unset;
+  grid-area: Sub;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+.sidebar_below img {
+  justify-self: center;
+}
+
+.line {
+  grid-area: Line;
+  width: 100%;
+  height: 0.01rem;
+  background-color: #a4a4af;
+}
+
+.ass {
+  color: #d0d1d8;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+/* General section */
+.general {
+  font-size: 1.2rem;
+  padding: 1rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  color: #d0d1d8;
+  /* padding-top: .5rem;
+  padding-bottom: .5rem;
+  color: white; */
+  /* background-color: #6d6f99; */
+  border-radius: 0.5rem;
+  width: 100%;
+  grid-area: Gen;
+}
+
+.selected {
+  color: white;
+  background-color: #6d6f99;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+.selected > * {
+  color: white;
+}

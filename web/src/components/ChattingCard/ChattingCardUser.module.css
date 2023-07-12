@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  width: auto;
+  /* margin-left: auto; */
+  /* flex-flow: flex-end; */
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.wrapper > * {
+  /* margin-left: auto; */
+
+  /* width: fit-content; */
+}
+
+.message {
+  padding: 1rem;
+  position: relative;
+
+  margin-right: 1rem;
+
+  border-radius: 1.875rem;
+  background: linear-gradient(0deg, #252525 0%, #252525 100%), #252525;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 65%;
+}
+
+.message img {
+  position: absolute;
+
+  bottom: -20px;
+  left: 0;
+
+  /* max-width: 3rem; */
+}

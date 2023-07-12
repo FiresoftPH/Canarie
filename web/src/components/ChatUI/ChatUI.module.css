@@ -1,0 +1,122 @@
+/* BACKDROP CSS */
+.backdrops {
+  /* display: block; */
+  /* display: flex; */
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.backdrop {
+  /* chatzone main bg */
+
+  box-sizing: border-box;
+  background: #262952;
+
+  width: 100%;
+  height: 100%; 
+  /*
+  margin-bottom: auto; */
+  /* box-shadow: inset 2px 1px 1px rgba(0, 0, 0, 0.25); */
+  margin: 0px auto;
+
+  position: absolute;
+  top: 0;
+  z-index: -2;
+  overflow: hidden;
+  /* overflow-x: hidden; */
+}
+
+.wrapper {
+  /* width: auto;
+  height: auto; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+}
+
+.redCircle {
+  width: 50rem;
+  height: 50rem;
+
+  background-color: #ea4335;
+  border-radius: 100%;
+  /* border: 10px 10px 10px red; */
+
+  position: absolute;
+  top: -80%;
+  right: -30%;
+}
+
+.yellowCircle {
+  width: 30rem;
+  height: 30rem;
+
+  background-color: #fbbc05;
+  border-radius: 100%;
+  /* border: 10px 10px 10px red; */
+
+  position: absolute;
+  bottom: -70%;
+  left: -10%;
+}
+
+.backdrop1 {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(75px);
+
+  position: absolute;
+  z-index: -1;
+
+  width: 100%;
+  height: 100%;
+}
+
+/* HEADER */
+.header {
+  /* width: 100%; */
+  /* height: 100%; */
+
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 15fr 1fr 1fr;
+  grid-template-areas: ". . . ." "line line line line";
+  align-items: center;
+}
+
+.header p {
+  margin-left: 0.5rem;
+}
+
+.header img {
+  max-width: 3rem;
+  justify-self: center;
+}
+
+.header img:not(:first-child) {
+  justify-self: center;
+}
+
+.sepLine {
+  width: 100%;
+  height: 0.1rem;
+  background-color: rgba(255, 255, 255, 0.4);
+  grid-area: line;
+
+  margin-top: .5rem;
+}
+
+.content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+
+.temp {
+  /* position: absolute;
+  width: auto; */
+}
