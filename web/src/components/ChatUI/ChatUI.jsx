@@ -9,28 +9,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import userSlice from "../../store/userSlice";
 
-function Dimension(el) {
-  // Get the DOM Node if you pass in a string
-  el = typeof el === "string" ? document.querySelector(el) : el;
-
-  var styles = window.getComputedStyle(el);
-  var margin =
-    parseFloat(styles["marginLeft"]) + parseFloat(styles["marginRight"]);
-
-  return Math.ceil(el.offsetWidth + margin);
-}
-
-function Dimension2(el) {
-  // Get the DOM Node if you pass in a string
-  el = typeof el === "string" ? document.querySelector(el) : el;
-
-  var styles = window.getComputedStyle(el);
-  var margin =
-    parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
-
-  return Math.ceil(el.offsetHeight + margin);
-}
-
 // const DUMMY_TEXT_DATA = [
 //   {
 //     assignmentId: "w1",
@@ -44,73 +22,13 @@ function Dimension2(el) {
 //       },
 //     ],
 //   },
-//   {
-//     assignmentId: "w2",
-//     chatHistory: [
-//       { chatId: 0, message: "Hello.", sender: "user" },
-//       {
-//         chatId: 1,
-//         message: "Hi, any help u need with assignment 2?",
-//         sender: "ai",
-//         rating: "none",
-//       },
-//     ],
-//   },
-//   {
-//     assignmentId: "w3",
-//     chatHistory: [
-//       { chatId: 0, message: "Hello.", sender: "user" },
-//       {
-//         chatId: 1,
-//         message: "Hi, any help u need with assignment 3?",
-//         sender: "ai",
-//         rating: "none",
-//       },
-//     ],
-//   },
-//   {
-//     assignmentId: "w4",
-//     chatHistory: [
-//       { chatId: 0, message: "Hello.", sender: "user" },
-//       {
-//         chatId: 1,
-//         message: "Hi, any help u need wiht lab 1?",
-//         sender: "ai",
-//         rating: "none",
-//       },
-//     ],
-//   },
-//   {
-//     assignmentId: "w5",
-//     chatHistory: [
-//       { chatId: 0, message: "Hello.", sender: "user" },
-//       {
-//         chatId: 1,
-//         message: "Hi, any help u need with lab 2?",
-//         sender: "ai",
-//         rating: "none",
-//       },
-//     ],
-//   },
-//   {
-//     assignmentId: "w6",
-//     chatHistory: [
-//       { chatId: 0, message: "Hello.", sender: "user" },
-//       {
-//         chatId: 1,
-//         message: "Hi, any help u need with lab 3?",
-//         sender: "ai",
-//         rating: "none",
-//       },
-//     ],
-//   },
 // ];
 
 import DUMMY_TEXT_DATA from "./ChatData.json";
 import BIG_DUMMY_DATA from "./BigData.json";
+import ChatScreenNotInit from "../ChatScreen/ChatScreenNotInit";
 
 let shouldUpdate = false;
-let init = false;
 const ChatUI = (props) => {
   // let chatName = props.mode;
 
@@ -135,56 +53,104 @@ const ChatUI = (props) => {
 
   const [topName, setTopName] = useState("-");
 
-  // if (chatName === "General") {
-  // chatName = "-";
-  // } else {
-  //   chatName = chatName.replace(" ", "_");
-  //   init = true;
-  // }
+  const [lock, setLock] = useState(false)
 
   const askAIHandler = (question) => {
-    console.log(question);
+    if (topName !== "-") {
+      // For any assignment chat
 
-    setHistory((prevState) =>
-      prevState.map((assignment) => {
-        if (assignment.assignmentId === chatName) {
-          return {
-            ...assignment,
-            chatHistory: [
-              ...assignment["chatHistory"],
-              {
-                chatId: Math.random(),
-                message: question,
-                sender: "user",
-              },
-            ],
-          };
-        } else {
-          return assignment;
-        }
-      })
-    );
+      console.log(question);
 
-    setHistory((prevState) =>
-      prevState.map((assignment) => {
-        if (assignment.assignmentId === chatName) {
-          return {
-            ...assignment,
-            chatHistory: [
-              ...assignment["chatHistory"],
-              {
-                chatId: Math.random(),
-                message: "No. You can do it yourself.",
-                sender: "ai",
-                rating: "none",
-              },
-            ],
-          };
-        } else {
-          return assignment;
-        }
-      })
-    );
+      setHistory((prevState) =>
+        prevState.map((assignment) => {
+          if (assignment.assignmentId === chatName) {
+            return {
+              ...assignment,
+              chatHistory: [
+                ...assignment["chatHistory"],
+                {
+                  chatId: Math.random(),
+                  message: question,
+                  sender: "user",
+                },
+              ],
+            };
+          } else {
+            return assignment;
+          }
+        })
+      );
+
+      setHistory((prevState) =>
+        prevState.map((assignment) => {
+          if (assignment.assignmentId === chatName) {
+            return {
+              ...assignment,
+              chatHistory: [
+                ...assignment["chatHistory"],
+                {
+                  chatId: Math.random(),
+                  message: "No. You can do it yourself.",
+                  sender: "ai",
+                  rating: "none",
+                },
+              ],
+            };
+          } else {
+            return assignment;
+          }
+        })
+      );
+    } else {
+      // For general chat
+
+      setHistory((prevState) =>
+        prevState.map((assignment) => {
+          if (assignment.assignmentId === chatName) {
+            return {
+              ...assignment,
+              chatHistory: [
+                ...assignment["chatHistory"],
+                {
+                  chatId: Math.random(),
+                  message: question,
+                  sender: "user",
+                },
+              ],
+            };
+          } else {
+            return assignment;
+          }
+        })
+      );
+
+      setHistory((prevState) =>
+        prevState.map((assignment) => {
+          if (assignment.assignmentId === chatName) {
+            return {
+              ...assignment,
+              chatHistory: [
+                ...assignment["chatHistory"],
+                {
+                  chatId: Math.random(),
+                  message: "Which assignment is your question referencing",
+                  sender: "ai",
+                  rating: "none",
+                  assignment: history.map((ass) => {
+                    if (ass.name !== "General")
+                      return { name: ass.name, id: ass.assignmentId };
+                  }),
+                },
+              ],
+            };
+          } else {
+            return assignment;
+          }
+        })
+      );
+
+      setLock(true)
+    }
   };
 
   const ratingHandler = (rating, id) => {
@@ -227,7 +193,9 @@ const ChatUI = (props) => {
       } else {
         shouldUpdate = false;
       }
-      setTopName(history.filter((ass) => ass.assignmentId === chatName)[0].name);
+      setTopName(
+        history.filter((ass) => ass.assignmentId === chatName)[0].name
+      );
     }
   }, [
     <ChatScreenInitalized
@@ -255,10 +223,14 @@ const ChatUI = (props) => {
             // assignment={init ? history.map((ass) => {}) : null}
           />
         ) : (
-          ""
+          <ChatScreenNotInit
+            onRate={ratingHandler}
+            history={history.filter((ass) => ass.assignmentId === chatName)[0]}
+            onChose={() => { setLock(false) }}
+          />
         )}
         {/* : <></>} */}
-        <ChatInputField onSend={askAIHandler} />
+        <ChatInputField onSend={askAIHandler} lock={lock} />
       </div>
       {/* <div className={styles.temp}> */}
       <div className={styles.backdrops}>

@@ -21,22 +21,26 @@ const ChatInputField = (props) => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.attachment}>
+      <div className={`${styles.attachment} ${props.lock ? styles.locked : ""}`}>
         <img src={FileAttachmentIcon} />
       </div>
-      <div className={styles.searchBar}>
+      <div className={`${styles.searchBar} ${props.lock ? styles.locked : ""}`}>
         <form
           onSubmit={(e) => {
             askHandler(e);
           }}
         >
-          <input
-            onChange={(e) => {
-              setQuestion(e.target.value);
-            }}
-            value={question}
-            className={styles.inputField}
-          />
+          {props.lock ? (
+            ""
+          ) : (
+            <input
+              onChange={(e) => {
+                setQuestion(e.target.value);
+              }}
+              value={question}
+              className={styles.inputField}
+            />
+          )}
         </form>
         <img onClick={askHandler} className={styles.send} src={SendIcon} />
       </div>

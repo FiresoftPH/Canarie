@@ -56,3 +56,13 @@
   max-width: 2.5rem;
   margin: 0;
 }
+
+.assignmentList {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* .assignmentList p {
+  text-decoration: underline;
+} */

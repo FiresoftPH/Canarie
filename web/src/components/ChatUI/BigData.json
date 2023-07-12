@@ -79,6 +79,11 @@
             "rating": "none"
           }
         ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
       }
     ]
   },
@@ -162,6 +167,11 @@
             "rating": "none"
           }
         ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
       }
     ]
   },
@@ -245,6 +255,11 @@
             "rating": "none"
           }
         ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
       }
     ]
   },
@@ -328,6 +343,11 @@
             "rating": "none"
           }
         ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
       }
     ]
   },
@@ -411,6 +431,11 @@
             "rating": "none"
           }
         ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
       }
     ]
   },
@@ -494,6 +519,11 @@
             "rating": "none"
           }
         ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
       }
     ]
   }

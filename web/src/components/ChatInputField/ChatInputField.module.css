@@ -45,6 +45,11 @@
   align-items: center;
 }
 
+.locked {
+  background: rgba(217, 217, 217, 0.30);
+  box-shadow: 2px 1px 6px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
 .inputField {
   all: unset;
   margin-left: 0.5rem;
