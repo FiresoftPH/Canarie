@@ -15,6 +15,9 @@ import styles from "./FileList.module.css";
 // import DUMMY_DATA from './FileNames.json'
 import BigData from '../ChatUI/BigData.json';
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { chatAction } from "../../store/chatSlice";
 
 const FileList = (props) => {
   const { subjectId, assignmentId } = useParams()
@@ -22,6 +25,8 @@ const FileList = (props) => {
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState()
   const [show, setShow] = useState(false)
+
+  const dispatch = useDispatch()
 
   //   const mh = props.maxHeight;
   useEffect(() => {
@@ -44,7 +49,8 @@ const FileList = (props) => {
   };
 
   const fileSelectHandler = (id) => {
-    console.log(id)
+    // console.log(files.filter(fie => fie.id === id)[0].code)
+    dispatch(chatAction.setCode(files.filter(fie => fie.id === id)[0].code))
     setSelectedFile(id)
   }
 

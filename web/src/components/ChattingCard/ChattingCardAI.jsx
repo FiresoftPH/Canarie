@@ -8,22 +8,20 @@ import FileIcon from "src/assets/FileIcon.svg";
 import LikeIconFilled from "src/assets/LikeIconFilled.svg";
 
 import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 const ChattingCardAI = (props) => {
-  const [rate, setRate] = useState();
-
-  const nav = useNavigate();
-  const { subjectId } = useParams();
 
   return (
     <div className={styles.wrapper}>
       <img src={ParrotIcon} />
-
-      {props.assignments
+      {/* {props.assignments
         ? props.assignments.map((assignment) => {
-            return <p>{assignment.name}</p>;
+
+
+            // return <p>{assignment.name}</p>;
           })
-        : ""}
+        : ""} */}
       <div className={styles.message}>
         <div>
           <p>{props.message}</p>

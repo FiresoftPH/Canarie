@@ -22,11 +22,14 @@ const ChatInputField = (props) => {
   return (
     <div className={styles.wrapper}>
       <div
-        onClick={() => {
-          if (props.lock === false) props.onFileAttach();
-        }}
+        // onClick={() => {
+        //   if (props.lock === false) props.onFileAttach();
+        // }}
         className={`${styles.attachment} ${props.lock ? styles.locked : ""}`}
       >
+        <label>
+          <input type="file" />
+        </label>
         <img src={FileAttachmentIcon} />
       </div>
       <div className={`${styles.searchBar} ${props.lock ? styles.locked : ""}`}>

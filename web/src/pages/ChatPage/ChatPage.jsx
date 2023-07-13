@@ -11,6 +11,7 @@ import { EditorView } from "@codemirror/view"
 import { langs } from '@uiw/codemirror-extensions-langs'
 import * as alls from '@uiw/codemirror-themes-all'
 import { javascript } from "@codemirror/lang-javascript";
+import { useSelector } from "react-redux";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -44,6 +45,8 @@ function Chat() {
 
   const [mode, setMode] = useState("General")
 
+  // const codeData = useSelector(state => state.chat.code)
+
   useEffect(() => {
     setTimeout(() => {
       const getWidth = window.innerWidth - Dimension(document.getElementById("total"))
@@ -68,6 +71,13 @@ function Chat() {
       setHeight(getHeight)
     }, 100);
   };
+
+  const codeData = useSelector(state => state.chat.code)
+
+  useEffect(() => {
+    console.log("I RUNNNNNNNN")
+    setCode(codeData)
+  }, [codeData])
 
   // IDE stuff //
   const onChange = useCallback((value) => {
@@ -190,7 +200,7 @@ function Chat() {
         <button onClick={executeCode}>RUN</button>
         <CodeMirror
           className={styles.ide}
-          value="console.log('helloworld!')"
+          value={code}
           theme={ [alls.atomone] }
           extensions={[langTemplate[language], fixedHeightEditor, EditorView.lineWrapping]}
           onChange = { onChange }

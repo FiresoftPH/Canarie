@@ -31,6 +31,8 @@ const ChatScreenNotInit = (props) => {
         //   console.log(message.assignment)
 
           if (message.sender === "ai") {
+            console.log(message)
+
             return (
               <ChattingCardAI
                 onRate={ratingHandler}

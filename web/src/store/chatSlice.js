@@ -10,6 +10,8 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     setCode: (state, action) => {
+    //   console.log(action.payload)
+    //   state.code = ""
       state.code = action.payload;
     },
   },
