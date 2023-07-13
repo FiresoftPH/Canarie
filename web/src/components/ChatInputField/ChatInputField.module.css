@@ -6,6 +6,7 @@
 
   position: absolute;
   bottom: 1rem;
+  z-index: 100;
   /* justify-content: center;
     align-items: center; */
 }

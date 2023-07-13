@@ -1,10 +1,43 @@
 .wrapper {
-    padding: 2rem;
-    padding-right: 4rem;
-    padding-top: 0;
-    /* margin-bottom: 1rem; */
+  padding: 2rem;
+  padding-right: 4rem;
+  padding-top: 7%;
+  padding-bottom: 0;
+  /* margin-bottom: 1rem; */
 
-    max-width: 100%;
-    height: 70%;
-    overflow-y: scroll;
+  /* margin-top: auto; */
+  /* margin-bottom: 1rem; */
+
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  top: 0;
+
+  position: absolute;
+}
+
+.topBlur {
+  position: absolute;
+  z-index: 20;
+  /* width: 100%;
+  height: 18%; */
+  top: 0;
+  width: 100%;
+  height: 20%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  backdrop-filter: blur(2px);
+  /* backdrop-filter: blur(1px); */
+  /* background-color: red; */
+}
+
+.bottomBlur {
+  position: absolute;
+  z-index: 20;
+  width: 100%;
+  height: 12%;
+  bottom: 0;
+  /* background-color: red; */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  backdrop-filter: blur(2px);
 }

@@ -11,7 +11,8 @@ import { EditorView } from "@codemirror/view"
 import { langs } from '@uiw/codemirror-extensions-langs'
 import * as alls from '@uiw/codemirror-themes-all'
 import { javascript } from "@codemirror/lang-javascript";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { bigDataAction } from "../../store/bigDataSlice";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -45,6 +46,10 @@ function Chat() {
 
   const [mode, setMode] = useState("General")
 
+  const fileId = useSelector(state => state.chat.fid)
+  const { subjectId, assignmentId } = useParams()
+  const dispatch = useDispatch()
+
   // const codeData = useSelector(state => state.chat.code)
 
   useEffect(() => {
@@ -75,7 +80,6 @@ function Chat() {
   const codeData = useSelector(state => state.chat.code)
 
   useEffect(() => {
-    console.log("I RUNNNNNNNN")
     setCode(codeData)
   }, [codeData])
 
@@ -83,6 +87,7 @@ function Chat() {
   const onChange = useCallback((value) => {
     setCode(value)
   }, []);
+
   const executeCode = () => {
     try {
       let result;
@@ -168,6 +173,12 @@ function Chat() {
     setLanguage(lang)
   }
 
+  const fileSaveHandler = () => {
+    // console.log("File saved!1!!")
+    // console.log(fileId)
+    dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }))
+  }
+
   // IDE stuff //
 
   return (
@@ -198,6 +209,7 @@ function Chat() {
           </select>
         </label>
         <button onClick={executeCode}>RUN</button>
+        <div onBlur={fileSaveHandler}>
         <CodeMirror
           className={styles.ide}
           value={code}
@@ -205,6 +217,7 @@ function Chat() {
           extensions={[langTemplate[language], fixedHeightEditor, EditorView.lineWrapping]}
           onChange = { onChange }
         />
+        </div>
       </section>
       <section className={styles.output}>
         {output}
