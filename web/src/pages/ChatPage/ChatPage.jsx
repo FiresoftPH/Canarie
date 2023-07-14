@@ -5,6 +5,7 @@ import ShortSideBar from "../../components/Sidebar/ShortSideBar";
 import { useParams } from "react-router-dom";
 import ChatUI from "../../components/ChatUI/ChatUI";
 import axios from 'axios'
+import runIcon from 'src/assets/RunBtn.svg'
 
 import CodeMirror from '@uiw/react-codemirror'
 import { EditorView } from "@codemirror/view"
@@ -159,7 +160,6 @@ function Chat() {
     dart : langs.dart(),
     go : langs.go(),
     html : langs.html(),
-    jsx : langs.jsx(),
     lua : langs.lua(),
     mysql : langs.mysql(),
     php : langs.php(),
@@ -184,20 +184,22 @@ function Chat() {
       <section className={styles.chat}>
         <ChatUI mode={mode} height={height} width={width} />
       </section>
-      <section id="coding" className={styles.ide_container}>
-        <label >
-          Languages:
-          <select className={styles.lang_selection} value={language} onChange={(evn) => handleLangChange(evn.target.value)}>
-            {Object.keys(langTemplate).sort().map((item, key) => {
-              return (
-                <option key = {key} value={item}>
-                  {item}
-                </option>
-              )
-            })}
-          </select>
-        </label>
-        <button onClick={executeCode}>RUN</button>
+      <section className={styles.ide_container}>
+        <div className={styles.ide_topbar}>
+          <label >
+            Languages:
+            <select className={styles.lang_selection} value={language} onChange={(evn) => handleLangChange(evn.target.value)}>
+              {Object.keys(langTemplate).sort().map((item, key) => {
+                return (
+                  <option key = {key} value={item}>
+                    {item}
+                  </option>
+                )
+              })}
+            </select>
+          </label>
+          <img className={styles.run_btn} src={runIcon} onClick={executeCode}/>
+        </div>
         <CodeMirror
           className={styles.ide}
           value={code}

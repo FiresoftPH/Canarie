@@ -33,11 +33,16 @@
   color: black;
 }
 
-.theme_selection{
-  color: black;
+
+.run_btn{
+  background-color: white;
+  padding: 0 1rem;
+  border-radius: 1rem;
 }
-.theme_selection option{
-  color: black;
+
+
+.ide_topbar{
+  display: flex;
 }
 
 .ide *{
