@@ -14,6 +14,7 @@ import ChatCard from "../ChatCard/ChatCard";
 import ChatList from "../ChatList/ChatList";
 import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
 import FileList from "../FileList/FileList";
+import { useSelector } from "react-redux";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -36,6 +37,12 @@ function LongSidebar(props) {
 
   const [change, setChange] = useState(false);
   const [mode, setMode] = useState("General");
+
+  const [file, setFile] = useState();
+  const data = useSelector((state) => state.bigData);
+  const code = useSelector((state) => state.chat.code);
+
+  const { subjectId, assignmentId } = useParams();
 
   useEffect(() => {
     const height =
@@ -72,10 +79,36 @@ function LongSidebar(props) {
   };
 
   const selectModeHandler = (id) => {
-    setMode(id)
-    console.log(id)
-    props.onSelectMode(id)
-  }
+    setMode(id);
+    console.log(id);
+    props.onSelectMode(id);
+  };
+
+  const fileDownloadHandler = (f) => {
+    console.log(file);
+    console.log(data);
+
+    const transformedData = data
+      .filter((sub) => sub.course === subjectId)[0]
+      .assignments.filter((ass) => ass.assignmentId === assignmentId)[0]
+      .files.filter((f) => f.id === file)[0];
+
+    console.log(transformedData);
+
+    let fType = 'text/plain';
+
+    if (fType.includes(".")) {
+      fType = { type: `text/${transformedData.name[transformedData.name.length - 1]}` }
+    }
+
+    const blob = new Blob([transformedData.code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = transformedData.name;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div id="total" className={styles.container}>
@@ -104,9 +137,14 @@ function LongSidebar(props) {
         </section> */}
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
-          <img src="/src/assets/Upload.svg" />
+          <img onClick={fileDownloadHandler} src="/src/assets/Upload.svg" />
         </section>
-        <FileList mh={cHeight} />
+        <FileList
+          sf={(f) => {
+            setFile(f);
+          }}
+          mh={cHeight}
+        />
       </div>
       <CourseSlideUp onSelectMode={selectModeHandler} re_render={onReRender} />
     </div>

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   code: "",
+  fid: ""
   //   assignment: "",
 };
 
@@ -14,6 +15,9 @@ const chatSlice = createSlice({
     //   state.code = ""
       state.code = action.payload;
     },
+    setFileId: (state, action) => {
+      state.fid = action.payload
+    }
   },
 });
 

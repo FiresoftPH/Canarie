@@ -28,10 +28,12 @@ import DUMMY_TEXT_DATA from "./ChatData.json";
 import BIG_DUMMY_DATA from "./BigData.json";
 import ChatScreenNotInit from "../ChatScreen/ChatScreenNotInit";
 import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
+import { useSelector } from "react-redux";
 
 let shouldUpdate = false;
 const ChatUI = (props) => {
   // let chatName = props.mode;
+  const data = useSelector(state => state.bigData)
 
   let chatName = useParams().assignmentId;
   const courseName = useParams().subjectId;
@@ -39,7 +41,7 @@ const ChatUI = (props) => {
   const location = useLocation();
   // let chatName = "Calculus 1"
 
-  // console.log(BIG_DUMMY_DATA.filter((sub) => {
+  // console.log(data.filter((sub) => {
   //     console.log(sub.course)
   //     console.log(courseName)
 
@@ -49,7 +51,7 @@ const ChatUI = (props) => {
   // console.log(chatName);
 
   const [history, setHistory] = useState(
-    BIG_DUMMY_DATA.filter((sub) => {
+    data.filter((sub) => {
       return sub.course == courseName;
     })[0].assignments
   );
@@ -244,7 +246,7 @@ const ChatUI = (props) => {
       {openFiles ? (
         <FileAttachmentModal
           files={
-            BIG_DUMMY_DATA.filter(
+            data.filter(
               (sub) => sub.course === courseName
             )[0].assignments.filter((ass) => ass.assignmentId === chatName)[0]
               .files
@@ -260,7 +262,8 @@ const ChatUI = (props) => {
           <div className={styles.header}>
             <img src={ChatIconNoBG} />
             <p>{topName}</p>
-            <img src={RenameIcon} />
+            {/* <img src={RenameIcon} /> */}
+            <div />
             <img src={ClearChatHistoryIcon} />
             <div className={styles.sepLine} />
           </div>
@@ -285,6 +288,7 @@ const ChatUI = (props) => {
           )}
           <ChatInputField
             onFileAttach={fileAttachHandler}
+            onUploadFile={fileAddHandler}
             onSend={askAIHandler}
             lock={lock}
           />
