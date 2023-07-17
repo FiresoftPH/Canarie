@@ -113,6 +113,7 @@ const ChatInputField = (props) => {
           )}
         </form>
         <img onClick={askHandler} className={styles.send} src={SendIcon} />
+        <div className={styles.bottomBlur} />
       </div>
     </div>
   );

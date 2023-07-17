@@ -266,6 +266,7 @@ const ChatUI = (props) => {
             <div />
             <img src={ClearChatHistoryIcon} />
             <div className={styles.sepLine} />
+            <div className={styles.topBlur}></div>
           </div>
           <div className={styles.chatting}></div>
           {chatName !== "General" ? (

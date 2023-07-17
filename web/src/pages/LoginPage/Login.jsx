@@ -4,15 +4,20 @@ import Term from "../TermPage/Term";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/userSlice";
+import Transition from "react-transition-group/Transition";
 import logo from "../../assets/Logo.svg"
 import cmkllogo from "../../assets/CMKL logo.svg"
 
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
-import CourseNames from './CourseNames.json';
+import CourseNames from "./CourseNames.json";
+import { loginAction } from "../../store/loginSlice";
 
 function Login() {
   const [show, setShow] = useState(false);
+  const [agree, setAgree] = useState(false);
+  const [touched, setTouched] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -52,16 +57,25 @@ function Login() {
       })
       );
 
-    Cookies.set("Screen_Width", window.innerWidth)
-    Cookies.set("Screen_Height", window.innerHeight)
-    fetch('/test').then(response => {
-      if(response.ok){
-        return response.json()
-      }
-    }).then(data => console.log(data))
+    Cookies.set("Screen_Width", window.innerWidth);
+    Cookies.set("Screen_Height", window.innerHeight);
   }, []);
 
   const modalToggle = () => {
+    setShow(!show);
+  };
+
+  const loginHandler = () => {
+    setTouched(true);
+
+    if (agree === true) {
+      navigate("/Course");
+      dispatch(loginAction.setLoggedIn(true))
+    }
+  };
+
+  const agreeHandler = () => {
+    setAgree(true);
     setShow(!show);
   };
 
@@ -79,7 +93,7 @@ function Login() {
           </section>
         </div>
         <div className={styles.group}>
-          <div className={styles.api_button}>
+          <div onClick={loginHandler} className={styles.api_button}>
             <div className={styles.api}>
               <img src={cmkllogo} />
               <p>Sign in with CMKL account</p>
@@ -87,25 +101,49 @@ function Login() {
           </div>
           <div className={styles.Term}>
             <form className={styles.agree_term}>
-              <p
+              {/* <p
                 onClick={() => {
                   navigate("/Course");
                 }}
               >
                 I agree with
-              </p>
+              </p> */}
               <a onClick={modalToggle}>Terms and Conditions</a>
             </form>
-            <div className={styles.accept_button}></div>
+            {/* <div className={styles.accept_button}></div> */}
           </div>
+          {touched && !agree && (
+            <div className={styles.warning}>
+              <p>
+                *Please{" "}
+                <span
+                  onClick={() => {
+                    setShow(!show);
+                  }}
+                >
+                  agree
+                </span>{" "}
+                to terms and conditions{" "}
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div className={styles.mask}>
         <div className={styles.red_circle}></div>
         <div className={styles.yellow_circle}></div>
       </div>
-
-      {show ? <Term toggle={modalToggle} /> : <></>}
+      <Transition in={show} timeout={300} mountOnEnter unmountOnExit >
+        {(state) => (
+          <Term
+            show={state}
+            agree={agree}
+            onAgree={agreeHandler}
+            toggle={modalToggle}
+          />
+        )}
+      </Transition>
+      {/* {show ? <Term agree={agree} onAgree={agreeHandler} toggle={modalToggle} /> : <></>} */}
     </div>
   );
 }

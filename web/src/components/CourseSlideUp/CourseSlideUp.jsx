@@ -91,12 +91,7 @@ const CourseSlideUp = (props) => {
             </div>
             {hideAss ? (
               <>
-                {/* <div className={styles.assignments}>
-                  <AssignmentCard pressed name="Thingy" />
-                  <AssignmentCard name="Thingy2" />
-                  <AssignmentCard name="Thingy3" />
-                </div> */}
-                <AssignmentList onSelect={assginmentListSelectHandler} />
+                <AssignmentList mh={props.mh} onSelect={assginmentListSelectHandler} />
               </>
             ) : (
               ""

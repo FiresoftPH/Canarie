@@ -7,6 +7,8 @@ import Data from "../../mockDB/MOCK_DATA.json";
 import { userActions } from "../../store/userSlice";
 import "boxicons";
 import { useNavigate } from "react-router-dom";
+import user_with_suit from '../../assets/user-with-suit.jpeg'
+import { loginAction } from "../../store/loginSlice";
 
 function Course() {
   // Demo data set to user store (Logic will be added at login page)
@@ -17,6 +19,7 @@ function Course() {
   const user = useSelector((state) => state.user);
 
   const [inputbox, setInputbox] = useState("");
+  const [greet, setGreet] = useState("")
 
   function inputChangeHandler(event) {
     setInputbox(event.target.value);
@@ -27,6 +30,15 @@ function Course() {
       item.toLowerCase().includes(inputbox.toLowerCase())
     );
   };
+
+  // let hour = 15;
+  useEffect(() => {
+    const hour = new Date().getHours()
+
+    console.log(hour)
+
+    setGreet(`${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`)
+  }, [])
 
   return (
     <>
@@ -39,14 +51,15 @@ function Course() {
           <header className={styles.userdropdown}>
             <p className={styles.username}>
               {" "}
-              Good <span>morning</span>, <span>Mr/Mrs</span>{" "}
+              Good <span>{greet}</span>, <span>Mr/Mrs</span>{" "}
               <span>Username</span>
             </p>
-            <div className={styles.user_img}> img </div>
+            <div className={styles.user_img}> <img src={user_with_suit} /> </div>
             {"  "}
             <div
               onClick={() => {
                 dispatch(userActions.logout());
+                dispatch(loginAction.setLoggedIn(false))
                 nav("/");
               }}
               className={styles.dropdown}
