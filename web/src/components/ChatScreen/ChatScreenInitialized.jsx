@@ -19,15 +19,7 @@ const ChatScreenInitialized = (props) => {
 
   return (
     <>
-      <div className={styles.topBlur}>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+      {/* <div className={styles.topBlur}></div> */}
       <div id="chatScroll" className={styles.wrapper}>
         {/* <div className={styles.topBlur}>
           <div></div>
@@ -59,7 +51,7 @@ const ChatScreenInitialized = (props) => {
           );
         })}
       </div>
-      <div className={styles.bottomBlur} />
+      {/* <div className={styles.bottomBlur} /> */}
     </>
   );
 };

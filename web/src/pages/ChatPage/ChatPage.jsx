@@ -4,16 +4,18 @@ import LongSidebar from "src/components/Sidebar/LongSidebar";
 import ShortSideBar from "../../components/Sidebar/ShortSideBar";
 import { useParams } from "react-router-dom";
 import ChatUI from "../../components/ChatUI/ChatUI";
-import axios from 'axios'
-import runIcon from 'src/assets/RunBtn.svg'
+import axios from "axios";
+import runIcon from "src/assets/RunBtn.svg";
 
-import CodeMirror from '@uiw/react-codemirror'
-import { EditorView } from "@codemirror/view"
-import { langs } from '@uiw/codemirror-extensions-langs'
-import * as alls from '@uiw/codemirror-themes-all'
+import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { langs } from "@uiw/codemirror-extensions-langs";
+import * as alls from "@uiw/codemirror-themes-all";
 import { javascript } from "@codemirror/lang-javascript";
 import { useDispatch, useSelector } from "react-redux";
 import { bigDataAction } from "../../store/bigDataSlice";
+
+import MinimizeIcon from '../../assets/MinimizeIcon.svg';
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -41,27 +43,28 @@ function Chat() {
   const [close, setClose] = useState(false);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  const [language, setLanguage] = useState('javascript');
-  const [code, setCode] = useState('');
-  const [output, setOutput] = useState('');
+  const [language, setLanguage] = useState("javascript");
+  const [code, setCode] = useState("");
+  const [output, setOutput] = useState("");
 
-  const [mode, setMode] = useState("General")
+  const [mode, setMode] = useState("General");
 
-  const fileId = useSelector(state => state.chat.fid)
-  const { subjectId, assignmentId } = useParams()
-  const dispatch = useDispatch()
+  const fileId = useSelector((state) => state.chat.fid);
+  const { subjectId, assignmentId } = useParams();
+  const dispatch = useDispatch();
 
   // const codeData = useSelector(state => state.chat.code)
 
   useEffect(() => {
     setTimeout(() => {
-      const getWidth = window.innerWidth - Dimension(document.getElementById("total"))
+      const getWidth =
+        window.innerWidth - Dimension(document.getElementById("total"));
 
-      const getHeight = window.innerHeight - Dimension2(document.getElementById("coding"))
+      const getHeight =
+        window.innerHeight - Dimension2(document.getElementById("coding"));
       setWidth(getWidth);
-      setHeight(getHeight)
+      setHeight(getHeight);
     }, 100);
-    
   }, []);
 
   const toggleClose = (val) => {
@@ -70,36 +73,39 @@ function Chat() {
     });
 
     setTimeout(() => {
-      const getWidth = window.innerWidth - Dimension(document.getElementById("total"))
+      const getWidth =
+        window.innerWidth - Dimension(document.getElementById("total"));
 
-      const getHeight = window.innerHeight - Dimension2(document.getElementById("coding"))
+      const getHeight =
+        window.innerHeight - Dimension2(document.getElementById("coding"));
       setWidth(getWidth);
-      setHeight(getHeight)
+      setHeight(getHeight);
     }, 100);
   };
 
-  const codeData = useSelector(state => state.chat.code)
+  const codeData = useSelector((state) => state.chat.code);
+  const fid = useSelector((state) => state.chat.fid);
 
   useEffect(() => {
-    setCode(codeData)
-  }, [codeData])
+    setCode(codeData);
+  }, [codeData, fid]);
 
   // IDE stuff //
   const onChange = useCallback((value) => {
-    setCode(value)
+    setCode(value);
   }, []);
 
   const executeCode = () => {
     try {
       let result;
       switch (language) {
-        case 'javascript':
+        case "javascript":
           result = excuteJavascriptCode(code);
-          console.log('1');
+          console.log("1");
           break;
-        case 'python':
+        case "python":
           result = excutePythonCode(code);
-          console.log('2');
+          console.log("2");
           break;
         default:
           throw new Error(`Language mode "${language}" is not supported.`);
@@ -114,10 +120,10 @@ function Chat() {
 
   const excutePythonCode = (code) => {
     // CacheStorage.bind('python:',code);
-    const cacheName = 'file.py';
+    const cacheName = "file.py";
     const fileContent = code;
 
-    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const blob = new Blob([fileContent], { type: "text/plain" });
 
     const cachePromise = caches.open(cacheName).then((cache) => {
       const request = new Request(cacheName);
@@ -125,16 +131,16 @@ function Chat() {
       return cache.put(request, response);
     });
     cachePromise.catch((error) => {
-      console.error('Error saving code to cache:', error);
+      console.error("Error saving code to cache:", error);
     });
   };
-  
+
   const getSavedCodeFromLocalSorage = () => {
-    return localStorage.getItem('python')
-  }
+    return localStorage.getItem("python");
+  };
 
   const excuteJavascriptCode = (code) => {
-    const cacheName = 'file.js';
+    const cacheName = "file.js";
     const fileContent = code;
 
     // const blob = new Blob([fileContent], { type: 'text/plain' });
@@ -145,85 +151,99 @@ function Chat() {
       return cache.put(request, response);
     });
     cachePromise.catch((error) => {
-      console.error('Error saving code to cache:', error);
+      console.error("Error saving code to cache:", error);
     });
-  }
-  
+  };
+
   const fixedHeightEditor = EditorView.theme({
-    "&": {height: "40vh"},
-    ".cm-content" : { overflow: "auto"},
-  })
-  const langTemplate = { 
+    "&": { height: "40vh" },
+    ".cm-content": { overflow: "auto" },
+  });
+  const langTemplate = {
     python: langs.python(),
-    java : langs.java(),
+    java: langs.java(),
     javascript: langs.javascript(),
-    typescript : langs.typescript(),
-    c : langs.c(),
-    css : langs.css(),
-    csharp : langs.csharp(),
-    dockerfile : langs.dockerfile(),
-    dart : langs.dart(),
-    go : langs.go(),
-    html : langs.html(),
-    lua : langs.lua(),
-    mysql : langs.mysql(),
-    php : langs.php(),
+    typescript: langs.typescript(),
+    c: langs.c(),
+    css: langs.css(),
+    csharp: langs.csharp(),
+    dockerfile: langs.dockerfile(),
+    dart: langs.dart(),
+    go: langs.go(),
+    html: langs.html(),
+    lua: langs.lua(),
+    mysql: langs.mysql(),
+    php: langs.php(),
   };
   function handleLangChange(lang) {
-    setLanguage(lang)
+    setLanguage(lang);
   }
 
   const fileSaveHandler = () => {
     // console.log("File saved!1!!")
     // console.log(fileId)
-    dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }))
-  }
+    dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
+  };
 
   // IDE stuff //
 
   return (
     // <div className={`styles.bg_container ` + (close ? "close" : "open")}>
-    <div className={`${styles.bg_container} ${close ? styles.close : styles.open}`}>
+    <div
+      className={`${styles.bg_container} ${close ? styles.close : styles.open}`}
+    >
       {close ? (
         <ShortSideBar open={toggleClose} />
       ) : (
-        <LongSidebar onSelectMode={(id) => {
-          setMode(id)
-          console.log("ID: ", id)
-        }} close={toggleClose} />
+        <LongSidebar
+          onSelectMode={(id) => {
+            setMode(id);
+            console.log("ID: ", id);
+          }}
+          close={toggleClose}
+        />
       )}
       <section className={styles.chat}>
         <ChatUI mode={mode} height={height} width={width} />
       </section>
       <section className={styles.ide_container}>
         <div className={styles.ide_topbar}>
-          <label >
+          <label>
             Languages:
-            <select className={styles.lang_selection} value={language} onChange={(evn) => handleLangChange(evn.target.value)}>
-              {Object.keys(langTemplate).sort().map((item, key) => {
-                return (
-                  <option key = {key} value={item}>
-                    {item}
-                  </option>
-                )
-              })}
+            <select
+              className={styles.lang_selection}
+              value={language}
+              onChange={(evn) => handleLangChange(evn.target.value)}
+            >
+              {Object.keys(langTemplate)
+                .sort()
+                .map((item, key) => {
+                  return (
+                    <option key={key} value={item}>
+                      {item}
+                    </option>
+                  );
+                })}
             </select>
           </label>
-          <img className={styles.run_btn} src={runIcon} onClick={executeCode}/>
+          <img className={styles.run_btn} src={runIcon} onClick={executeCode} />
+          <img src={MinimizeIcon} />
         </div>
         <div onBlur={fileSaveHandler}>
-        <CodeMirror
-          className={styles.ide}
-          value={code}
-          theme={ [alls.atomone] }
-          extensions={[langTemplate[language], fixedHeightEditor, EditorView.lineWrapping]}
-          onChange = { onChange }
-        />
+          <CodeMirror
+            className={styles.ide}
+            value={code}
+            theme={[alls.atomone]}
+            extensions={[
+              langTemplate[language],
+              fixedHeightEditor,
+              EditorView.lineWrapping,
+            ]}
+            onChange={onChange}
+          />
         </div>
       </section>
-      <section className={styles.output}>
-        {output}
-      </section>
+      <section className={styles.output}>{output}</section>
     </div>
   );
 }
