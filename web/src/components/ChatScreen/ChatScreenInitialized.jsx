@@ -11,7 +11,7 @@ const ChatScreenInitialized = (props) => {
     return <div className={styles.wrapper}></div>;
   }
 
-  console.log("I run brfore");
+  // console.log("I run brfore");
 
   const ratingHandler = (rate, id) => {
     props.onRate(rate, id);

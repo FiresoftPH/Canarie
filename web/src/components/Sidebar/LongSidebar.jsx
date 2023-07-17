@@ -146,7 +146,7 @@ function LongSidebar(props) {
           mh={cHeight}
         />
       </div>
-      <CourseSlideUp onSelectMode={selectModeHandler} re_render={onReRender} />
+      <CourseSlideUp mh={cHeight} onSelectMode={selectModeHandler} re_render={onReRender} />
     </div>
   );
 }

@@ -48,7 +48,9 @@ const AssignmentList = (props) => {
 
   return (
     <>
-      <div className={styles.assignments}>
+      <div className={styles.assignments} style={{
+        // maxHeight: props.mh
+      }}>
         {/* <AssignmentCard pressed name="Thingy" />
         <AssignmentCard name="Thingy2" />
         <AssignmentCard name="Thingy3" /> */}

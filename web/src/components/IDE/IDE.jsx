@@ -1,10 +1,7 @@
+import styles from "./IDE.module.css";
+
 import { useState, useCallback, useEffect } from "react";
-import styles from "./ChatPage.module.css";
-import LongSidebar from "src/components/Sidebar/LongSidebar";
-import ShortSideBar from "../../components/Sidebar/ShortSideBar";
 import { useParams } from "react-router-dom";
-import ChatUI from "../../components/ChatUI/ChatUI";
-import axios from "axios";
 import runIcon from "src/assets/RunBtn.svg";
 
 import CodeMirror from "@uiw/react-codemirror";
@@ -13,75 +10,41 @@ import { langs } from "@uiw/codemirror-extensions-langs";
 import { useDispatch, useSelector } from "react-redux";
 import { bigDataAction } from "../../store/bigDataSlice";
 
-import IDE from "../../components/IDE/IDE";
+import * as alls from "@uiw/codemirror-themes-all";
 
-import MinimizeIcon from "../../assets/MinimizeIcon.svg";
+const IDE = (props) => {
+  const [mouseDown, setMouseDown] = useState(false);
+  const [mousePos, setMousePos] = useState({});
+  const [ideDimention, setIdeDimention] = useState({ x: "10rem", y: "20rem" });
 
-function Dimension(el) {
-  // Get the DOM Node if you pass in a string
-  el = typeof el === "string" ? document.querySelector(el) : el;
+  useEffect(() => {
+    if (mouseDown == false) {
+      return;
+    }
 
-  var styles = window.getComputedStyle(el);
-  var margin =
-    parseFloat(styles["marginLeft"]) + parseFloat(styles["marginRight"]);
+    // console.log(window.innerHeight - mousePos.y);
+    setIdeDimention({ y: window.innerHeight - mousePos.y + 10 });
+  }, [mousePos]);
 
-  return el.offsetWidth + margin;
-}
+  function handleLangChange(lang) {
+    setLanguage(lang);
+  }
 
-function Dimension2(el) {
-  // Get the DOM Node if you pass in a string
-  el = typeof el === "string" ? document.querySelector(el) : el;
+  const fileSaveHandler = () => {
+    // console.log("File saved!1!!")
+    // console.log(fileId)
+    dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
+  };
 
-  var styles = window.getComputedStyle(el);
-  var margin =
-    parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
-
-  return el.offsetHeight + margin;
-}
-
-function Chat() {
-  const [close, setClose] = useState(false);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
-
-  const [mode, setMode] = useState("General");
 
   const fileId = useSelector((state) => state.chat.fid);
   const { subjectId, assignmentId } = useParams();
   const dispatch = useDispatch();
 
   // const codeData = useSelector(state => state.chat.code)
-
-  useEffect(() => {
-    setTimeout(() => {
-      const getWidth =
-        window.innerWidth - Dimension(document.getElementById("total"));
-
-      const getHeight =
-        window.innerHeight - Dimension2(document.getElementById("coding"));
-      setWidth(getWidth);
-      setHeight(getHeight);
-    }, 100);
-  }, []);
-
-  const toggleClose = (val) => {
-    setClose((state) => {
-      return !state;
-    });
-
-    setTimeout(() => {
-      const getWidth =
-        window.innerWidth - Dimension(document.getElementById("total"));
-
-      const getHeight =
-        window.innerHeight - Dimension2(document.getElementById("coding"));
-      setWidth(getWidth);
-      setHeight(getHeight);
-    }, 100);
-  };
 
   const codeData = useSelector((state) => state.chat.code);
   const fid = useSelector((state) => state.chat.fid);
@@ -176,60 +139,73 @@ function Chat() {
     php: langs.php(),
   };
 
-  // function handleLangChange(lang) {
-  //   setLanguage(lang);
-  // }
-
-  // const fileSaveHandler = () => {
-  //   // console.log("File saved!1!!")
-  //   // console.log(fileId)
-  //   dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
-  // };
-
-  // const [mouseDown, setMouseDown] = useState(false);
-  // const [mousePos, setMousePos] = useState({});
-  // const [ideDimention, setIdeDimention] = useState({ x: "10rem", y: "20rem" });
-
-  // useEffect(() => {
-  //   if (mouseDown == false) {
-  //     return;
-  //   }
-
-  //   console.log(window.innerHeight - mousePos.y);
-  //   setIdeDimention({ y: window.innerHeight - mousePos.y + 10 });
-  //   console.log(mousePos);
-  // }, [mousePos]);
-
-  // let interv;
-  // const resizeY = (e) => {
-  //   console.log(e.clientY);
-  // };
-
-  // IDE stuff //
   return (
-    // <div className={`styles.bg_container ` + (close ? "close" : "open")}>
-    <div
-      className={`${styles.bg_container} ${close ? styles.close : styles.open}`}
-    >
-      {close ? (
-        <ShortSideBar open={toggleClose} />
-      ) : (
-        <LongSidebar
-          onSelectMode={(id) => {
-            setMode(id);
-            console.log("ID: ", id);
+    <>
+      <div
+        className={styles.big_ide_container}
+        style={{
+          height: ideDimention.y,
+        }}
+      >
+        <div
+          onMouseDown={(e) => {
+            setMouseDown(true);
           }}
-          close={toggleClose}
-        />
-      )}
-      <div className={styles.leftSide}>
-        <section id="ChatUI" className={styles.chat}>
-          <ChatUI mode={mode} height={height} width={width} />
+          onMouseUp={() => {
+            setMouseDown(false);
+          }}
+          onMouseMove={(e) => {
+            setMousePos({ x: e.clientX, y: e.clientY });
+          }}
+          className={styles.sidin}
+        >
+          =
+        </div>
+        <section className={styles.ide_container}>
+          <div className={styles.ide_topbar}>
+            <label>
+              Languages:
+              <select
+                className={styles.lang_selection}
+                value={language}
+                onChange={(evn) => handleLangChange(evn.target.value)}
+              >
+                {Object.keys(langTemplate)
+                  .sort()
+                  .map((item, key) => {
+                    return (
+                      <option key={key} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+              </select>
+            </label>
+            <img
+              className={styles.run_btn}
+              src={runIcon}
+              onClick={executeCode}
+            />
+            {/* <img src={MinimizeIcon} /> */}
+          </div>
+          <div onBlur={fileSaveHandler}>
+            <CodeMirror
+              className={styles.ide}
+              value={code}
+              theme={[alls.atomone]}
+              extensions={[
+                langTemplate[language],
+                fixedHeightEditor,
+                EditorView.lineWrapping,
+              ]}
+              onChange={onChange}
+            />
+          </div>
         </section>
-        <IDE />
+        <section className={styles.output}>{output}</section>
       </div>
-    </div>
+    </>
   );
-}
+};
 
-export default Chat;
+export default IDE;
