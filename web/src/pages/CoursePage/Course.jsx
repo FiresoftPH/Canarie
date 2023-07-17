@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./Course.module.css";
 import CourseList from "src/components/CourseList/CourseList.jsx";

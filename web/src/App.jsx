@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "src/pages/LoginPage/Login.jsx";
-import Course from "src/pages/CoursePage/Course.jsx";
-import Term from "src/pages/TermPage/Term.jsx";
-import ChatPage from "src/pages/ChatPage/ChatPage.jsx";
-import Admin from "src/pages/AdminPage/Admin.jsx";
-import AdminCourse from "src/pages/AdminCoursePage/AdminCourse.jsx";
+import { Routes, Route } from "react-router-dom";
+import Login from "../src/pages/LoginPage/Login";
+import Course from "../src/pages/CoursePage/Course.jsx";
+import Term from "../src/pages/TermPage/Term.jsx";
+import ChatPage from "../src/pages/ChatPage/ChatPage.jsx";
+import Admin from "../src/pages/AdminPage/Admin.jsx";
+import AdminCourse from "../src/pages/AdminCoursePage/AdminCourse.jsx";
 
 /*
 REQUIRED DEPENDENCIES:
