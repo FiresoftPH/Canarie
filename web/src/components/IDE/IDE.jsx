@@ -194,29 +194,9 @@ const IDE = (props) => {
       style={{
         height: ideDimention.y,
       }}
+      ref={ideRef}
     >
-      <div
-        onMouseDown={(e) => {
-          setMouseDown(true);
-        }}
-        onMouseUp={() => {
-          setMouseDown(false);
-        }}
-        onMouseMove={(e) => {
-          setMousePos({ x: e.clientX, y: e.clientY });
-        }}
-        ref={ideRef}
-      >
         <div
-          // onMouseDown={(e) => {
-          //   setMouseDown(true);
-          // }}
-          // onMouseUp={() => {
-          //   setMouseDown(false);
-          // }}
-          // onMouseMove={(e) => {
-          //   setMousePos({ x: e.clientX, y: e.clientY });
-          // }}
           className={styles.sidin}
         >
           =
@@ -267,49 +247,6 @@ const IDE = (props) => {
           <section className={styles.output}>{output}</section>
         </div>
       </div>
-      <section className={styles.ide_container}>
-        <div className={styles.ide_topbar}>
-          <label>
-            Languages:
-            <select
-              className={styles.lang_selection}
-              value={language}
-              onChange={(evn) => handleLangChange(evn.target.value)}
-            >
-              {Object.keys(langTemplate)
-                .sort()
-                .map((item, key) => {
-                  return (
-                    <option key={key} value={item}>
-                      {item}
-                    </option>
-                  );
-                })}
-            </select>
-          </label>
-          <img
-            className={styles.run_btn}
-            src={runIcon}
-            onClick={executeCode}
-          />
-          {/* <img src={MinimizeIcon} /> */}
-        </div>
-        <div onBlur={fileSaveHandler}>
-          <CodeMirror
-            className={styles.ide}
-            value={code}
-            theme={[alls.atomone]}
-            extensions={[
-              langTemplate[language],
-              fixedHeightEditor,
-              EditorView.lineWrapping,
-            ]}
-            onChange={onChange}
-          />
-        </div>
-      </section>
-      <section className={styles.output}>{output}</section>
-    </div>
   );
 };
 
