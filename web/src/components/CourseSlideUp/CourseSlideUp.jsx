@@ -31,83 +31,124 @@ const CourseSlideUp = (props) => {
 
   return (
     <>
-      <div
-        className={styles.sidebar_below}
-        style={
-          hideCourse
-            ? {
-                gap: "0rem",
-              }
-            : {
-                gap: ".5rem",
-              }
-        }
-        id="assignment"
-      >
-        <h2>Courses</h2>
-        <img
-          onClick={() => {
-            setHideCourse(!hideCourse);
-            props.re_render();
+      <div className={styles.sidebar_below} id="assignment">
+        <div className={styles.allVis}>
+          <h2>Courses</h2>
+          <img
+            onClick={() => {
+              setHideCourse(!hideCourse);
+            }}
+            src={DownV}
+            style={
+              hideCourse
+                ? {
+                    transition: "300ms",
+                    rotate: "180deg",
+                  }
+                : {
+                    transition: "300ms",
+                    rotate: "0deg",
+                  }
+            }
+          />
+        </div>
+        <Transition in={!hideCourse} timeout={300} mountOnEnter unmountOnExit>
+          {(state) => {
+            const cssClasses = [
+              styles.latterHalf,
+              state === "entering"
+                ? styles.latterHalfOpen
+                : state === "exiting"
+                ? styles.latterHalfClose
+                : null,
+            ];
+
+            return (
+              <div
+                // style={
+                //   state === "entering"
+                //     ? {
+                //         transition: "300ms",
+                //         transform: "translateX(3rem)",
+                //       }
+                //     : {}
+                // }
+                className={cssClasses.join(" ")}
+              >
+                <h3>{subjectId}</h3>
+                <div
+                  className={`${styles.assignmentNav} ${
+                    chatSelect === "Assignment" ? styles.selected : ""
+                  }`}
+                  onClick={() => {
+                    setHideAss(!hideAss);
+                    props.re_render();
+                    setChatSelect("Assignment");
+                    nav(
+                      `../Chat/${subjectId}/${
+                        BigData.filter((sub) => sub.course === subjectId)[0]
+                          .assignments[0].assignmentId
+                      }`,
+                      {
+                        replace: true,
+                      }
+                    );
+                  }}
+                >
+                  <p className={styles.ass}># Assignments</p>
+                  <img
+                    className={`${styles.assDropDown}`}
+                    style={
+                      hideAss
+                        ? {
+                            transition: "300ms",
+                            rotate: "0deg",
+                          }
+                        : {
+                            transition: "300ms",
+                            rotate: "90deg",
+                          }
+                    }
+                    src={DownV}
+                  />
+                </div>
+                <Transition
+                  in={hideAss}
+                  timeout={300}
+                  mountOnEnter
+                  unmountOnExit
+                >
+                  {(state) => (
+                    <AssignmentList
+                      mh={props.mh}
+                      show={state}
+                      onSelect={assginmentListSelectHandler}
+                    />
+                  )}
+                </Transition>
+                {/* {hideAss ? <></> : ""} */}
+                <div className={styles.line} />
+                <section
+                  onClick={() => {
+                    setChatSelect("General");
+                    setHideAss(false);
+                    props.onSelectMode("General");
+                    props.re_render();
+                  }}
+                  className={`${styles.general} ${
+                    chatSelect === "General" ? styles.selected : ""
+                  }`}
+                >
+                  # General
+                </section>
+              </div>
+            );
           }}
-          src={hideCourse ? UpV : DownV}
-        />
-        {hideCourse ? (
+        </Transition>
+        {/* {hideCourse ? (
           ""
         ) : (
-          <>
-            <h3>{subjectId}</h3>
-            <div
-              className={`${styles.assignmentNav} ${
-                chatSelect === "Assignment" ? styles.selected : ""
-              }`}
-              onClick={() => {
-                setHideAss(!hideAss);
-                props.re_render();
-                setChatSelect("Assignment");
-                nav(
-                  `../Chat/${subjectId}/${
-                    BigData.filter((sub) => sub.course === subjectId)[0]
-                      .assignments[0].assignmentId
-                  }`,
-                  {
-                    replace: true,
-                  }
-                );
-              }}
-            >
-              <p className={styles.ass}># Assignments</p>
-              <img
-                className={styles.assDropDown}
-                src={hideAss ? DownV : LeftV}
-              />
-            </div>
-            {hideAss ? (
-              <>
-                <AssignmentList
-                  mh={props.mh}
-                  onSelect={assginmentListSelectHandler}
-                />
-              </>
-            ) : (
-              ""
-            )}
-            <div className={styles.line} />
-            <section
-              onClick={() => {
-                setChatSelect("General");
-                setHideAss(false);
-                props.onSelectMode("General");
-                props.re_render();
-              }}
-              className={`${styles.general} ${
-                chatSelect === "General" ? styles.selected : ""
-              }`}
-            >
-              # General
-            </section>
-          </>
-        )}
+        )} */}
       </div>
     </>
   );

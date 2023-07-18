@@ -147,8 +147,6 @@ const IDE = (props) => {
       edges: { top: true, left: false, bottom: false, right: false },
       listeners: {
         move: function (event) {
-          console.log("Event triggered");
-
           let { x, y } = event.target.dataset;
 
           x = (parseFloat(x) || 0) + event.deltaRect.left;
@@ -169,8 +167,6 @@ const IDE = (props) => {
       edges: { top: false, left: false, bottom: false, right: true },
       listeners: {
         move: function (event) {
-          console.log("Event triggered");
-
           let { x, y } = event.target.dataset;
 
           x = (parseFloat(x) || 0) + event.deltaRect.left;

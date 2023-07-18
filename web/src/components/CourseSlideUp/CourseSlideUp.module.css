@@ -1,30 +1,82 @@
 .sidebar_below {
+  transition: 300ms;
   background-color: #5e6084;
-
-  display: grid;
-  grid-template-areas:
-    "Cou CouNav"
-    "Sub Sub"
-    "AssNav AssNav"
-    "Ass Ass"
-    "Line Line"
-    "Gen Gen";
-  grid-template-columns: 5fr 1fr;
-  grid-template-rows: max-content;
 
   padding: 1rem;
   padding-top: 1.2rem;
   align-items: center;
+
+  height: fit-content;
 
   /* transition: all 300ms ease-out; */
   
   /* height: 5rem; */
 }
 
+.latterHalf > *:not(:first-child) {
+  margin-top: .5rem;
+}
+
+@keyframes LHfOpen {
+  0% {
+    /* width: 100%;
+    overflow: hidden;
+    height: 1rem; */
+    transform: translateY(0rem);
+  }
+  100% {
+    /* width: 100%;
+    height: 3rem; */
+    transform: translateY(3rem);
+  }
+}
+
+@keyframes LHClose {
+  0% {
+    width: 100%;
+    overflow: hidden;
+    height: 100%;
+  }
+  100% {
+    width: 100%;
+    height: 1%;
+  }
+}
+
+.latterHalfOpen {
+  animation: LHOpen 300ms ease-out forwards;
+  /* transform: translateY(-3rem); */
+  /* transition: 300ms;
+  transform: translateY(3rem); */
+}
+
+.latterHalfClose {
+  animation: LHClose 300ms ease-out forwards;
+}
+
+.sidebar_below > *:not(:first-child) {
+  margin-top: .5rem;
+}
+
+.allVis {
+  display: flex;
+  /* justify-content: flex-end; */
+}
+
+.allVis img {
+  /* justify-self: flex-end; */
+  align-self: end;
+  margin-left: auto !important; 
+}
+
+.allVis:first-child {
+  justify-self: flex-start;
+}
+
 .assDropDown {
   /* all: unset; */
 
-  max-width: 2rem;
+  /* max-width: 2rem; */
   justify-self: center;
   align-self: center;
 }

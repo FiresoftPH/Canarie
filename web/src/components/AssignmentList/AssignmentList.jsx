@@ -13,7 +13,7 @@ import styles from "./AssignmentList.module.css";
 // ];
 
 // import DUMMY_DATA_ASSIGNMENT from "./Assignments.json";
-import BigData from '../ChatUI/BigData.json';
+import BigData from "../ChatUI/BigData.json";
 
 const AssignmentList = (props) => {
   //   const [assignments, setAssignments] = useState(DUMMY_DATA)
@@ -23,14 +23,14 @@ const AssignmentList = (props) => {
 
   let DUMMY_DATA = BigData.filter((subject) => {
     return subject.course == subjectId;
-  })[0].assignments.filter(ass => ass.assignmentId !== "General");
+  })[0].assignments.filter((ass) => ass.assignmentId !== "General");
 
-  DUMMY_DATA = DUMMY_DATA.map(ass => {
+  DUMMY_DATA = DUMMY_DATA.map((ass) => {
     return {
       id: ass.assignmentId,
-      name: ass.name
-    }
-  })
+      name: ass.name,
+    };
+  });
 
   const [selectedAssignment, setSelectedAssignment] = useState(
     DUMMY_DATA[0].id
@@ -46,11 +46,25 @@ const AssignmentList = (props) => {
     });
   };
 
+  const cssClasses = [
+    styles.assignments,
+    props.show === "entering"
+      ? styles.open
+      : props.show === "exiting"
+      ? styles.close
+      : null,
+  ];
+
   return (
     <>
-      <div className={styles.assignments} style={{
-        // maxHeight: props.mh
-      }}>
+      <div
+        className={cssClasses.join(" ")}
+        style={
+          {
+            // maxHeight: props.mh
+          }
+        }
+      >
         {/* <AssignmentCard pressed name="Thingy" />
         <AssignmentCard name="Thingy2" />
         <AssignmentCard name="Thingy3" /> */}

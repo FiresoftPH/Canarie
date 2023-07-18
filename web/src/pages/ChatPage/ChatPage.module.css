@@ -1,5 +1,5 @@
 .bg_container {
-  transition: 300ms linear;
+  transition: 200ms ease-out;
   display: grid;
   grid-template-columns: 0.55fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;

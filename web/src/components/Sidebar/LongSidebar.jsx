@@ -137,13 +137,7 @@ function LongSidebar(props) {
             src="/src/assets/Collapse.svg"
           />
           <div className={styles.sepLine} />
-          {/* <SearchBox dark holder="Search" /> */}
         </div>
-        {/* <ChatList maxHeight={cHeight / 2} /> */}
-        {/* <section id="newChatBtn" className={styles.new_chat}>
-          <img src="src/assets/New button.svg" />
-          <p>New Chat</p>
-        </section> */}
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
           <img onClick={fileDownloadHandler} src="/src/assets/Upload.svg" />
