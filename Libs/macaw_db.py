@@ -1,8 +1,8 @@
 import pymysql.cursors
 import numpy as np
-from dotenv import dotenv_values
 import json
 import pickle
+from dotenv import dotenv_values
 
 class Database:
     def __init__(self):
@@ -28,21 +28,21 @@ class Database:
             pass
 
         try:
-            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), username VARCHAR(255),  password VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255))"
+            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255),  email VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255))"
             self.cursor.execute(command_1)
         except pymysql.err.OperationalError:
             # print("Already initialized")
             pass
 
         try:
-            command_2 = "CREATE TABLE statistics (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), username VARCHAR(255),  overall_understanding VARCHAR(255), most_asked_course VARCHAR(255), average_session_time VARCHAR(255))"
+            command_2 = "CREATE TABLE statistics (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255),  overall_understanding VARCHAR(255), most_asked_course VARCHAR(255), average_session_time VARCHAR(255))"
             self.cursor.execute(command_2)
         except pymysql.err.OperationalError:
             # print("Already initialized")
             pass
 
         try:
-            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log BLOB)"
+            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log BLOB)"
             self.cursor.execute(command_3)
         except pymysql.err.OperationalError:
             pass
@@ -56,9 +56,10 @@ class Database:
     # Reset the table values to nothing in case something gone wrong. This is used for development only.
     def resetTable(self):
         # self.cursor.execute("DROP TABLE courses")
-        # self.cursor.execute("DROP TABLE users")
-        # self.cursor.execute("DROP TABLE statistics")
+        self.cursor.execute("DROP TABLE users")
+        self.cursor.execute("DROP TABLE statistics")
         self.cursor.execute("DROP TABLE chat_history")
+        self.cursor.close()
 
     # Alter the table columns to add more functionalities. This is used for development only
     def alterTable(self):
@@ -78,17 +79,17 @@ class Database:
             self.connection.commit()
 
     # User register, each user have to have a name, username and password.
-    def userRegister(self, name, username, password):
-        self.cursor.execute("SELECT username FROM users")
+    def userRegister(self, email, username):
+        self.cursor.execute("SELECT email FROM users")
         result = self.cursor.fetchall()
-        new_user_data = (username, )        
+        new_user_data = (email, )        
         for row in result:
             if row == new_user_data:
                 print("User already exist")
                 return False
 
-        new_user_data_long = (name, username, password, "")
-        command = "INSERT INTO users (name, username, password, enrolled_courses) VALUES (%s, %s, %s, %s)"
+        new_user_data_long = (email, username, "", "user")
+        command = "INSERT INTO users (email, username, enrolled_courses, status) VALUES (%s, %s, %s, %s)"
         self.cursor.execute(command, new_user_data_long)
         self.connection.commit()
         return True
@@ -327,16 +328,20 @@ class Database:
         self.cursor.execute("SELECT course_name, assignment_name, log FROM chat_history WHERE username = %s", username)
         all_history = self.cursor.fetchall()
         for data in all_history:
-            if (course, assignment) == (data[0], data[1]):
+            if data[0] == course and data[1] == assignment:
                 temp = data[2]
+                print(temp)
                 return pickle.loads(temp)
-            else:
-                return False
             
         return False
-        
-        # history = pickle.loads(history[0])
-        # return history
+    
+    def printChatHistory(self, username):
+        self.cursor.execute("SELECT assignment_name FROM chat_history WHERE username = %s", username)
+        all_history = self.cursor.fetchall()
+        for data in all_history:
+            print(data)
+            
+        return False
 
     def showColumnNames(self):
         self.cursor.execute("SELECT * from chat_history")
@@ -351,6 +356,8 @@ class Database:
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
 
-# test = Database()
-# test.enrollCourse("hutao", ["Calculus 1", "Computer System", "Principal Of Computing Application"])
-# print(test.fetchUserData("Firesoft"))
+test = Database()
+test.showAllTables()
+# test.resetTable()
+# print(test.loadChatHistory("hutao", "Computer System", ""))
+# print(test.loadChatHistory("hutao"))

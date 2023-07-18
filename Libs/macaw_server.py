@@ -1,8 +1,12 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 from flask_cors import CORS
+from flask_caching import Cache
+from flask_oauthlib.client import OAuth
+from dotenv import dotenv_values
+import secrets 
 
 import requests
 import os
@@ -28,8 +32,8 @@ class DatabaseOperations:
         self.db.addCourseData(course_name, assignment_list)
 
     # User register, each user have to have a name, username and password.
-    def userRegister(self, name, username, password):
-        return self.db.userRegister(name, username, password)
+    def userRegister(self, email, username):
+        return self.db.userRegister(email, username)
 
     # Provided login functionalities and returns the credentials to the applications.
     def userLogin(self, username, password):
@@ -97,10 +101,9 @@ class AIOperations:
     def putContext(self, header):
         self.prompt.contextPrompt(header)
     
-    def storeChatHistory(self, username, course, assignment):
-        chat_history = self.ai.getCachedMemory()
+    def storeChatHistory(self, username, course, assignment, chat_history):
+        # chat_history = self.ai.getCachedMemory()
         self.db.storeChatHistory(username, course, assignment, chat_history)
-        self.db.showChatHistory()
 
     def getResponse(self, prompt):
         return self.ai.getResponse(prompt)
@@ -110,62 +113,91 @@ class AIOperations:
         if old_chat == False:
             return
         else:
-            self.ai.loadHistory(old_chat)
-            return
-
-    # We will load
-# Google authentication
-class GAuthentication:
-    def __init__(self):
-        pass
-
+            return old_chat
+        
+    def getChainedResponse(self, prompt, history):
+        return self.ai.getChainResponse(prompt, history)
+    
+# The actual flask server
 class FlaskServer(Flask):
     def __init__(self, name):
         super().__init__(name)
+        # Flask server configurations
+        config = dotenv_values("Libs/.env")
+        self.secret_key = config['SECRET_KEY']
+
         # Routing applications
-        self.route('/auth/login')(self.login)
+        self.route('/auth/login', methods = ["POST"])(self.login)
         self.route('/auth/register')(self.register)
         self.route('/test/temp_login')(self.tempLogin)
         self.route('/auth/enrolled_courses')(self.getEnrolledCourse)
-        self.route('/ai/getResponse')(self.getResponse)
+        self.route('/ai/get_response', methods = ["POST"])(self.getResponse)
         self.route('/compileCode', methods = ["POST"])(self.compileCode)
 
         # Init class
         self.db = DatabaseOperations()
         self.ai = AIOperations()
-        self.auth = GAuthentication()
         self.credentials = None
-        self.credentials = ("kokomi", "44444")
         self.current_chat_room = None
-        self.cors = CORS(self)
-        self.config['CORS_HEADERS'] = 'Content-Type'
-        # self.current_chat_room = ["Computer System", None]
+        CORS(self)
+        self.oauth = OAuth(self)
+
+    def verify_google_token(token):
+        try:
+            google_auth_url = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
+            params = {'access_token': token}
+            response = requests.get(google_auth_url, params=params)
+
+            if response.status_code == 200:
+                token = response.json()
+                return token
+            else:
+                raise ValueError('Invalid token.')
+        except Exception as e:
+            raise e
+        
+    def get_google_user_info(access_token):
+        try:
+            google_people_api_url = 'https://people.googleapis.com/v1/people/me'
+            headers = {'Authorization': f'Bearer {access_token}'}
+            params = {'personFields': 'names'}  # Request specific fields (names in this case)
+            response = requests.get(google_people_api_url, headers=headers, params=params)
+
+            if response.status_code == 200:
+                user_info = response.json()
+                return user_info
+            else:
+                raise ValueError(f'Failed to retrieve user information from Google People API. Status code: {response.status_code}')
+        except Exception as e:
+            print(f'Error during Google People API request: {e}')
+            raise e
 
     def login(self):
-        data = request.json
-        username = data.get("username")
-        password = data.get("password")
-
-        success = self.db.userLogin(username, password)
         try:
-            if success[1] is True:
-                response = {'message': 'Login Success'}
-                self.credentials = success[0]
-                initial = self.db.checkInitialSetup(self.credentials[0])
-                if initial == False:
-                    response.update({'status': 'No courses enrolled yet'})
-                else:
-                    # confirm = str(input("Do you want to enroll any courses?: "))
-                    # # if +
-                    response.update({'status': 'Already contained enrolled courses'})
+            token = request.json['token']
+            token_info = self.verify_google_token(token)
+            print(token_info)
+            email = token_info.get('email', None)
+            user_info = self.get_google_user_info(token)
 
-            else:
-                response = {'message': 'Wrong Username or Password!'}
+            # Extract the display name (username) from user_info
+            names = user_info.get('names', [])
+            username = None
+            if names:
+                username = names[0].get('displayName')
 
-        except TypeError:
-            response = {'message': 'Wrong Username or Password!'}
+            print(username)
+            print(email)
+            
+            if email is None or username is None:
+                raise ValueError('Failed to retrieve user information from token.')
 
-        return json.dumps(response)
+            self.db.userRegister(email, username)
+            return jsonify({'email': email, 'username': username})
+        except ValueError as e:
+            print(str(e))
+
+            return jsonify({'error': str(e)})
     
     def tempLogin(self):
         data = self.db.fetchUserData(self.credentials[0])
@@ -189,80 +221,85 @@ class FlaskServer(Flask):
         course_list = self.db.showUserEnrolledCourse(self.credentials[0])
         print(json.dumps(course_list))
         return json.dumps(course_list)
-    
-    def loadChatHistory(self):
-        return self.ai.loadChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
 
     def getResponse(self):
-        data = request.json
-        question = data.get("responses")
-        if 'file' in request.files:
-            file = request.files['file']
-        else:
-            file_dir = None
+        username = request.form['username']
+        course = request.form['course']
+        assignment = request.form['assignment']
+        question = request.form['question']
+        history = self.ai.loadChatHistory(username, course, assignment)
         
-        if file.filename == '':
-            return "File name is empty"
-        else:
-            try:
-                file_dir = os.path.join('uploads', file.filename)
-                file.save(file_dir)
-            except OSError:
-                file_dir = None
+        if 'file' in request.files:
+            recieved_file = request.files['file']
+            cached_files = os.listdir("cache")
+            output_filename = str(random.randint(1, 1000000))
+            while output_filename in cached_files:
+                output_filename = str(random.randint(1, 1000000))
 
-        prompt = self.ai.getPrompt(question, file_dir)
-        self.ai.getResponse(prompt, file_dir)
-        # self.ai.storeChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
+            filename = "cache/" + output_filename
+            recieved_file.save(filename)
+            prompt = self.ai.getPrompt(question, filename)
+            response = self.ai.getChainedResponse(prompt, history)
+            self.ai.storeChatHistory(username, course, assignment, response[1])
+        else:
+            filename = None
+            prompt = self.ai.getPrompt(question, filename) 
+            response = self.ai.getChainedResponse(prompt, history)
+            print(response)
+            self.ai.storeChatHistory(username, course, assignment, response[1])
+
+        return json.dumps({'answer': response[0], 'error': ""})
     
     def compileCode(self):
-        received_file = request.files['file']
-        filename = received_file.filename
-        file_extension = os.path.splitext(filename)[1]
-        cached_files = os.listdir("cache")
-        output_filename = str(random.randint(1, 1000000))
-        while output_filename in cached_files:
-            output_filename = str(random.randint(1, 1000000))
+        # recieved_file = Cache(self, config={'CACHE_TYPE': 'simple'})
+        # recieved_file = recieved_file.get("file.js")
+        # print(recieved_file)
+        # print(type(recieved_file))
+        return jsonify({"cache": "disshpilt"})
+        # # received_file = request.files['file']
+        # filename = recieved_file.filename
+        # file_extension = os.path.splitext(filename)[1]
+        # cached_files = os.listdir("cache")
+        # output_filename = str(random.randint(1, 1000000))
+        # while output_filename in cached_files:
+        #     output_filename = str(random.randint(1, 1000000))
 
-        filename = "cache/" + output_filename + file_extension
-        received_file.save("cache/" + output_filename + file_extension)
-        gcc_list = ['c', 'rust']
-        lexer = guess_lexer_for_filename(filename, '')
-        lang = lexer.name.lower()
-        cached_files = os.listdir("cache")
-        output_filename = str(random.randint(1, 1000000)) + ".o"
-        while output_filename in cached_files:
-            output_filename = str(random.randint(1, 1000000)) + ".o"
+        # filename = "cache/" + output_filename + file_extension
+        # recieved_file.save(filename)
+        # gcc_list = ['c', 'rust']
+        # lexer = guess_lexer_for_filename(filename, '')
+        # lang = lexer.name.lower()
+        # cached_files = os.listdir("cache")
+        # output_filename = str(random.randint(1, 1000000)) + ".o"
+        # while output_filename in cached_files:
+        #     output_filename = str(random.randint(1, 1000000)) + ".o"
 
-        output_filename = "cache/" + output_filename
+        # output_filename = "cache/" + output_filename
 
-        if lang in gcc_list:
-            compile_process = subprocess.Popen(['gcc', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            compile_process.communicate()
-            execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            stdout, stderr = execute_process.communicate()
-        elif lang == "c++":
-            compile_process = subprocess.Popen(['g++', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            compile_process.communicate()
-            execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            stdout, stderr = execute_process.communicate()
-        else:
-            process = subprocess.Popen([lang, filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate()
+        # if lang in gcc_list:
+        #     compile_process = subprocess.Popen(['gcc', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        #     compile_process.communicate()
+        #     execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        #     stdout, stderr = execute_process.communicate()
+        # elif lang == "c++":
+        #     compile_process = subprocess.Popen(['g++', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        #     compile_process.communicate()
+        #     execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        #     stdout, stderr = execute_process.communicate()
+        # else:
+        #     process = subprocess.Popen([lang, filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        #     stdout, stderr = process.communicate()
         
-        if len(os.listdir("cache")) >= 20:
-            for x in os.listdir("cache"):
-                try:
-                    os.remove("cache/" + x)
-                except FileNotFoundError:
-                    print("File not found")
+        # if len(os.listdir("cache")) >= 20:
+        #     for x in os.listdir("cache"):
+        #         try:
+        #             os.remove("cache/" + x)
+        #         except FileNotFoundError:
+        #             print("File not found")
 
-        return json.dumps({"Output": stdout.decode(), "Error": stderr.decode()})
-
-# Example usage
-# print(json.loads(run_another_file("test_files/TwT.cpp")))
+        # return json.dumps({"Output": stdout.decode(), "Error": stderr.decode()})
         
-
 if __name__ == '__main__':
     app = FlaskServer(__name__)
-    app.run(port=2424)
-
+    # app.run(host = '0.0.0.0', port=2424)
+    app.run(host = "localhost", port=2424)
