@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { chatAction } from "../../store/chatSlice";
 import { bigDataAction } from "../../store/bigDataSlice";
+import Transition from "react-transition-group/Transition";
 
 const FileList = (props) => {
   const { subjectId, assignmentId } = useParams();
@@ -46,7 +47,7 @@ const FileList = (props) => {
       setFiles(transformedData);
       setSelectedFile(transformedData[0].id);
       props.sf(transformedData[0].id);
-      dispatch(chatAction.setCode(transformedData[0].code))
+      dispatch(chatAction.setCode(transformedData[0].code));
     }
   }, [
     assignmentId,
@@ -68,7 +69,7 @@ const FileList = (props) => {
           (ass) => ass.assignmentId === assignmentId
         )[0].files;
 
-      setSelectedFile(transformedData[0].id)
+      setSelectedFile(transformedData[0].id);
     }
   };
 
@@ -76,7 +77,7 @@ const FileList = (props) => {
     // console.log(files.filter(fie => fie.id === id)[0].code)
     dispatch(chatAction.setCode(files.filter((fie) => fie.id === id)[0].code));
     setSelectedFile(id);
-    props.sf(id)
+    props.sf(id);
   };
 
   return (
@@ -103,7 +104,6 @@ const FileList = (props) => {
               );
             })
           : "Please select an assignment to work on"}
-        
       </section>
     </>
   );

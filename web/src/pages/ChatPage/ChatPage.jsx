@@ -16,6 +16,7 @@ import { bigDataAction } from "../../store/bigDataSlice";
 import IDE from "../../components/IDE/IDE";
 
 import MinimizeIcon from "../../assets/MinimizeIcon.svg";
+import Transition from "react-transition-group/Transition";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -155,63 +156,28 @@ function Chat() {
     });
   };
 
-  const fixedHeightEditor = EditorView.theme({
-    "&": { height: "40vh" },
-    ".cm-content": { overflow: "auto" },
-  });
-  const langTemplate = {
-    python: langs.python(),
-    java: langs.java(),
-    javascript: langs.javascript(),
-    typescript: langs.typescript(),
-    c: langs.c(),
-    css: langs.css(),
-    csharp: langs.csharp(),
-    dockerfile: langs.dockerfile(),
-    dart: langs.dart(),
-    go: langs.go(),
-    html: langs.html(),
-    lua: langs.lua(),
-    mysql: langs.mysql(),
-    php: langs.php(),
-  };
-
-  // function handleLangChange(lang) {
-  //   setLanguage(lang);
-  // }
-
-  // const fileSaveHandler = () => {
-  //   // console.log("File saved!1!!")
-  //   // console.log(fileId)
-  //   dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
-  // };
-
-  // const [mouseDown, setMouseDown] = useState(false);
-  // const [mousePos, setMousePos] = useState({});
-  // const [ideDimention, setIdeDimention] = useState({ x: "10rem", y: "20rem" });
-
-  // useEffect(() => {
-  //   if (mouseDown == false) {
-  //     return;
-  //   }
-
-  //   console.log(window.innerHeight - mousePos.y);
-  //   setIdeDimention({ y: window.innerHeight - mousePos.y + 10 });
-  //   console.log(mousePos);
-  // }, [mousePos]);
-
-  // let interv;
-  // const resizeY = (e) => {
-  //   console.log(e.clientY);
-  // };
-
   // IDE stuff //
   return (
     // <div className={`styles.bg_container ` + (close ? "close" : "open")}>
     <div
       className={`${styles.bg_container} ${close ? styles.close : styles.open}`}
     >
-      {close ? (
+      <Transition in={close} timeout={300} mountOnEnter unmountOnExit>
+        {(state) => <ShortSideBar open={toggleClose} show={state} />}
+      </Transition>
+      <Transition in={!close} timeout={300} mountOnEnter unmountOnExit>
+        {(state) => (
+          <LongSidebar
+            onSelectMode={(id) => {
+              setMode(id);
+              console.log("ID: ", id);
+            }}
+            close={toggleClose}
+            show={state}
+          />
+        )}
+      </Transition>
+      {/* {close ? (
         <ShortSideBar open={toggleClose} />
       ) : (
         <LongSidebar
@@ -221,7 +187,7 @@ function Chat() {
           }}
           close={toggleClose}
         />
-      )}
+      )} */}
       <div className={styles.leftSide}>
         <section id="ChatUI" className={styles.chat}>
           <ChatUI mode={mode} height={height} width={width} />

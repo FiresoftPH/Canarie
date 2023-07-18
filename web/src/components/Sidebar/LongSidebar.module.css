@@ -101,3 +101,34 @@ img[src="src/assets/Collapse.svg"] {
 img[src="/src/assets/Upload.svg"] {
   padding-right: 1.75rem;
 }
+
+@keyframes openSideBar {
+  0% {
+    transform: translateX(-100);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes closeSideBar {
+  0% {
+    /* transform: translateY(0px); */
+    /* opacity: 1; */
+    display: block;
+  }
+  100% {
+    /* transform: translateY(-100%); */
+    /* opacity: 0; */
+    display: none;
+  }
+}
+
+.open {
+  animation: openSideBar 300ms linear forwards;
+}
+
+.close {
+  /* animation: closeSldeBar 300ms ease-in forwards; */
+  display: none;
+}

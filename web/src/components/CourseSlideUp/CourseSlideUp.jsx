@@ -10,7 +10,8 @@ import LeftV from "../../assets/LeftV.svg";
 import UpV from "../../assets/UpV.svg";
 import AssignmentList from "../AssignmentList/AssignmentList";
 
-import BigData from '../ChatUI/BigData.json';
+import BigData from "../ChatUI/BigData.json";
+import Transition from "react-transition-group/Transition";
 
 const CourseSlideUp = (props) => {
   const [hideCourse, setHideCourse] = useState(false);
@@ -18,15 +19,15 @@ const CourseSlideUp = (props) => {
 
   const [chatSelect, setChatSelect] = useState("General");
 
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   const assginmentListSelectHandler = (id) => {
     setChatSelect("Assignment");
-    props.onSelectMode(id)
-    console.log(chatSelect)
+    props.onSelectMode(id);
+    console.log(chatSelect);
   };
-  
-  const { subjectId } = useParams()
+
+  const { subjectId } = useParams();
 
   return (
     <>
@@ -64,34 +65,29 @@ const CourseSlideUp = (props) => {
                 setHideAss(!hideAss);
                 props.re_render();
                 setChatSelect("Assignment");
-                // props.onSelectMode("Assignment 1")
-                // console.log(BigData.filter(sub => sub.course === subjectId)[0].assignments[0].assignmentId)
-                nav(`../Chat/${subjectId}/${BigData.filter(sub => sub.course === subjectId)[0].assignments[0].assignmentId}`, {
-                  replace: true,
-                });
+                nav(
+                  `../Chat/${subjectId}/${
+                    BigData.filter((sub) => sub.course === subjectId)[0]
+                      .assignments[0].assignmentId
+                  }`,
+                  {
+                    replace: true,
+                  }
+                );
               }}
             >
-              <p
-                // onClick={() => {
-                //   setHideAss(!hideAss);
-                //   props.re_render();
-                // }}
-                className={styles.ass}
-              >
-                # Assignments
-              </p>
+              <p className={styles.ass}># Assignments</p>
               <img
-                // onClick={() => {
-                //   setHideAss(!hideAss);
-                //   props.re_render();
-                // }}
                 className={styles.assDropDown}
                 src={hideAss ? DownV : LeftV}
               />
             </div>
             {hideAss ? (
               <>
-                <AssignmentList mh={props.mh} onSelect={assginmentListSelectHandler} />
+                <AssignmentList
+                  mh={props.mh}
+                  onSelect={assginmentListSelectHandler}
+                />
               </>
             ) : (
               ""
@@ -100,9 +96,9 @@ const CourseSlideUp = (props) => {
             <section
               onClick={() => {
                 setChatSelect("General");
-                setHideAss(false)
-                props.onSelectMode("General")
-                props.re_render()
+                setHideAss(false);
+                props.onSelectMode("General");
+                props.re_render();
               }}
               className={`${styles.general} ${
                 chatSelect === "General" ? styles.selected : ""

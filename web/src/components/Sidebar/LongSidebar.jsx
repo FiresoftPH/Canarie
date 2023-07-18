@@ -110,8 +110,17 @@ function LongSidebar(props) {
     URL.revokeObjectURL(url);
   };
 
+  const cssClasses = [
+    styles.container,
+    props.show === "entering"
+      ? styles.open
+      : props.show === "exiting"
+      ? styles.close
+      : null,
+  ];
+
   return (
-    <div id="total" className={styles.container}>
+    <div id="total" className={cssClasses.join(" ")}>
       <div className={styles.sidebar_top}>
         <div id="chat" className={styles.top}>
           <img

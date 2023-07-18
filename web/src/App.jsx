@@ -15,6 +15,8 @@ npm install react-redux
 npm install @reduxjs/toolkit
 npm install boxicons --save
 npm install js-cookie
+npm install --save interactjs
+npm install react-transition-group --save
 */
 
 function App() {
@@ -25,7 +27,7 @@ function App() {
   return (
     <>
       <Routes>
-        {loggedIn ? (
+        {true ? (
           <>
             <Route path="/" element={<Login />} />
             <Route path="/Term" element={<Term />} />
