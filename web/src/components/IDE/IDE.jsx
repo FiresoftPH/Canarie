@@ -2,7 +2,7 @@ import styles from "./IDE.module.css";
 
 import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import runIcon from "src/assets/RunBtn.svg";
+import runIcon from "../../assets/RunBtn.svg";
 
 import CodeMirror from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -104,10 +104,6 @@ const IDE = (props) => {
     });
   };
 
-  const getSavedCodeFromLocalSorage = () => {
-    return localStorage.getItem("python");
-  };
-
   const excuteJavascriptCode = (code) => {
     const cacheName = "file.js";
     const fileContent = code;
@@ -193,11 +189,21 @@ const IDE = (props) => {
   });
 
   return (
-    <>
+    <div
+      className={styles.big_ide_container}
+      style={{
+        height: ideDimention.y,
+      }}
+    >
       <div
-        className={styles.big_ide_container}
-        style={{
-          height: ideDimention.y,
+        onMouseDown={(e) => {
+          setMouseDown(true);
+        }}
+        onMouseUp={() => {
+          setMouseDown(false);
+        }}
+        onMouseMove={(e) => {
+          setMousePos({ x: e.clientX, y: e.clientY });
         }}
         ref={ideRef}
       >
@@ -261,7 +267,49 @@ const IDE = (props) => {
           <section className={styles.output}>{output}</section>
         </div>
       </div>
-    </>
+      <section className={styles.ide_container}>
+        <div className={styles.ide_topbar}>
+          <label>
+            Languages:
+            <select
+              className={styles.lang_selection}
+              value={language}
+              onChange={(evn) => handleLangChange(evn.target.value)}
+            >
+              {Object.keys(langTemplate)
+                .sort()
+                .map((item, key) => {
+                  return (
+                    <option key={key} value={item}>
+                      {item}
+                    </option>
+                  );
+                })}
+            </select>
+          </label>
+          <img
+            className={styles.run_btn}
+            src={runIcon}
+            onClick={executeCode}
+          />
+          {/* <img src={MinimizeIcon} /> */}
+        </div>
+        <div onBlur={fileSaveHandler}>
+          <CodeMirror
+            className={styles.ide}
+            value={code}
+            theme={[alls.atomone]}
+            extensions={[
+              langTemplate[language],
+              fixedHeightEditor,
+              EditorView.lineWrapping,
+            ]}
+            onChange={onChange}
+          />
+        </div>
+      </section>
+      <section className={styles.output}>{output}</section>
+    </div>
   );
 };
 

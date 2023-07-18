@@ -1,10 +1,12 @@
 import styles from "./Login.module.css";
 import { useEffect, useState } from "react";
 import Term from "../TermPage/Term";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/userSlice";
 import Transition from "react-transition-group/Transition";
+import logo from "../../assets/Logo.svg"
+import cmkllogo from "../../assets/CMKL logo.svg"
 
 import Cookies from "js-cookie";
 
@@ -19,6 +21,29 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  
+  // const sendDataToBackend = async () => {
+  //   try {
+  //     const response = await fetch('/logintest', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         message: 'Hello from Frontend!',
+  //         timestamp: Date.now(),
+  //       }),
+  //     });
+
+  //     if (response.ok) {
+  //       console.log('Data sent to backend successfully');
+  //     } else {
+  //       console.log('Error sending data to backend');
+  //     }
+  //   } catch (error) {
+  //     console.log('Error:', error);
+  //   }
+  // };
 
   useEffect(() => {
     dispatch(
@@ -30,7 +55,7 @@ function Login() {
         courses: CourseNames,
         status: "user",
       })
-    );
+      );
 
     Cookies.set("Screen_Width", window.innerWidth);
     Cookies.set("Screen_Height", window.innerHeight);
@@ -57,7 +82,7 @@ function Login() {
   return (
     <div className={styles.background}>
       <div className={styles.content}>
-        <img className={styles.logo} src="/src/assets/Logo.svg" />
+        <img className={styles.logo} src={logo} />
         <p className={styles.app_name}>Macaw</p>
         <div className={styles.quote}>
           <section className={styles.left_text}>
@@ -70,7 +95,7 @@ function Login() {
         <div className={styles.group}>
           <div onClick={loginHandler} className={styles.api_button}>
             <div className={styles.api}>
-              <img src="/src/assets/CMKL logo.svg" />
+              <img src={cmkllogo} />
               <p>Sign in with CMKL account</p>
             </div>
           </div>

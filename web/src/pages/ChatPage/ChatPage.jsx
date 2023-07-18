@@ -4,17 +4,9 @@ import LongSidebar from "src/components/Sidebar/LongSidebar";
 import ShortSideBar from "../../components/Sidebar/ShortSideBar";
 import { useParams } from "react-router-dom";
 import ChatUI from "../../components/ChatUI/ChatUI";
-import axios from "axios";
-import runIcon from "src/assets/RunBtn.svg";
-
-import CodeMirror from "@uiw/react-codemirror";
-import { EditorView } from "@codemirror/view";
-import { langs } from "@uiw/codemirror-extensions-langs";
 import { useDispatch, useSelector } from "react-redux";
 import { bigDataAction } from "../../store/bigDataSlice";
-
 import IDE from "../../components/IDE/IDE";
-
 import MinimizeIcon from "../../assets/MinimizeIcon.svg";
 import Transition from "react-transition-group/Transition";
 
@@ -44,7 +36,6 @@ function Chat() {
   const [close, setClose] = useState(false);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
 
@@ -91,69 +82,23 @@ function Chat() {
     setCode(codeData);
   }, [codeData, fid]);
 
-  // IDE stuff //
-  const onChange = useCallback((value) => {
-    setCode(value);
-  }, []);
+  const [mouseDown, setMouseDown] = useState(false);
+  const [mousePos, setMousePos] = useState({});
+  const [ideDimention, setIdeDimention] = useState({ x: "10rem", y: "20rem" });
 
-  const executeCode = () => {
-    try {
-      let result;
-      switch (language) {
-        case "javascript":
-          result = excuteJavascriptCode(code);
-          console.log("1");
-          break;
-        case "python":
-          result = excutePythonCode(code);
-          console.log("2");
-          break;
-        default:
-          throw new Error(`Language mode "${language}" is not supported.`);
-      }
-      // Set the output with the result of code execution
-      setOutput(result);
-    } catch (error) {
-      // Set the output with the error message if any
-      setOutput(error.toString());
+  useEffect(() => {
+    if (mouseDown == false) {
+      return;
     }
-  };
 
-  const excutePythonCode = (code) => {
-    // CacheStorage.bind('python:',code);
-    const cacheName = "file.py";
-    const fileContent = code;
+    console.log(window.innerHeight - mousePos.y);
+    setIdeDimention({ y: window.innerHeight - mousePos.y + 10 });
+    console.log(mousePos);
+  }, [mousePos]);
 
-    const blob = new Blob([fileContent], { type: "text/plain" });
-
-    const cachePromise = caches.open(cacheName).then((cache) => {
-      const request = new Request(cacheName);
-      const response = new Response(blob);
-      return cache.put(request, response);
-    });
-    cachePromise.catch((error) => {
-      console.error("Error saving code to cache:", error);
-    });
-  };
-
-  const getSavedCodeFromLocalSorage = () => {
-    return localStorage.getItem("python");
-  };
-
-  const excuteJavascriptCode = (code) => {
-    const cacheName = "file.js";
-    const fileContent = code;
-
-    // const blob = new Blob([fileContent], { type: 'text/plain' });
-
-    const cachePromise = caches.open(cacheName).then((cache) => {
-      const request = new Request(cacheName);
-      const response = new Response(fileContent);
-      return cache.put(request, response);
-    });
-    cachePromise.catch((error) => {
-      console.error("Error saving code to cache:", error);
-    });
+  let interv;
+  const resizeY = (e) => {
+    console.log(e.clientY);
   };
 
   // IDE stuff //
