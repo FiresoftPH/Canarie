@@ -144,7 +144,7 @@ function LongSidebar(props) {
         </div>
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
-          <img onClick={fileDownloadHandler} src="/src/assets/Upload.svg" />
+          <img onClick={fileDownloadHandler} src={Upload} />
         </section>
         <FileList
           sf={(f) => {
