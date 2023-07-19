@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Admin.css";
+
 function Admin() {
   return (
     <>
@@ -15,7 +16,7 @@ function Admin() {
             <div className="logo-admin">
               <img src="src/assets/Logo.svg" />
               <div className="name-admin">
-                <p>Macow</p>
+                <p>Parrot</p>
                 <p>Admin</p>
               </div>
             </div>
@@ -29,7 +30,7 @@ function Admin() {
               </a>
             </div>
             <div className="chat-page">
-              <p>Macow Chat</p>
+              <p>Parrot Chat</p>
               <img src="src/assets/Linkto.svg" />
             </div>
           </div>
@@ -41,7 +42,7 @@ function Admin() {
                   <div className="username">
                     <p>Hi,Admin User</p>
                     <p>Blank</p>
-                    <p>Macow</p>
+                    <p>Parrot</p>
                   </div>
                 </section>
               </div>
@@ -62,7 +63,7 @@ function Admin() {
                   <img src="src/assets/Macaw-admin-nav-icon.svg" />
                 </section>
                 <section className="nav-app-macaw-text">
-                  <p>Macaw Chat</p>
+                  <p>Parrot Chat</p>
                   <p>Chat with Parrot</p>
                 </section>
               </section>

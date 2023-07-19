@@ -1,0 +1,72 @@
+.wrapper {
+  display: flex;
+  margin-top: 1.5rem;
+  /* width: auto; */
+}
+
+.message {
+  border-radius: 1.875rem;
+  background: linear-gradient(0deg, #252525 0%, #252525 100%), #252525;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 65%;
+
+  padding: 1rem;
+  position: relative;
+
+  margin-left: 1rem;
+}
+
+.preference {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #d9d9d9;
+  padding: 0.5rem;
+
+  border-radius: 1.875rem;
+
+  position: absolute;
+  right: 0;
+  bottom: -35%;
+}
+
+.preferenceSelected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #d9d9d9;
+
+  border-radius: 1.875rem;
+
+  position: absolute;
+  right: 0;
+  bottom: -35%;
+}
+
+.like {
+  margin-right: .5rem;
+}
+
+.likeFilled {
+  max-width: 2.5rem;
+  margin: 0;
+}
+
+.assignmentList {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.assignmentList p {
+  text-decoration: underline;
+}
+
+.assignmentList p:hover {
+  cursor: pointer;
+}

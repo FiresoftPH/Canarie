@@ -1,4 +1,5 @@
 from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig, pipeline
+#from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig, GenerationConfig, pipeline
 from langchain.llms import HuggingFacePipeline
 from langchain import PromptTemplate, LLMChain
 import langchain.chains
@@ -11,10 +12,12 @@ import sys
 import pickle
 
 arima = macaw_ai.GeneratePrompt()
-prompt = arima.codePrompt("explain this code ", "test_files/UwU.py")
+prompt = arima.codePrompt("explain this code ", "UwU.py")
 
 #tokenizer = LlamaTokenizer.from_pretrained("/lustre/scratch/project/cmkl/ai-chat/llama-13b-meta-hf")
 tokenizer = LlamaTokenizer.from_pretrained("TheBloke/vicuna-13B-1.1-HF")
+#tokenizer = LlamaTokenizer.from_pretrained("chavinlo/alpaca-native")
+#tokenizer = AutoTokenizer.from_pretrained('mosaicml/mpt-30b')
 print("here")
 
 base_model = LlamaForCausalLM.from_pretrained(
@@ -22,15 +25,24 @@ base_model = LlamaForCausalLM.from_pretrained(
     load_in_8bit=True,
     device_map='auto',
 )
+# config = AutoConfig.from_pretrained("mosaicml/mpt-30b", trust_remote_code=True)
+# config.attn_config['attn_impl'] = 'triton' 
+# config.init_device = 'cuda:0'
+
+# base_model = AutoModelForCausalLM.from_pretrained(
+#   'mosaicml/mpt-30b',
+#   trust_remote_code=True
+# )
 print("here2")
 pipe = pipeline(
     "text-generation",
     model=base_model, 
     tokenizer=tokenizer, 
-    max_length=1024,
+    max_length=720,
     temperature=0.6,
     top_p=0.95,
-    repetition_penalty=1.2
+    repetition_penalty=1.2,
+    device_map="auto"
 )
 print("here3")
 local_llm = HuggingFacePipeline(pipeline=pipe)

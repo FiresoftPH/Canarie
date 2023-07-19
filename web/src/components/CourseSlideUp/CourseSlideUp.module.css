@@ -1,0 +1,140 @@
+.sidebar_below {
+  /* transition: 300ms; */
+  background-color: #5e6084;
+
+  padding: 1rem;
+  padding-top: 1.2rem;
+  align-items: center;
+
+  height: max-content;
+}
+
+.latterHalf > *:not(:first-child) {
+  margin-top: .5rem;
+}
+
+@keyframes slideUp {
+  0% {
+    /* height: 0%;
+    overflow: hidden; */
+    transform: translateY(5rem);
+  }
+  100% {
+    /* height: 100%; */
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    /* width: 100%; */
+    /* overflow: hidden;
+    height: 100%; */
+    transform: translateY(0);
+  }
+  100% {
+    /* width: 100%; */
+    /* height: 0%; */
+    transform: translateY(15rem);
+  }
+}
+
+.latterHalfOpen {
+  animation: slideUp 300ms linear forwards;
+}
+
+.latterHalfClose {
+  animation: slideDown 300ms linear forwards;
+}
+
+.sidebar_below > *:not(:first-child) {
+  margin-top: .5rem;
+}
+
+.allVis {
+  display: flex;
+  /* justify-content: flex-end; */
+}
+
+.allVis img {
+  /* justify-self: flex-end; */
+  align-self: end;
+  margin-left: auto; 
+}
+
+.allVis:first-child {
+  justify-self: flex-start;
+}
+
+.assDropDown {
+  /* all: unset; */
+
+  /* max-width: 2rem; */
+  justify-self: center;
+  align-self: center;
+}
+
+.assignmentNav {
+  grid-area: AssNav;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  align-items: center;
+  /* background-color: red; */
+  border-radius: .5rem;
+}
+
+.sidebar_below h2 {
+  font-size: 2rem;
+  align-self: center;
+}
+
+.sidebar_below h3 {
+  all: unset;
+  grid-area: Sub;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+.sidebar_below img {
+  justify-self: center;
+}
+
+.line {
+  grid-area: Line;
+  width: 100%;
+  height: 0.01rem;
+  background-color: #a4a4af;
+}
+
+.ass {
+  color: #d0d1d8;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+/* General section */
+.general {
+  font-size: 1.2rem;
+  padding: 1rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  color: #d0d1d8;
+  /* padding-top: .5rem;
+  padding-bottom: .5rem;
+  color: white; */
+  /* background-color: #6d6f99; */
+  border-radius: 0.5rem;
+  width: 100%;
+  grid-area: Gen;
+}
+
+.selected {
+  color: white;
+  background-color: #6d6f99;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+.selected > * {
+  color: white;
+}

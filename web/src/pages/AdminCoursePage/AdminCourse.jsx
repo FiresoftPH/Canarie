@@ -18,7 +18,7 @@ function AdminCourse() {
             <div className="logo-admin">
               <img src="src/assets/Logo.svg" />
               <div className="name-admin">
-                <p>Macaw</p>
+                <p>Parrot</p>
                 <p>Admin</p>
               </div>
             </div>
@@ -32,20 +32,11 @@ function AdminCourse() {
               </a>
             </div>
             <div className="chat-page">
-              <p>Macow Chat</p>
+              <p>Parrot Chat</p>
               <img src="src/assets/Linkto.svg" />
             </div>
           </div>
-          <div className="course-content">
-            <div className="course-pillar">
-              <div className="course-pillar-title">
-                <p>Courses</p>
-                <p>All courses</p>
-              </div>
-              <section className="line"></section>
-              <PillarList />
-            </div>
-          </div>
+          <PillarList />
         </div>
       </div>
     </>

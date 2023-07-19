@@ -1,7 +1,10 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+import requests
 import os
 try: 
     import macaw_db, macaw_ai
@@ -10,6 +13,11 @@ except:
     from Libs import macaw_db, macaw_ai
 
 import json
+import subprocess
+import json
+from pygments.lexers import guess_lexer_for_filename
+import os
+import random
 
 class DatabaseOperations:
     def __init__(self):
@@ -62,6 +70,10 @@ class DatabaseOperations:
     def getUserChatRoom(self, username):
         return self.db.getUserChatRoom(username)
 
+    # fetch user related data and send to frontend
+    def fetchUserData(self, username):
+        return self.db.fetchUserData(username)
+
 class AIOperations:
     def __init__(self):
         self.ai = macaw_ai.AI()
@@ -81,6 +93,9 @@ class AIOperations:
         
         except TypeError:
             return prompt
+
+    def putContext(self, header):
+        self.prompt.contextPrompt(header)
     
     def storeChatHistory(self, username, course, assignment):
         chat_history = self.ai.getCachedMemory()
@@ -98,6 +113,7 @@ class AIOperations:
             self.ai.loadHistory(old_chat)
             return
 
+    # We will load
 # Google authentication
 class GAuthentication:
     def __init__(self):
@@ -107,18 +123,23 @@ class FlaskServer(Flask):
     def __init__(self, name):
         super().__init__(name)
         # Routing applications
-        self.route('/login')(self.login)
-        self.route('/register')(self.register)
-        self.route('/enrolled_courses')(self.getEnrolledCourse)
+        self.route('/auth/login')(self.login)
+        self.route('/auth/register')(self.register)
+        self.route('/test/temp_login')(self.tempLogin)
+        self.route('/auth/enrolled_courses')(self.getEnrolledCourse)
+        self.route('/ai/getResponse')(self.getResponse)
+        self.route('/compileCode', methods = ["POST"])(self.compileCode)
 
         # Init class
         self.db = DatabaseOperations()
         self.ai = AIOperations()
         self.auth = GAuthentication()
         self.credentials = None
-        self.credentials = ("Firesoft", "111111")
+        self.credentials = ("kokomi", "44444")
         self.current_chat_room = None
-        self.current_chat_room = ["Computer System", None]
+        self.cors = CORS(self)
+        self.config['CORS_HEADERS'] = 'Content-Type'
+        # self.current_chat_room = ["Computer System", None]
 
     def login(self):
         data = request.json
@@ -145,6 +166,11 @@ class FlaskServer(Flask):
             response = {'message': 'Wrong Username or Password!'}
 
         return json.dumps(response)
+    
+    def tempLogin(self):
+        data = self.db.fetchUserData(self.credentials[0])
+        
+        return json.dumps(data)
 
     def register(self):
         data = request.json
@@ -175,7 +201,7 @@ class FlaskServer(Flask):
         else:
             file_dir = None
         
-        if file.filename is '':
+        if file.filename == '':
             return "File name is empty"
         else:
             try:
@@ -187,11 +213,56 @@ class FlaskServer(Flask):
         prompt = self.ai.getPrompt(question, file_dir)
         self.ai.getResponse(prompt, file_dir)
         # self.ai.storeChatHistory(self.credentials[0], self.current_chat_room[0], self.current_chat_room[1])
+    
+    def compileCode(self):
+        received_file = request.files['file']
+        filename = received_file.filename
+        file_extension = os.path.splitext(filename)[1]
+        cached_files = os.listdir("cache")
+        output_filename = str(random.randint(1, 1000000))
+        while output_filename in cached_files:
+            output_filename = str(random.randint(1, 1000000))
+
+        filename = "cache/" + output_filename + file_extension
+        received_file.save("cache/" + output_filename + file_extension)
+        gcc_list = ['c', 'rust']
+        lexer = guess_lexer_for_filename(filename, '')
+        lang = lexer.name.lower()
+        cached_files = os.listdir("cache")
+        output_filename = str(random.randint(1, 1000000)) + ".o"
+        while output_filename in cached_files:
+            output_filename = str(random.randint(1, 1000000)) + ".o"
+
+        output_filename = "cache/" + output_filename
+
+        if lang in gcc_list:
+            compile_process = subprocess.Popen(['gcc', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            compile_process.communicate()
+            execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            stdout, stderr = execute_process.communicate()
+        elif lang == "c++":
+            compile_process = subprocess.Popen(['g++', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            compile_process.communicate()
+            execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            stdout, stderr = execute_process.communicate()
+        else:
+            process = subprocess.Popen([lang, filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+        
+        if len(os.listdir("cache")) >= 20:
+            for x in os.listdir("cache"):
+                try:
+                    os.remove("cache/" + x)
+                except FileNotFoundError:
+                    print("File not found")
+
+        return json.dumps({"Output": stdout.decode(), "Error": stderr.decode()})
+
+# Example usage
+# print(json.loads(run_another_file("test_files/TwT.cpp")))
+        
 
 if __name__ == '__main__':
     app = FlaskServer(__name__)
-    app.run()
+    app.run(port=2424)
 
-
-
-        

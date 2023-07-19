@@ -84,8 +84,10 @@
   display: grid;
   grid-template-columns: 9fr 1fr 1fr;
   grid-area: user;
-  justify-content: end;
+  justify-content: center;
+  align-items: center;
   column-gap: 10px;
+  height: fit-content;
 }
 
 .username{
@@ -107,3 +109,7 @@ span{
   border-radius: 50%;
 }
 
+.user_img img {
+  max-width: 100%;
+  border-radius: 50%;
+}
