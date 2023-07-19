@@ -32,7 +32,7 @@ function PillarList(props) {
   ];
 
   const pillar_output = pillarList.map((pillar) => (
-    <div className="pillar-container">
+    <div className="pillar_container">
       <div className="pillar-icon">
         <img src={pillar.icon} />
       </div>
@@ -47,7 +47,9 @@ function PillarList(props) {
       <div className={styles.pillar_title}>
         <section className={styles.pillar_list}>
           {pillar_output.map((item, index) => (
-            <div key={index}>{item}</div>
+            <div className={styles.pillar_container} key={index}>
+              {item}
+            </div>
           ))}
         </section>
       </div>

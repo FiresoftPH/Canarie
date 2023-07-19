@@ -4,7 +4,6 @@ import Term from "../TermPage/Term";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/userSlice";
-import { Link } from "react-router-dom";
 
 function Login() {
   const [show, setShow] = useState(false);

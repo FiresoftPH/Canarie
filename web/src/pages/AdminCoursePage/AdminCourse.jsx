@@ -18,7 +18,7 @@ function AdminCourse() {
             <div className="logo-admin">
               <img src="src/assets/Logo.svg" />
               <div className="name-admin">
-                <p>Macow</p>
+                <p>Macaw</p>
                 <p>Admin</p>
               </div>
             </div>
