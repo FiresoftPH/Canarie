@@ -21,10 +21,6 @@ function PillarList(props) {
     >
       <div className={styles.pillar_icon}>
         <img src={pillar.icon} alt="" />
-  const pillar_output = pillarList.map((pillar) => (
-    <div className="pillar_container">
-      <div className="pillar-icon">
-        <img src={pillar.icon} />
       </div>
       <div className={styles.pillar_name}>
         <p>{pillar.pillar_name}</p>
@@ -59,9 +55,7 @@ function PillarList(props) {
           {selectedPillar !== null && (
             <div className={styles.pillar_course}>
               {pillarList[selectedPillar].courses.map((course, index) => (
-                <div className={styles.pillar_container} key={index}>
-              {course}
-            </div>
+                <div key={index}>{course}</div>
               ))}
             </div>
           )}
