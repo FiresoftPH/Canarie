@@ -33,8 +33,6 @@ function Dimension(el) {
 
 function LongSidebar(props) {
   const nav = useNavigate();
-  // const [hideCourse, setHideCourse] = useState(false);
-  // const [hideAss, setHideAss] = useState(false);
 
   const chatHeight = useRef(null);
   const [cHeight, setCHeight] = useState(0);
@@ -56,14 +54,6 @@ function LongSidebar(props) {
       Dimension(document.getElementById("file-upload"));
 
     setCHeight(height - 15);
-
-    // console.log(
-    //   Dimension(document.getElementById("total")),
-    //   Dimension(document.getElementById("assignment")),
-    //   Dimension(document.getElementById("chat")),
-    //   Dimension(document.getElementById("newChatBtn")),
-    //   Dimension(document.getElementById("file-upload"))
-    // );
   }, [change]);
 
   useEffect(() => {
@@ -89,8 +79,8 @@ function LongSidebar(props) {
   };
 
   const fileDownloadHandler = (f) => {
-    console.log(file);
-    console.log(data);
+    // console.log(file);
+    // console.log(data);
 
     const transformedData = data
       .filter((sub) => sub.course === subjectId)[0]

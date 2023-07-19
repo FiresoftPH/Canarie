@@ -55,15 +55,15 @@ const CourseSlideUp = (props) => {
             }
           />
         </div>
-        <Transition nodeRef={nodeRef} in={!hideCourse} timeout={300} mountOnEnter unmountOnExit>
+        <Transition nodeRef={nodeRef} in={!hideCourse} timeout={0} mountOnEnter unmountOnExit>
           {(state) => {
             const cssClasses = [
               styles.latterHalf,
-              state === "entering"
-                ? styles.latterHalfOpen
-                : state === "exiting"
-                ? styles.latterHalfClose
-                : null,
+              // state === "entering"
+              //   ? styles.latterHalfOpen
+              //   : state === "exiting"
+              //   ? styles.latterHalfClose
+              //   : null,
             ];
 
             return (
@@ -107,7 +107,7 @@ const CourseSlideUp = (props) => {
                 </div>
                 <Transition
                   in={hideAss}
-                  timeout={300}
+                  timeout={150}
                   mountOnEnter
                   unmountOnExit
                 >

@@ -1,35 +1,37 @@
+import { useMemo } from "react";
+import { useCallback } from "react";
+import { memo } from "react";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ChattingCardAI from "../ChattingCard/ChattingCardAI";
 import ChattingCardUser from "../ChattingCard/ChattingCardUser";
 import styles from "./ChatScreenInitialized.module.css";
 
-const ChatScreenInitialized = (props) => {
-  const [update, setUpdate] = useState(false);
-  const [prevUpdate, setPrevUpdate] = useState(false);
+const ChatScreenInitialized = ({ history, onRate }) => {
+  // console.log("I run brfore");
 
-  if (props.history == undefined) {
+  const ratingHandler = useCallback((rate, id) => {
+    onRate(rate, id);
+  }, []);
+
+  const { subjectId, assignmentId } = useParams();
+
+  const optimizedData = useMemo(() => {
+    return history.chatHistory;
+  }, [history]);
+
+  console.log(history);
+
+  if (history == undefined) {
     return <div className={styles.wrapper}></div>;
   }
 
-  // console.log("I run brfore");
-
-  const ratingHandler = (rate, id) => {
-    props.onRate(rate, id);
-  };
+  // console.log("Expensive component re rendered")
 
   return (
     <>
-      {/* <div className={styles.topBlur}></div> */}
       <div id="chatScroll" className={styles.wrapper}>
-        {/* <div className={styles.topBlur}>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div> */}
-        {props.history.chatHistory.map((message) => {
+        {optimizedData.map((message) => {
           if (message.sender === "ai") {
             return (
               <ChattingCardAI
@@ -41,7 +43,7 @@ const ChatScreenInitialized = (props) => {
             );
           }
 
-          console.log(message);
+          // console.log("Mapped");
 
           return (
             <ChattingCardUser
@@ -51,7 +53,6 @@ const ChatScreenInitialized = (props) => {
           );
         })}
       </div>
-      {/* <div className={styles.bottomBlur} /> */}
     </>
   );
 };
