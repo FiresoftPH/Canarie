@@ -14,6 +14,11 @@ import ChatCard from "../ChatCard/ChatCard";
 import ChatList from "../ChatList/ChatList";
 import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
 import FileList from "../FileList/FileList";
+import { useSelector } from "react-redux";
+
+import Back_Button from '../../assets/Back_Button.svg';
+import Collapse from '../../assets/Collapse.svg';
+import Upload from '../../assets/Upload.svg';
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -28,14 +33,18 @@ function Dimension(el) {
 
 function LongSidebar(props) {
   const nav = useNavigate();
-  // const [hideCourse, setHideCourse] = useState(false);
-  // const [hideAss, setHideAss] = useState(false);
 
   const chatHeight = useRef(null);
   const [cHeight, setCHeight] = useState(0);
 
   const [change, setChange] = useState(false);
   const [mode, setMode] = useState("General");
+
+  const [file, setFile] = useState();
+  const data = useSelector((state) => state.bigData);
+  const code = useSelector((state) => state.chat.code);
+
+  const { subjectId, assignmentId } = useParams();
 
   useEffect(() => {
     const height =
@@ -45,14 +54,6 @@ function LongSidebar(props) {
       Dimension(document.getElementById("file-upload"));
 
     setCHeight(height - 15);
-
-    // console.log(
-    //   Dimension(document.getElementById("total")),
-    //   Dimension(document.getElementById("assignment")),
-    //   Dimension(document.getElementById("chat")),
-    //   Dimension(document.getElementById("newChatBtn")),
-    //   Dimension(document.getElementById("file-upload"))
-    // );
   }, [change]);
 
   useEffect(() => {
@@ -72,43 +73,77 @@ function LongSidebar(props) {
   };
 
   const selectModeHandler = (id) => {
-    setMode(id)
-    console.log(id)
-    props.onSelectMode(id)
-  }
+    setMode(id);
+    console.log(id);
+    props.onSelectMode(id);
+  };
+
+  const fileDownloadHandler = (f) => {
+    // console.log(file);
+    // console.log(data);
+
+    const transformedData = data
+      .filter((sub) => sub.course === subjectId)[0]
+      .assignments.filter((ass) => ass.assignmentId === assignmentId)[0]
+      .files.filter((f) => f.id === file)[0];
+
+    console.log(transformedData);
+
+    let fType = 'text/plain';
+
+    if (fType.includes(".")) {
+      fType = { type: `text/${transformedData.name[transformedData.name.length - 1]}` }
+    }
+
+    const blob = new Blob([transformedData.code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = transformedData.name;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const cssClasses = [
+    styles.container,
+    props.show === "entering"
+      ? styles.open
+      : props.show === "exiting"
+      ? styles.close
+      : null,
+  ];
 
   return (
-    <div id="total" className={styles.container}>
+    <div id="total" className={cssClasses.join(" ")}>
       <div className={styles.sidebar_top}>
         <div id="chat" className={styles.top}>
           <img
             onClick={() => {
               nav("/Course");
             }}
-            src="/src/assets/Back_Button.svg"
+            src={Back_Button}
           />
           <p>Macaw Chat</p>
           <img
             onClick={() => {
               props.close();
             }}
-            src="/src/assets/Collapse.svg"
+            src={Collapse}
           />
           <div className={styles.sepLine} />
-          {/* <SearchBox dark holder="Search" /> */}
         </div>
-        {/* <ChatList maxHeight={cHeight / 2} /> */}
-        {/* <section id="newChatBtn" className={styles.new_chat}>
-          <img src="src/assets/New button.svg" />
-          <p>New Chat</p>
-        </section> */}
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
-          <img src="/src/assets/Upload.svg" />
+          <img onClick={fileDownloadHandler} src={Upload} />
         </section>
-        <FileList mh={cHeight} />
+        <FileList
+          sf={(f) => {
+            setFile(f);
+          }}
+          mh={cHeight}
+        />
       </div>
-      <CourseSlideUp onSelectMode={selectModeHandler} re_render={onReRender} />
+      <CourseSlideUp mh={cHeight} onSelectMode={selectModeHandler} re_render={onReRender} />
     </div>
   );
 }

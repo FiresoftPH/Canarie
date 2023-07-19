@@ -1,0 +1,1322 @@
+[
+  {
+    "course": "Principal Of Computing Applications",
+    "assignments": [
+      {
+        "assignmentId": "w1",
+        "name": "Assignment 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1 (From POCA)?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world 1!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world 2!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world 3!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "name": "Assignment 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "name": "Assignment 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "name": "Lab 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "name": "Lab 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "name": "Lab 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
+      }
+    ]
+  },
+  {
+    "course": "Computer Systems",
+    "assignments": [
+      {
+        "assignmentId": "w1",
+        "name": "Assignment 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1 (From CS)?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "name": "Assignment 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "name": "Assignment 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "name": "Lab 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "name": "Lab 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "name": "Lab 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
+      }
+    ]
+  },
+  {
+    "course": "Calculus 1",
+    "assignments": [
+      {
+        "assignmentId": "w1",
+        "name": "Assignment 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1 (From C1)?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "name": "Assignment 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "name": "Assignment 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "name": "Lab 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "name": "Lab 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "name": "Lab 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
+      }
+    ]
+  },
+  {
+    "course": "Calculus 2",
+    "assignments": [
+      {
+        "assignmentId": "w1",
+        "name": "Assignment 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1 (From C2)?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "name": "Assignment 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "name": "Assignment 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "name": "Lab 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "name": "Lab 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "name": "Lab 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
+      }
+    ]
+  },
+  {
+    "course": "Physics",
+    "assignments": [
+      {
+        "assignmentId": "w1",
+        "name": "Assignment 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1 (From Physics)?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "name": "Assignment 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "name": "Assignment 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "name": "Lab 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "name": "Lab 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "name": "Lab 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
+      }
+    ]
+  },
+  {
+    "course": "Chemistry",
+    "assignments": [
+      {
+        "assignmentId": "w1",
+        "name": "Assignment 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 1 (From Breaking Bad)?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w2",
+        "name": "Assignment 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w3",
+        "name": "Assignment 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with assignment 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w4",
+        "name": "Lab 1",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need wiht lab 1?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w5",
+        "name": "Lab 2",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 2?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "w6",
+        "name": "Lab 3",
+        "chatHistory": [
+          {
+            "chatId": 0,
+            "message": "Hello.",
+            "sender": "user",
+            "file_attachments": []
+          },
+          {
+            "chatId": 1,
+            "message": "Hi, any help u need with lab 3?",
+            "sender": "ai",
+            "rating": "none"
+          }
+        ],
+        "files": [
+          {
+            "id": 1,
+            "name": "Untitled-1",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 2,
+            "name": "Untitled-2",
+            "code": "console.log(\"hello world!\")"
+          },
+          {
+            "id": 3,
+            "name": "Untitled-3",
+            "code": "console.log(\"hello world!\")"
+          }
+        ]
+      },
+      {
+        "assignmentId": "General",
+        "name": "General",
+        "chatHistory": []
+      }
+    ]
+  }
+]

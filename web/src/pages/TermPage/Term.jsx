@@ -2,24 +2,45 @@ import { useState } from "react";
 import "./Term.css";
 
 function Term(props) {
+  // const [agreed, setAgreed] = useState(false)
+
+  const agreeHandler = () => {
+    // setAgreed(true)
+    props.onAgree();
+  };
+
+  const cssClasses = [
+    "glass-layer",
+    props.show === "entering"
+      ? "modalOpen"
+      : props.show === "exiting"
+      ? "modalClose"
+      : null,
+  ];
+
+  console.log(cssClasses)
+
   return (
     <>
       <div className="bg-container">
-        <div className="glass-layer">
+        <div style={{
+          // opacity: props.show === "entering" ? 1 : 0,
+        }} className={cssClasses.join(' ')}>
           <div className="top-bar">
             <h1 className="termandcondition">
               Terms and
               <br />
               conditions.
             </h1>
-            <button
-              className="close-btn"
-              onClick={() => {
-                props.toggle();
-              }}
-            >
-              X
-            </button>
+            <div className="close-btn">
+              <p>
+                I agree with <br /> Terms and conditions
+              </p>
+              <div onClick={agreeHandler} className="agree-btn">
+                <div className="unclicked"></div>
+                {props.agree ? <div className="clicked"></div> : ""}
+              </div>
+            </div>
             <div className="line-landscape"></div>
           </div>
           <div className="detail-notes">

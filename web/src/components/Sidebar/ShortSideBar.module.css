@@ -4,6 +4,46 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* transition: all 300ms ease-out; */
+}
+
+@keyframes openSideBar {
+  /* 0% {
+    transform: translateY(-100%);
+    width: 100%;
+  }
+  70% {
+    transform: translateY(0);
+    width: 100%;
+  }
+  100% {
+    width: 80%;
+  } */
+  0% {
+    width: 50%;
+    height: 100%;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@keyframes closeSideBar {
+  0% {
+
+  }
+  100% {
+
+  }
+}
+
+.open {
+  /* animation: openSideBar 250ms linear forwards; */
+}
+
+.close {
+  display: none;
 }
 
 .top {
@@ -16,6 +56,10 @@
 .top > * {
   max-width: 3rem;
   align-self: center;
+}
+
+.top img:hover {
+  cursor: pointer;
 }
 
 .bottom {

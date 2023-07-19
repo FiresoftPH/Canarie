@@ -4,171 +4,147 @@ import ChatIconNoBG from "src/assets/ChatIconNoBG.svg";
 import RenameIcon from "src/assets/RenameIcon.svg";
 import ClearChatHistoryIcon from "src/assets/ClearChatHistoryIcon.svg";
 import ChatInputField from "../ChatInputField/ChatInputField";
-import ChatScreen from "../ChatScreen/ChatScreen";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import ChatScreenInitalized from "../ChatScreen/ChatScreenInitialized";
+import { memo, useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import userSlice from "../../store/userSlice";
 
-function Dimension(el) {
-  // Get the DOM Node if you pass in a string
-  el = typeof el === "string" ? document.querySelector(el) : el;
+// const DUMMY_TEXT_DATA = [
+//   {
+//     assignmentId: "w1",
+//     chatHistory: [
+//       { chatId: 0, message: "Hello.", sender: "user" },
+//       {
+//         chatId: 1,
+//         message: "Hi, any help u need with assignment 1?",
+//         sender: "ai",
+//         rating: "none",
+//       },
+//     ],
+//   },
+// ];
 
-  var styles = window.getComputedStyle(el);
-  var margin =
-    parseFloat(styles["marginLeft"]) + parseFloat(styles["marginRight"]);
-
-  return Math.ceil(el.offsetWidth + margin);
-}
-
-function Dimension2(el) {
-  // Get the DOM Node if you pass in a string
-  el = typeof el === "string" ? document.querySelector(el) : el;
-
-  var styles = window.getComputedStyle(el);
-  var margin =
-    parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
-
-  return Math.ceil(el.offsetHeight + margin);
-}
-
-const DUMMY_TEXT_DATA = [
-  {
-    assignmentId: "w1",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need with assignment 1?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-  {
-    assignmentId: "w2",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need with assignment 2?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-  {
-    assignmentId: "w3",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need with assignment 3?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-  {
-    assignmentId: "w4",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need wiht lab 1?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-  {
-    assignmentId: "w5",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need with lab 2?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-  {
-    assignmentId: "w6",
-    chatHistory: [
-      { chatId: 0, message: "Hello.", sender: "user" },
-      {
-        chatId: 1,
-        message: "Hi, any help u need with lab 3?",
-        sender: "ai",
-        rating: "none",
-      },
-    ],
-  },
-];
+import ChatScreenNotInit from "../ChatScreen/ChatScreenNotInit";
+import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
+import { useSelector } from "react-redux";
+import { useRef } from "react";
 
 let shouldUpdate = false;
-const ChatUI = (props) => {
+const ChatUI = () => {
   // let chatName = props.mode;
-  let chatName = useParams().assignmentId;
+  const data = useSelector((state) => state.bigData, () => true);
 
-  if (chatName === "General") {
-    chatName = "-";
-  } else {
-    chatName = chatName.replace(" ", "_");
-  }
+  // let chatName = useParams().assignmentId;
+  // const courseName = useParams().subjectId;
+  const { subjectId, assignmentId } = useParams()
+  let chatName = assignmentId;
+  const courseName = subjectId;
 
-  const [history, setHistory] = useState(DUMMY_TEXT_DATA);
+  const nav = useNavigate()
 
-  // const [shouldUpdate, setShouldUpdate] = useState(false)
+  const location = useLocation();
+
+  const [history, setHistory] = useState(
+    data
+      .filter((sub) => {
+        return sub.course == courseName;
+      })[0]
+      .assignments.map((ass) => {
+        const asArray = Object.entries(ass);
+
+        const filtered = asArray.filter(([key, value]) => key !== "files");
+
+        return Object.fromEntries(filtered);
+      })
+  );
+
+  // console.log(history);
+
+  const [topName, setTopName] = useState("-");
+  // const topNameRef = useRef()
+
+  const [lock, setLock] = useState(false);
+  const [openFiles, setOpenFiles] = useState(false);
+
+  const [fileAttached, setFileAttached] = useState(null);
+
+  const addChatToAssignment = (chatMessage, sender, fileAttach) => {
+    // console.log(fileAttached)
+
+    let attachment;
+    if (fileAttach === null || fileAttach === undefined) {
+      attachment = [];
+    } else {
+      attachment = fileAttach;
+    }
+
+    setHistory((prevState) =>
+      prevState.map((assignment) => {
+        if (assignment.assignmentId === chatName) {
+          return {
+            ...assignment,
+            chatHistory: [
+              ...assignment["chatHistory"],
+              {
+                chatId: Math.random(),
+                message: chatMessage,
+                sender: sender,
+                rating: "none",
+                file_attachments: attachment,
+              },
+            ],
+          };
+        } else {
+          return assignment;
+        }
+      })
+    );
+
+    setFileAttached(null);
+  };
 
   const askAIHandler = (question) => {
-    console.log(question);
+    if (topName !== "-") {
+      // For any assignment chat
 
-    setHistory((prevState) =>
-      prevState.map((assignment) => {
-        if (assignment.assignmentId === chatName) {
-          return {
-            ...assignment,
-            chatHistory: [
-              ...assignment["chatHistory"],
-              {
-                chatId: Math.random(),
-                message: question,
-                sender: "user",
-              },
-            ],
-          };
-        } else {
-          return assignment;
-        }
-      })
-    );
+      console.log(question);
+      addChatToAssignment(question, "user", fileAttached);
+      addChatToAssignment("No. You do it yourself.", "ai");
+    } else {
+      // For general chat
+      addChatToAssignment(question, "user");
 
-    setHistory((prevState) =>
-      prevState.map((assignment) => {
-        if (assignment.assignmentId === chatName) {
-          return {
-            ...assignment,
-            chatHistory: [
-              ...assignment["chatHistory"],
-              {
-                chatId: Math.random(),
-                message: "No. You can do it yourself.",
-                sender: "ai",
-                rating: "none",
-              },
-            ],
-          };
-        } else {
-          return assignment;
-        }
-      })
-    );
+      setHistory((prevState) =>
+        prevState.map((assignment) => {
+          if (assignment.assignmentId === chatName) {
+            return {
+              ...assignment,
+              chatHistory: [
+                ...assignment["chatHistory"],
+                {
+                  chatId: Math.random(),
+                  message: "Which assignment is your question referencing",
+                  sender: "ai",
+                  rating: "none",
+                  assignment: history.map((ass) => {
+                    if (ass.name !== "General")
+                      return { name: ass.name, id: ass.assignmentId };
+                  }),
+                },
+              ],
+            };
+          } else {
+            return assignment;
+          }
+        })
+      );
+
+      setLock(true);
+    }
   };
 
   const ratingHandler = (rating, id) => {
     shouldUpdate = true;
-    // console.log(rating, id)
 
     setHistory((prevState) =>
       prevState.map((assignment) => {
@@ -196,61 +172,141 @@ const ChatUI = (props) => {
   };
 
   useEffect(() => {
-    console.log("I run after");
-    console.log(shouldUpdate);
-    if (shouldUpdate === false) {
-      const scrollBar = document.getElementById("chatScroll");
-      scrollBar.scrollTop = scrollBar.scrollHeight;
-      // console.log("Go to bottom")
-    } else {
-      shouldUpdate = false;
+    console.log("Initialized chat screen re rendered")
+
+    if (chatName !== "General") {
+      if (shouldUpdate === false) {
+        const scrollBar = document.getElementById("chatScroll");
+        scrollBar.scrollTop = scrollBar.scrollHeight;
+      } else {
+        shouldUpdate = false;
+      }
+      setTopName(
+        history.filter((ass) => ass.assignmentId === chatName)[0].name
+      );
     }
-  }, [
-    <ChatScreen
-      onRate={ratingHandler}
-      history={history.filter((ass) => ass.assignmentId === chatName)[0]}
-    />,
-  ]);
+  }, [history.filter((ass) => ass.assignmentId === chatName)[0]])
+  // }, [<ChatScreenInitalized onRate={ratingHandler} history={history.filter((ass) => ass.assignmentId === chatName)[0]} />]);
+
+  const fileAttachHandler = () => {
+    setOpenFiles(!openFiles);
+    // console.log(history)
+  };
+
+  useEffect(() => {
+    if (location.state !== null) {
+      console.log("Adding chat")
+      // console.log(location);
+      setHistory((prevState) =>
+        prevState.map((assignment) => {
+          if (assignment.assignmentId === chatName) {
+            return {
+              ...assignment,
+              chatHistory: [...assignment["chatHistory"], location.state],
+            };
+          } else {
+            return assignment;
+          }
+        })
+      );
+
+      setHistory((prevState) =>
+        prevState.map((assignment) => {
+          if (assignment.assignmentId === chatName) {
+            return {
+              ...assignment,
+              chatHistory: [
+                ...assignment["chatHistory"],
+                {
+                  chatId: Math.random(),
+                  message: "No. Do it yourself.",
+                  sender: "ai",
+                  rating: "none",
+                  assignment: history.map((ass) => {
+                    if (ass.name !== "General")
+                      return { name: ass.name, id: ass.assignmentId };
+                  }),
+                },
+              ],
+            };
+          } else {
+            return assignment;
+          }
+        })
+      );
+    }
+  }, [chatName]);
+
+  const fileAddHandler = (files) => {
+    setFileAttached(files);
+  };
+
+  console.log("ChatUI refreshed");
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.content}>
-        <div className={styles.header}>
-          <img src={ChatIconNoBG} />
-          <p>{chatName}</p>
-          <img src={RenameIcon} />
-          <img src={ClearChatHistoryIcon} />
-          <div className={styles.sepLine} />
-        </div>
-        <div className={styles.chatting}></div>
-        <ChatScreen
-          onRate={ratingHandler}
-          history={history.filter((ass) => ass.assignmentId === chatName)[0]}
+    <>
+      {/* {openFiles ? (
+        <FileAttachmentModal
+          files={
+            data
+              .filter((sub) => sub.course === courseName)[0]
+              .assignments.filter((ass) => ass.assignmentId === chatName)[0]
+              .files
+          }
+          toggle={() => {
+            setOpenFiles(!openFiles);
+          }}
+          onSubmit={fileAddHandler}
         />
-        <ChatInputField onSend={askAIHandler} />
-      </div>
-      {/* <div className={styles.temp}> */}
+      ) : (
+        ""
+      )} */}
+      <div className={styles.wrapper}>
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <img src={ChatIconNoBG} />
+            <p>{topName}</p>
+            {/* <img src={RenameIcon} /> */}
+            <div />
+            <img src={ClearChatHistoryIcon} />
+            <div className={styles.sepLine} />
+            <div className={styles.topBlur}></div>
+          </div>
+          <div className={styles.chatting}></div>
+          {chatName !== "General" ? (
+            <ChatScreenInitalized
+              onRate={ratingHandler}
+              history={
+                history.filter((ass) => ass.assignmentId === chatName)[0]
+              }
+            />
+          ) : (
+            <ChatScreenNotInit
+              onRate={ratingHandler}
+              history={
+                history.filter((ass) => ass.assignmentId === chatName)[0]
+              }
+              onChose={() => {
+                setLock(false);
+              }}
+            />
+          )}
+          <ChatInputField
+            onFileAttach={fileAttachHandler}
+            onUploadFile={fileAddHandler}
+            onSend={askAIHandler}
+            lock={lock}
+          />
+        </div>
         <div className={styles.backdrops}>
-          <div
-            // style={{
-            //   width: props.width,
-            //   height: props.height,
-            // }}
-            className={styles.backdrop}
-          >
+          <div className={styles.backdrop}>
             <div className={styles.yellowCircle} />
             <div className={styles.redCircle} />
           </div>
-          <div
-            // style={{
-            //   width: props.width,
-            //   height: props.height,
-            // }}
-            className={styles.backdrop1}
-          />
+          <div className={styles.backdrop1} />
         </div>
-      {/* </div> */}
-    </div>
+      </div>
+    </>
   );
 };
 

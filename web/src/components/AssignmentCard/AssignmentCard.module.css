@@ -6,6 +6,13 @@
     padding: .5rem;
     background-color: #565879;
     border-radius: 0.5rem;
+    transition: all 300ms ease-out;
+}
+
+.wrapper:hover {
+    cursor: pointer;
+    background-color: #484964;
+    box-shadow: .1px .1px 1px rgb(0, 0, 0) inset;
 }
 
 .wrapper p {
@@ -16,5 +23,5 @@
     background-color: #484964;
     /* border-radius: 10px;
     border-color: black; */
-    box-shadow: 1px 1px 5px black inset;
+    box-shadow: 1px 1px 5px black inset !important;
 }

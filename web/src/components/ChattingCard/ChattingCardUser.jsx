@@ -5,17 +5,41 @@ import DislikeIcon from "src/assets/DislikeIcon.svg";
 import FileIcon from "src/assets/FileIcon.svg";
 
 import styles from "./ChattingCardUser.module.css";
+import { useState } from "react";
+import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
+import { memo } from "react";
 
-const ChattingCardUser = (props) => {
+const ChattingCardUser = memo(function ChattingCardUser(props) {
+  // console.log(props.file_attachment);
+  const [toggle, setToggle] = useState(false);
+
+  console.log("USER CARD RE-RENDER")
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.message}>
-        {props.file_attachment ? <img src={FileIcon} /> : ""}
+        {props.file_attachment.length !== 0 ? (
+          <img
+            onClick={() => {
+              setToggle(!toggle);
+            }}
+            src={FileIcon}
+          />
+        ) : (
+          ""
+        )}
         <p>{props.message}</p>
       </div>
       <img src={UserImage} />
+      {toggle ? <FileAttachmentModal
+        files={props.file_attachment}
+        static
+        toggle={() => {
+          setToggle(!toggle);
+        }}
+      /> : ""}
     </div>
   );
-};
+});
 
 export default ChattingCardUser;

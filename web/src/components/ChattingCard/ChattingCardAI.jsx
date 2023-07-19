@@ -8,21 +8,47 @@ import FileIcon from "src/assets/FileIcon.svg";
 import LikeIconFilled from "src/assets/LikeIconFilled.svg";
 
 import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { memo } from "react";
+import { useMemo } from "react";
 
-const ChattingCardAI = (props) => {
-  const [rate, setRate] = useState();
+const ChattingCardAI = memo(function ChattingCardAI(props) {
+  console.log("ChattingCardAI component is called")
 
   return (
     <div className={styles.wrapper}>
       <img src={ParrotIcon} />
-
-      {props.assignments
+      {/* {props.assignments
         ? props.assignments.map((assignment) => {
-            return <p>{assignment.name}</p>;
+
+
+            // return <p>{assignment.name}</p>;
           })
-        : ""}
+        : ""} */}
       <div className={styles.message}>
-        <p>{props.message}</p>
+        <div>
+          <p>{props.message}</p>
+          <div className={styles.assignmentList}>
+            {props.assignments
+              ? props.assignments.map((assignment) => {
+                  if (assignment !== undefined) {
+                    return (
+                      <>
+                        <p
+                          onClick={() => {
+                            props.chooseSubject(assignment.id);
+                          }}
+                        >
+                          {assignment.name}
+                        </p>
+                        &nbsp;&nbsp;&nbsp;
+                      </>
+                    );
+                  }
+                })
+              : ""}
+          </div>
+        </div>
         {/* <div className={styles.preference}> */}
         {props.rating === "none" ? (
           <div className={styles.preference}>
@@ -53,6 +79,6 @@ const ChattingCardAI = (props) => {
       </div>
     </div>
   );
-};
+});
 
 export default ChattingCardAI;

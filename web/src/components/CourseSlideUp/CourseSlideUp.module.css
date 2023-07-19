@@ -1,29 +1,78 @@
 .sidebar_below {
+  /* transition: 300ms; */
   background-color: #5e6084;
-
-  display: grid;
-  grid-template-areas:
-    "Cou CouNav"
-    "Sub Sub"
-    "AssNav AssNav"
-    "Ass Ass"
-    "Line Line"
-    "Gen Gen";
-  grid-template-columns: 5fr 1fr;
-  grid-template-rows: max-content;
 
   padding: 1rem;
   padding-top: 1.2rem;
   align-items: center;
 
-  
-  /* height: 5rem; */
+  height: max-content;
+
+  /* overflow: hidden; */
+}
+
+.latterHalf > *:not(:first-child) {
+  margin-top: .5rem;
+}
+
+@keyframes slideUp {
+  0% {
+    /* height: 0%;
+    overflow: hidden; */
+    /* transform: translateY(5rem); */
+    height: 0%;
+  }
+  100% {
+    /* height: 100%; */
+    /* transform: translateY(0); */
+    height: 100%;
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    height: 100%;
+  }
+  100% {
+    height: 0%;
+  }
+}
+
+.latterHalfOpen {
+  height: 0%;
+  overflow: hidden;
+  animation: slideUp 300ms linear forwards;
+  height: 100%;
+}
+
+.latterHalfClose {
+  overflow: hidden;
+  animation: slideDown 300ms linear forwards;
+}
+
+.sidebar_below > *:not(:first-child) {
+  margin-top: .5rem;
+}
+
+.allVis {
+  display: flex;
+  /* justify-content: flex-end; */
+}
+
+.allVis img {
+  /* justify-self: flex-end; */
+  align-self: end;
+  margin-left: auto; 
+}
+
+.allVis:first-child {
+  justify-self: flex-start;
 }
 
 .assDropDown {
   /* all: unset; */
 
-  max-width: 2rem;
+  /* max-width: 2rem; */
   justify-self: center;
   align-self: center;
 }

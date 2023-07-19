@@ -8,6 +8,7 @@
 
 .searchbox{
   background-color: #F2f2f2;
+  color: black;
   background-image: url(src/assets/SearchIcon.svg);
   background-repeat: no-repeat;
   background-position: 1rem;
@@ -24,9 +25,8 @@
 
 .searchbox_dark {
   all: unset;
-
   background-color: #000000;
-  background-image: url(src/assets/SearchIcon.svg);
+  background-image: url(../../assets/SearchIcon.svg);
   background-repeat: no-repeat;
   background-position: 1rem;
   border: none;

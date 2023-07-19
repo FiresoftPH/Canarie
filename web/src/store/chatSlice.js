@@ -1,19 +1,26 @@
-// import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
-// const initialState = {
-//   course: "",
-//   assignment: "",
+const initialState = {
+  code: "",
+  fid: ""
+  //   assignment: "",
+};
 
-// }
+const chatSlice = createSlice({
+  name: "chat",
+  initialState,
+  reducers: {
+    setCode: (state, action) => {
+    //   console.log(action.payload)
+    //   state.code = ""
+      state.code = action.payload;
+    },
+    setFileId: (state, action) => {
+      state.fid = action.payload
+    }
+  },
+});
 
-// const chatSlice = createSlice({
-//   name: 'user',
-//   initialState,
-//   reducers: {
-    
-//   },
-// })
-
-// // Action creators are generated for each case reducer function
-// export const miscActions = miscSlice.actions
-// export default miscSlice.reducer
+// Action creators are generated for each case reducer function
+export const chatAction = chatSlice.actions;
+export default chatSlice.reducer;
