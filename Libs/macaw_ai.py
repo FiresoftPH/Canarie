@@ -41,11 +41,11 @@ class AI:
                         repetition_penalty=1.2
                     )
         self.local_llm = HuggingFacePipeline(pipeline=self.pipe)
-        self.memory = ConversationTokenBufferMemory(llm=self.local_llm,max_token_limit=512)
-        self.conversation = ConversationChain(llm=self.local_llm, verbose=True, memory=self.memory)
-        self.conversation.prompt.template = '''The following is a friendly conversation between a human and an AI called Melusine. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know. Current conversation:
-{history}
-{input}'''
+        # self.memory = ConversationTokenBufferMemory(llm=self.local_llm,max_token_limit=512)
+        # self.conversation = ConversationChain(llm=self.local_llm, verbose=True, memory=self.memory)
+#         self.conversation.prompt.template = '''The following is a friendly conversation between a human and an AI called Melusine. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know. Current conversation:
+# {history}
+# {input}'''
 
     def getResponse(self, prompt):
         return self.conversation.predict(input=prompt)
@@ -60,21 +60,19 @@ class AI:
 
     def loadHistory(self, history):
         retrieved_chat_history = ChatMessageHistory(messages=history)
-        self.memory = ConversationTokenBufferMemory(chat_memory=retrieved_chat_history,llm=self.local_llm,max_token_limit=512)
-        self.conversation = ConversationChain(llm=self.local_llm, verbose=False, memory=self.memory)
-        print(self.memory.load_memory_variables({}))
-        return self.memory.load_memory_variables({})
-
-# test = GeneratePrompt()
-# # prompt = test.codePrompt("Explain this code: ", "test_files/UwU.py")
-# ai = AI()
-
-# while True:
-#     code = input("gimme: ")
-#     prompt = test.codePrompt(code, "test_files/UwU.py")
-#     answer = ai.getResponse(prompt)
-#     print(ai.getCachedMemory())
-#     # print(type(ai.getCachedMemory(prompt)))
-#     object_array = [ai.getCachedMemory()]
-#     print(type(object_array))
-#     print(object_array)
+        memory = ConversationTokenBufferMemory(chat_memory=retrieved_chat_history,llm=self.local_llm,max_token_limit=512)
+        conversation = ConversationChain(llm=self.local_llm, verbose=False, memory=memory)
+        conversation.prompt.template = '''The following is a friendly conversation between a human and an AI called Melusine. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know. Current conversation:
+{history}
+{input}'''
+        print(memory.load_memory_variables({}))
+        return memory.load_memory_variables({})
+    
+    def getChainResponse(self, prompt, history):
+        retrieved_chat_history = ChatMessageHistory(messages=history)
+        memory = ConversationTokenBufferMemory(chat_memory=retrieved_chat_history,llm=self.local_llm,max_token_limit=512)
+        conversation = ConversationChain(llm=self.local_llm, verbose=False, memory=memory)
+        conversation.prompt.template = '''The following is a friendly conversation between a human and an AI called Melusine. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know. Current conversation:
+{history}
+{input}'''
+        return (conversation.predict(input=prompt), conversation(prompt))
