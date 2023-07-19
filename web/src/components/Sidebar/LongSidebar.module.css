@@ -41,10 +41,14 @@
   font-weight: 500;
 }
 
-img[src="src/assets/Collapse.svg"] {
+.top img:last-child {
   grid-area: collapseBtn;
   width: 2.5rem;
   justify-self: end;
+}
+
+.top img:hover {
+  cursor: pointer;
 }
 
 .sepLine {
@@ -98,8 +102,12 @@ img[src="src/assets/Collapse.svg"] {
 }
 
 /* Upload file icon */
-img[src="/src/assets/Upload.svg"] {
+.file_uploaded img {
   padding-right: 1.75rem;
+}
+
+.file_uploaded img:hover {
+  cursor: pointer;
 }
 
 @keyframes openSideBar {

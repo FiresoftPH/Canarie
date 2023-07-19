@@ -12,10 +12,13 @@ import AssignmentList from "../AssignmentList/AssignmentList";
 
 import BigData from "../ChatUI/BigData.json";
 import Transition from "react-transition-group/Transition";
+import { useRef } from "react";
 
 const CourseSlideUp = (props) => {
   const [hideCourse, setHideCourse] = useState(false);
   const [hideAss, setHideAss] = useState(false);
+
+  const nodeRef = useRef()
 
   const [chatSelect, setChatSelect] = useState("General");
 
@@ -52,7 +55,7 @@ const CourseSlideUp = (props) => {
             }
           />
         </div>
-        <Transition in={!hideCourse} timeout={300} mountOnEnter unmountOnExit>
+        <Transition nodeRef={nodeRef} in={!hideCourse} timeout={300} mountOnEnter unmountOnExit>
           {(state) => {
             const cssClasses = [
               styles.latterHalf,
@@ -64,17 +67,7 @@ const CourseSlideUp = (props) => {
             ];
 
             return (
-              <div
-                // style={
-                //   state === "entering"
-                //     ? {
-                //         transition: "300ms",
-                //         transform: "translateX(3rem)",
-                //       }
-                //     : {}
-                // }
-                className={cssClasses.join(" ")}
-              >
+              <div ref={nodeRef} className={cssClasses.join(" ")}>
                 <h3>{subjectId}</h3>
                 <div
                   className={`${styles.assignmentNav} ${
@@ -145,10 +138,6 @@ const CourseSlideUp = (props) => {
             );
           }}
         </Transition>
-        {/* {hideCourse ? (
-          ""
-        ) : (
-        )} */}
       </div>
     </>
   );

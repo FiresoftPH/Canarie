@@ -58,6 +58,10 @@
   align-self: center;
 }
 
+.top img:hover {
+  cursor: pointer;
+}
+
 .bottom {
   display: flex;
   flex-direction: column;
