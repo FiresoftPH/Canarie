@@ -75,6 +75,33 @@ const bigDataSlice = createSlice({
 
       return transformedData;
     },
+    deleteFile: (state, action) => {
+      const subId = action.payload.subjectId;
+      const assId = action.payload.assignmentId;
+      const fid = action.payload.fileId;
+
+      const transformedData = state.map((sub) => {
+        if (sub.course === subId) {
+          return {
+            ...sub,
+            assignments: sub.assignments.map((ass) => {
+              if (ass.assignmentId === assId) {
+                return {
+                  ...ass,
+                  files: ass.files.filter((file) => file.id !== fid)
+                };
+              } else {
+                return ass;
+              }
+            }),
+          };
+        } else {
+          return sub;
+        }
+      });
+
+      return transformedData;
+    }
   },
 });
 

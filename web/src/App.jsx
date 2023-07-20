@@ -44,26 +44,28 @@ function App() {
 
   console.log(loggedIn);
 
-  return (
-    <>
-      <RouterProvider router={router} />
-      {/* <Routes>
-        {true ? (
-          <>
-            <Route path="/" element={<Login />} />
-            <Route path="/Term" element={<Term />} />
-            <Route path="/Course" element={<Course />} />
-            <Route path="/Chat/:subjectId/:assignmentId" element={<ChatPage />}/>
-            <Route path="/Admin" element={<Admin />} />
-            <Route path="/AdminCourse" element={<AdminCourse />} />
-            <Route path="*" element={<ErrorPage />} />
-          </>
-        ) : (
-          <Route path="*" element={<Login />} />
-        )}
-      </Routes> */}
-    </>
-  );
+  // return (
+  //   <>
+  //     <RouterProvider router={router} />
+  //     {/* <Routes>
+  //       {true ? (
+  //         <>
+  //           <Route path="/" element={<Login />} />
+  //           <Route path="/Term" element={<Term />} />
+  //           <Route path="/Course" element={<Course />} />
+  //           <Route path="/Chat/:subjectId/:assignmentId" element={<ChatPage />}/>
+  //           <Route path="/Admin" element={<Admin />} />
+  //           <Route path="/AdminCourse" element={<AdminCourse />} />
+  //           <Route path="*" element={<ErrorPage />} />
+  //         </>
+  //       ) : (
+  //         <Route path="*" element={<Login />} />
+  //       )}
+  //     </Routes> */}
+  //   </>
+  // );
+
+  return <RouterProvider router={router} />
 }
 
 export default App;

@@ -40,6 +40,7 @@ const CourseSlideUp = (props) => {
           <img
             onClick={() => {
               setHideCourse(!hideCourse);
+              props.re_render()
             }}
             src={DownV}
             style={
@@ -113,7 +114,7 @@ const CourseSlideUp = (props) => {
                 >
                   {(state) => (
                     <AssignmentList
-                      mh={props.mh}
+                      // mh={props.mh}
                       show={state}
                       onSelect={assginmentListSelectHandler}
                     />

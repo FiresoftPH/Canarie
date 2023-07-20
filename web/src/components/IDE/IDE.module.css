@@ -41,7 +41,7 @@
   position: relative;
   bottom: 0;
 
-  overflow: hidden;
+  overflow-y: hidden;
 
   touch-action: none;
 
@@ -49,6 +49,7 @@
   box-sizing: border-box;
 
   width: 100% !important;
+  min-height: 10px;
   /* grid-template-columns: 1fr 1fr; */
 }
 
@@ -89,8 +90,7 @@
 }
 
 .ide_container {
-  /* grid-area: Editor; */
-  background-color: rgb(21, 95, 255);
+  background-color: rgb(47, 53, 66);
   width: 60%;
   height: 100% !important;
 
@@ -99,10 +99,17 @@
 
   position: relative;
   padding-right: 10px;
+}
 
-  overflow: hidden;
+.ide_bottombar{
+  height: 100%;
+  width: auto;
+  position: relative;
+  /* overflow-y: scroll; */
+}
 
-  /* resize: both; */
+.cm-scroller{
+  overflow: auto;
 }
 
 .lang_selection {
@@ -120,12 +127,14 @@
 
 .ide_topbar {
   display: flex;
+  position:relative;
   padding: 0.5%;
   justify-content: space-between;
 }
 
 .ide * {
   font-size: 14px;
+  position: relative;
 }
 
 .output {

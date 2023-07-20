@@ -1,8 +1,11 @@
 .chatList {
   padding: 1.5rem;
+  padding-top: 0;
   padding-bottom: 0;
 
   overflow-y: scroll;
+  flex: 1;
+  margin-bottom: .5rem;
 }
 
 /* Make chat list scrollable */

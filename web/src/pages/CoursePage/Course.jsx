@@ -31,12 +31,9 @@ function Course() {
     );
   };
 
-  // let hour = 15;
   useEffect(() => {
     const hour = new Date().getHours()
-
     console.log(hour)
-
     setGreet(`${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`)
   }, [])
 
@@ -68,7 +65,6 @@ function Course() {
             </div>
           </header>
           <CourseList displayData={search(courses)} />
-          {/* <h1>{JSON.stringify(user)}</h1> */}
         </div>
         <div className={styles.mask}>
           <div className={styles.red_circle_course}></div>

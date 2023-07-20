@@ -4,12 +4,12 @@ import FileCard from "../FileCard/FileCard";
 import styles from "./FileList.module.css";
 
 // const DUMMY_DATA = [
-//   { id: 1, name: "Untitled-1" },
-//   { id: 2, name: "Untitled-2" },
-//   { id: 3, name: "Untitled-3" },
-//   { id: 4, name: "Untitled-4" },
-//   { id: 5, name: "Untitled-5" },
-//   { id: 6, name: "Untitled-6" },
+  // { id: 1, name: "Untitled-1" },
+  // { id: 2, name: "Untitled-2" },
+  // { id: 3, name: "Untitled-3" },
+  // { id: 4, name: "Untitled-4" },
+  // { id: 5, name: "Untitled-5" },
+  // { id: 6, name: "Untitled-6" },
 // ];
 
 // import DUMMY_DATA from './FileNames.json'
@@ -44,6 +44,7 @@ const FileList = (props) => {
           (ass) => ass.assignmentId === assignmentId
         )[0].files;
       // console.log(transformedData)
+
       setFiles(transformedData);
       setSelectedFile(transformedData[0].id);
       props.sf(transformedData[0].id);
@@ -57,25 +58,32 @@ const FileList = (props) => {
   ]);
 
   const fileDeleteHandler = (id) => {
-    setFiles(
-      files.filter((file) => {
-        return file.id !== id;
-      })
-    );
-    if (files.length !== 0) {
-      const transformedData = data
-        .filter((sub) => sub.course === subjectId)[0]
-        .assignments.filter(
-          (ass) => ass.assignmentId === assignmentId
-        )[0].files;
+    const filteredData = files.filter((file) => {
+      return file.id !== id;
+    })
 
-      setSelectedFile(transformedData[0].id);
+    setFiles(filteredData);
+
+    dispatch(bigDataAction.deleteFile({ subjectId, assignmentId, fileId: id }));
+
+    if (files.length !== 0) {
+      const transformedData = filteredData[0];
+
+      console.log(transformedData)
+
+      setSelectedFile(transformedData.id);
+      dispatch(chatAction.setCode(transformedData.code))
+      dispatch(chatAction.setFileId(transformedData.id))
+      props.sf(transformedData.id)
+
+      // console.log(transformedData)
     }
   };
 
   const fileSelectHandler = (id) => {
     // console.log(files.filter(fie => fie.id === id)[0].code)
     dispatch(chatAction.setCode(files.filter((fie) => fie.id === id)[0].code));
+    dispatch(chatAction.setFileId(id))
     setSelectedFile(id);
     props.sf(id);
   };
@@ -83,9 +91,9 @@ const FileList = (props) => {
   return (
     <>
       <section
-        style={{
-          maxHeight: props.mh,
-        }}
+        // style={{
+        //   maxHeight: props.mh,
+        // }}
         className={styles.file_status}
       >
         {/* <FileCard selected name="Untitled-1" />
