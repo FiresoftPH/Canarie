@@ -94,11 +94,19 @@ class Database:
                 print("User already exist")
                 return False
 
-        new_user_data_long = (email, username, "", "user")
-        command = "INSERT INTO users (email, username, enrolled_courses, status) VALUES (%s, %s, %s, %s)"
+        new_user_data_long = (email, username, "", "user", "yes")
+        command = "INSERT INTO users (email, username, enrolled_courses, status, consent) VALUES (%s, %s, %s, %s, %s)"
         self.cursor.execute(command, new_user_data_long)
         self.connection.commit()
         return True
+
+    def temporaryEnroll(self, email, username):
+        self.cursor = self.connection.cursor()
+        command = "UPDATE chat_history SET enrolled_courses = %s WHERE email = %s AND username = %s"
+        temp_course = ["Principal Of Computing Applications", "Computer Systems", "Advanced Calculus", "Database Technology", "Cloud Computing"]
+        course_data = self.stringFromArray(temp_course)
+        self.cursor.execute(command, (course_data, email, username))
+        self.connection.commit()
 
     # Used to show course data in the database. Some modes will be removed from the final version.
     def showCourseData(self, mode=0):

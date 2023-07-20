@@ -84,23 +84,23 @@ class FlaskServer(Flask):
     def __init__(self, name):
         super().__init__(name)
         # Flask server configurations
-        config = dotenv_values("Libs/.env")
+        config = dotenv_values(".env")
         self.secret_key = config['SECRET_KEY']
 
         # Routing applications
         self.route('/auth/login', methods = ["POST"])(self.login)
-        self.route('/auth/register')(self.register)
-        self.route('/test/temp_login')(self.tempLogin)
-        self.route('/auth/enrolled_courses')(self.getEnrolledCourse)
         self.route('/ai/get_response', methods = ["POST"])(self.getResponse)
+        self.route('/ai/getFullHistory', methods = ["POST"])(self.getFullHistory)
         self.route('/compileCode', methods = ["POST"])(self.compileCode)
+        # Future routings
+        # self.route('/user/enroll', methods = ["POST"])(self.enroll)
+        # self.route('/user/unenroll', methods = ["POST"])(self.unenroll)
+        # self.route('/user/courses', methods = ["POST"])(self.getEnrolledCourse)
 
         # Init class
         self.db = macaw_db.Database()
         self.prompt_generation = macaw_ai.GeneratePrompt()
         self.ai = macaw_ai.Chat()
-        self.credentials = None
-        self.current_chat_room = None
         CORS(self)
         self.oauth = OAuth(self)
 
@@ -155,34 +155,27 @@ class FlaskServer(Flask):
                 raise ValueError('Failed to retrieve user information from token.')
 
             self.db.userRegister(email, username)
+            self.db.temporaryEnroll(email, username)
             return jsonify({'email': email, 'username': username})
         except ValueError as e:
             print(str(e))
 
             return jsonify({'error': str(e)})
     
-    def tempLogin(self):
-        data = self.db.fetchUserData(self.credentials[0])
-        
-        return json.dumps(data)
-
-    def register(self):
-        data = request.json
-        name = data.get("name")
-        username = data.get("username")
-        password = data.get("password")
-        success = self.db.userRegister(name, username, password)
-        if success is True:
-            response = {'message': 'Done!'}
-        else:
-            response = {'message': "User already register, use login instead"}
-
-        return json.dumps(response)
-    
     def getEnrolledCourse(self):
         course_list = self.db.showUserEnrolledCourse(self.credentials[0])
         print(json.dumps(course_list))
         return json.dumps(course_list)
+    
+    def getFullHistory(self):
+        username = request.form['username']
+        email = request.form['email']
+        course = request.form['course']
+        chatroom = request.form['chatroom_name']
+        full_history = self.db.loadChatHistory(username, email, course, chatroom)
+        user_history = full_history[0]
+        ai_history = full_history[1]
+        return json.dumps({"user": user_history, "ai": ai_history})
 
     def getResponse(self):
         username = request.form['username']
