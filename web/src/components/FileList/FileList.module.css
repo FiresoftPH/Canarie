@@ -1,17 +1,19 @@
 .file_status {
-  display: flex;
+  /* display: flex;
   justify-content: safe;
-  flex-direction: column;
+  flex-direction: column; */
   /* grid-template-columns: 1fr; */
 
   /* max-height: 100%; */
   padding: 1.5rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0rem;
+  margin-bottom: 1rem;
   /* overflow-y: scroll; */
   overflow-x: hidden;
 
-  flex: 1;
-  overflow-y: auto;
+  /* flex: 1; */
+  overflow-y: scroll;
+  height: 100%;
 }
 
 /* .file_status > * {
