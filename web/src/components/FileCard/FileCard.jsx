@@ -3,10 +3,14 @@ import styles from "./FileCard.module.css";
 import Close from "../../assets/CloseIcon.svg";
 import { useDispatch } from "react-redux";
 import { chatAction } from "../../store/chatSlice";
+import { useState } from "react";
 
 const FileCard = (props) => {
   let fname = props.name;
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  // const [trigger, setTrigger] = useState(false)
+  let del = false;
 
   try {
     if (fname.split(".")[0].length > 10) {
@@ -20,8 +24,13 @@ const FileCard = (props) => {
     <div
       className={`${styles.wrapper} ${props.selected ? styles.selected : ""}`}
       onClick={() => {
-        props.onSelect(props.id);
-        dispatch(chatAction.setFileId(props.id))
+        if (del === false) {
+          props.onSelect(props.id);
+          dispatch(chatAction.setFileId(props.id))
+          console.log("selected")
+        } else {
+          del = false
+        }
       }}
     >
       {/* <> */}
@@ -33,6 +42,8 @@ const FileCard = (props) => {
         src={Close}
         onClick={() => {
           props.onDelete(props.id);
+          del = true
+          // console.log("selecte1")
         }}
       />}
       {/* </> */}

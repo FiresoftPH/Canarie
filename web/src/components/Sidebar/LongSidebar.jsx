@@ -16,9 +16,9 @@ import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
 import FileList from "../FileList/FileList";
 import { useSelector } from "react-redux";
 
-import Back_Button from '../../assets/Back_Button.svg';
-import Collapse from '../../assets/Collapse.svg';
-import Upload from '../../assets/Upload.svg';
+import Back_Button from "../../assets/Back_Button.svg";
+import Collapse from "../../assets/Collapse.svg";
+import Upload from "../../assets/Upload.svg";
 
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
@@ -34,7 +34,7 @@ function Dimension(el) {
 function LongSidebar(props) {
   const nav = useNavigate();
 
-  const chatHeight = useRef(null);
+  // const chatHeight = useRef(null);
   const [cHeight, setCHeight] = useState(0);
 
   const [change, setChange] = useState(false);
@@ -44,16 +44,20 @@ function LongSidebar(props) {
   const data = useSelector((state) => state.bigData);
   const code = useSelector((state) => state.chat.code);
 
+  // const assHeightRef = useRef()
+
   const { subjectId, assignmentId } = useParams();
 
   useEffect(() => {
-    const height =
-      Dimension(document.getElementById("total")) -
-      Dimension(document.getElementById("assignment")) -
-      Dimension(document.getElementById("chat")) -
-      Dimension(document.getElementById("file-upload"));
+    setTimeout(() => {
+      const height =
+        Dimension(document.getElementById("total")) -
+        Dimension(document.getElementById("assignment")) -
+        Dimension(document.getElementById("chat")) -
+        Dimension(document.getElementById("file-upload"));
 
-    setCHeight(height - 15);
+      setCHeight(height - 15);
+    }, 200);
   }, [change]);
 
   useEffect(() => {
@@ -89,15 +93,17 @@ function LongSidebar(props) {
 
     console.log(transformedData);
 
-    let fType = 'text/plain';
+    let fType = "text/plain";
 
     if (fType.includes(".")) {
-      fType = { type: `text/${transformedData.name[transformedData.name.length - 1]}` }
+      fType = {
+        type: `text/${transformedData.name[transformedData.name.length - 1]}`,
+      };
     }
 
-    const blob = new Blob([transformedData.code], { type: 'text/plain' });
+    const blob = new Blob([transformedData.code], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = transformedData.name;
     link.click();
@@ -143,7 +149,11 @@ function LongSidebar(props) {
           mh={cHeight}
         />
       </div>
-      <CourseSlideUp mh={cHeight} onSelectMode={selectModeHandler} re_render={onReRender} />
+      <CourseSlideUp
+        // mh={cHeight}
+        onSelectMode={selectModeHandler}
+        re_render={onReRender}
+      />
     </div>
   );
 }
