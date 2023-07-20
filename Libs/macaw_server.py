@@ -168,22 +168,24 @@ class FlaskServer(Flask):
         return json.dumps(course_list)
     
     def getFullHistory(self):
-        username = request.form['username']
-        email = request.form['email']
-        course = request.form['course']
-        chatroom = request.form['chatroom_name']
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        chatroom = data['chatroom_name']
         full_history = self.db.loadChatHistory(username, email, course, chatroom)
         user_history = full_history[0]
         ai_history = full_history[1]
         return json.dumps({"user": user_history, "ai": ai_history})
 
     def getResponse(self):
-        username = request.form['username']
-        email = request.form['email']
-        code = request.form['code']
-        course = request.form['course']
-        chatroom = request.form['chatroom_name']
-        message = request.form['question']
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        code = data['code']
+        course = data['course']
+        chatroom = data['chatroom_name']
+        message = data['question']
         if code == [] or code == None or code == "":
             prompt = message
         else:
