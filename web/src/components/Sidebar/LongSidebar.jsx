@@ -129,7 +129,7 @@ function LongSidebar(props) {
             }}
             src={Back_Button}
           />
-          <p>Macaw Chat</p>
+          <p>Parrot Chat</p>
           <img
             onClick={() => {
               props.close();

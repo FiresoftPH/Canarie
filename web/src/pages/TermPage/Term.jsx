@@ -52,25 +52,25 @@ function Term(props) {
             <div className="line-potrait"></div>
             <div className="term-container">
               <p className="scroll-term">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets
-                containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of
-                Lorem Ipsum. It is a long established fact that a reader will be
-                distracted by the readable content of a page when looking at its
-                layout. The point of using Lorem Ipsum is that it has a
-                more-or-less normal distribution of letters, as opposed to using
-                'Content here, content here', making it look like readable
-                English. Many desktop publishing packages and web page editors
-                now use Lorem Ipsum as their default model text, and a search
-                for 'lorem ipsum' will uncover many web sites still in their
-                infancy. Various versions have evolved over the years, sometimes
-                by accident, sometimes on purpose
+              1. YOU UNDERSTAND AND AGREE THAT THIS SERVICE IS PROVIDED “AS IS” AND “AS AVAILABLE,” WITHOUT EXPRESS OR IMPLIED WARRANTY OR CONDITION OF ANY KIND. CMKL UNIVERSITY MAKE NO REPRESENTATIONS AND DISCLAIM ANY WARRANTIES OR CONDITIONS OF SATISFACTORY QUALITY, MERCHANTABILITY, OR NON-INFRINGEMENT. CMKL UNIVERSITY MAKE NO WARRANTS THAT THE THIS SERVICE IS FREE OF MALWARE OR OTHER HARMFUL COMPONENTS. IN ADDITION, CMKL UNIVERSITY MAKES NO REPRESENTATION NOR DOES IT WARRANT, ENDORSE, GUARANTEE, OR ASSUME RESPONSIBILITY FOR ANY THIRD-PARTY APPLICATIONS (OR THE CONTENT THEREOF) OR DEVICES.
+            NO ADVICE OR INFORMATION WHETHER ORAL OR IN WRITING OBTAINED BY YOU FROM CMKL UNIVERSITY SHALL CREATE ANY WARRANTY ON BEHALF OF CMKL UNIVERSITY. 
+<br />
+2. You acknowledge that while using this service there might be an unexpected incident or error that might, in result, damage or loss of your data. You must create a backup of your data or any information uploaded to the infrastructure at all time. Incase of any damage or loss of your data, CMKL University has no responsibilities nor duty to compensate you of any damage occurred during using this service.     
+Do Expect data loss to happen due to an ongoing configuration process.
+<br />
+3. You shall have responsible to secure your access, username or password, and shall not share your access, username or password, to any third parties without prior consent from CMKL University. Incase of any data breaches, CMKL University has no responsibilities nor duty to compensate you of any damage occurred from data breaches.      
+<br />
+4. You acknowledge that after the trial phase ends, your account information and all of your data on the infrastructure WILL BE ERASED from the system. You shall not have right to claim for any compensation from CMKL University. We advise you to backup or download all of your data prior the end of the trial phase. 
+<br />
+5. The following type of data or information is prohibited and not allow to be upload into the system <br />
+5.1 Personal data or any data that might be used to identify individuals. <br />
+5.2 Illegal data including but not limited to intellectual property infringement data, sensitive data, violent data, or data that might affect national security.
+<br />
+CMKL University has right to delete any prohibited data uploaded into the system without prior notice. CMKL University reserved the right to file a lawsuit claiming for compensations from you. You agree to solely responsible for all the information or data uploaded into the system by you if anyone brings a claim against CMKL University. CMKL University is not responsible for any claim against such information or data uploaded by you.
+<br />
+6. YOU AGREE THAT YOUR SOLE AND EXCLUSIVE REMEDY FOR ANY PROBLEMS OR DISSATISFACTION WITH THIS SERVICE IS TO RETURN THE USERNAME AND PASSWORD TO CMKL UNIVERSITY AND TO STOP USING THIS SERVICE.
+<br />
+7. You agree to indemnify and hold CMKL University harmless from and against all damages, losses, and expenses of any kind.
               </p>
             </div>
           </div>
