@@ -102,7 +102,7 @@ class Database:
 
     def temporaryEnroll(self, email, username):
         self.cursor = self.connection.cursor()
-        command = "UPDATE chat_history SET enrolled_courses = %s WHERE email = %s AND username = %s"
+        command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
         temp_course = ["Principal Of Computing Applications", "Computer Systems", "Advanced Calculus", "Database Technology", "Cloud Computing"]
         course_data = self.stringFromArray(temp_course)
         self.cursor.execute(command, (course_data, email, username))
