@@ -13,13 +13,13 @@ import userSlice from "../../store/userSlice";
 //   {
 //     assignmentId: "w1",
 //     chatHistory: [
-      // { chatId: 0, message: "Hello.", sender: "user" },
-      // {
-      //   chatId: 1,
-      //   message: "Hi, any help u need with assignment 1?",
-      //   sender: "ai",
-      //   rating: "none",
-      // },
+// { chatId: 0, message: "Hello.", sender: "user" },
+// {
+//   chatId: 1,
+//   message: "Hi, any help u need with assignment 1?",
+//   sender: "ai",
+//   rating: "none",
+// },
 //     ],
 //   },
 // ];
@@ -32,15 +32,18 @@ import { useRef } from "react";
 let shouldUpdate = false;
 const ChatUI = () => {
   // let chatName = props.mode;
-  const data = useSelector((state) => state.bigData, () => true);
+  const data = useSelector(
+    (state) => state.bigData,
+    () => true
+  );
 
   // let chatName = useParams().assignmentId;
   // const courseName = useParams().subjectId;
-  const { subjectId, assignmentId } = useParams()
+  const { subjectId, assignmentId } = useParams();
   let chatName = assignmentId;
   const courseName = subjectId;
 
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   const location = useLocation();
 
@@ -56,7 +59,7 @@ const ChatUI = () => {
 
     //     return Object.fromEntries(filtered);
     //   })
-    data.filter(sub => sub.course === courseName)[0]
+    data.filter((sub) => sub.course === courseName)[0]
   );
 
   // console.log(history);
@@ -173,7 +176,7 @@ const ChatUI = () => {
   };
 
   useEffect(() => {
-    console.log("Initialized chat screen re rendered")
+    console.log("Initialized chat screen re rendered");
 
     if (chatName !== "General") {
       if (shouldUpdate === false) {
@@ -186,7 +189,7 @@ const ChatUI = () => {
         history.filter((ass) => ass.assignmentId === chatName)[0].name
       );
     }
-  }, [history.filter((ass) => ass.assignmentId === chatName)[0]])
+  }, [history.filter((ass) => ass.assignmentId === chatName)[0]]);
   // }, [<ChatScreenInitalized onRate={ratingHandler} history={history.filter((ass) => ass.assignmentId === chatName)[0]} />]);
 
   const fileAttachHandler = () => {
@@ -196,7 +199,7 @@ const ChatUI = () => {
 
   useEffect(() => {
     if (location.state !== null) {
-      console.log("Adding chat")
+      console.log("Adding chat");
       // console.log(location);
       setHistory((prevState) =>
         prevState.map((assignment) => {

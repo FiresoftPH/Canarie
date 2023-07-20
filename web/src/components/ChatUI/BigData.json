@@ -1,74 +1,76 @@
 [
   {
     "course": "Principal Of Computing Applications",
-    "assignments": [],
+    "assignments": [
+
+    ],
     "files": [
-      { "id": 1, "name": "Untitled-1" },
-      { "id": 2, "name": "Untitled-2" },
-      { "id": 3, "name": "Untitled-3" },
-      { "id": 4, "name": "Untitled-4" },
-      { "id": 5, "name": "Untitled-5" },
-      { "id": 6, "name": "Untitled-6" }
+      { "id": 1, "name": "Untitled-1", "code":"console.log('hallo world')" },
+      { "id": 2, "name": "Untitled-2", "code":"console.log('hallo world')" },
+      { "id": 3, "name": "Untitled-3", "code":"console.log('hallo world')" },
+      { "id": 4, "name": "Untitled-4", "code":"console.log('hallo world')" },
+      { "id": 5, "name": "Untitled-5", "code":"console.log('hallo world')" },
+      { "id": 6, "name": "Untitled-6", "code":"console.log('hallo world')" }
     ]
   },
   {
     "course": "Computer Systems",
     "assignments": [],
     "files": [
-      { "id": 1, "name": "Untitled-1" },
-      { "id": 2, "name": "Untitled-2" },
-      { "id": 3, "name": "Untitled-3" },
-      { "id": 4, "name": "Untitled-4" },
-      { "id": 5, "name": "Untitled-5" },
-      { "id": 6, "name": "Untitled-6" }
+      { "id": 1, "name": "Untitled-1", "code":"console.log('hallo world')" },
+      { "id": 2, "name": "Untitled-2", "code":"console.log('hallo world')" },
+      { "id": 3, "name": "Untitled-3", "code":"console.log('hallo world')" },
+      { "id": 4, "name": "Untitled-4", "code":"console.log('hallo world')" },
+      { "id": 5, "name": "Untitled-5", "code":"console.log('hallo world')" },
+      { "id": 6, "name": "Untitled-6", "code":"console.log('hallo world')" }
     ]
   },
   {
     "course": "Calculus 1",
     "assignments": [],
     "files": [
-      { "id": 1, "name": "Untitled-1" },
-      { "id": 2, "name": "Untitled-2" },
-      { "id": 3, "name": "Untitled-3" },
-      { "id": 4, "name": "Untitled-4" },
-      { "id": 5, "name": "Untitled-5" },
-      { "id": 6, "name": "Untitled-6" }
+      { "id": 1, "name": "Untitled-1", "code":"console.log('hallo world')" },
+      { "id": 2, "name": "Untitled-2", "code":"console.log('hallo world')" },
+      { "id": 3, "name": "Untitled-3", "code":"console.log('hallo world')" },
+      { "id": 4, "name": "Untitled-4", "code":"console.log('hallo world')" },
+      { "id": 5, "name": "Untitled-5", "code":"console.log('hallo world')" },
+      { "id": 6, "name": "Untitled-6", "code":"console.log('hallo world')" }
     ]
   },
   {
     "course": "Calculus 2",
     "assignments": [],
     "files": [
-      { "id": 1, "name": "Untitled-1" },
-      { "id": 2, "name": "Untitled-2" },
-      { "id": 3, "name": "Untitled-3" },
-      { "id": 4, "name": "Untitled-4" },
-      { "id": 5, "name": "Untitled-5" },
-      { "id": 6, "name": "Untitled-6" }
+      { "id": 1, "name": "Untitled-1", "code":"console.log('hallo world')" },
+      { "id": 2, "name": "Untitled-2", "code":"console.log('hallo world')" },
+      { "id": 3, "name": "Untitled-3", "code":"console.log('hallo world')" },
+      { "id": 4, "name": "Untitled-4", "code":"console.log('hallo world')" },
+      { "id": 5, "name": "Untitled-5", "code":"console.log('hallo world')" },
+      { "id": 6, "name": "Untitled-6", "code":"console.log('hallo world')" }
     ]
   },
   {
     "course": "Physics",
     "assignments": [],
     "files": [
-      { "id": 1, "name": "Untitled-1" },
-      { "id": 2, "name": "Untitled-2" },
-      { "id": 3, "name": "Untitled-3" },
-      { "id": 4, "name": "Untitled-4" },
-      { "id": 5, "name": "Untitled-5" },
-      { "id": 6, "name": "Untitled-6" }
+      { "id": 1, "name": "Untitled-1", "code":"console.log('hallo world')" },
+      { "id": 2, "name": "Untitled-2", "code":"console.log('hallo world')" },
+      { "id": 3, "name": "Untitled-3", "code":"console.log('hallo world')" },
+      { "id": 4, "name": "Untitled-4", "code":"console.log('hallo world')" },
+      { "id": 5, "name": "Untitled-5", "code":"console.log('hallo world')" },
+      { "id": 6, "name": "Untitled-6", "code":"console.log('hallo world')" }
     ]
   },
   {
     "course": "Chemistry",
     "assignments": [],
     "files": [
-      { "id": 1, "name": "Untitled-1" },
-      { "id": 2, "name": "Untitled-2" },
-      { "id": 3, "name": "Untitled-3" },
-      { "id": 4, "name": "Untitled-4" },
-      { "id": 5, "name": "Untitled-5" },
-      { "id": 6, "name": "Untitled-6" }
+      { "id": 1, "name": "Untitled-1", "code":"console.log('hallo world')" },
+      { "id": 2, "name": "Untitled-2", "code":"console.log('hallo world')" },
+      { "id": 3, "name": "Untitled-3", "code":"console.log('hallo world')" },
+      { "id": 4, "name": "Untitled-4", "code":"console.log('hallo world')" },
+      { "id": 5, "name": "Untitled-5", "code":"console.log('hallo world')" },
+      { "id": 6, "name": "Untitled-6", "code":"console.log('hallo world')" }
     ]
   }
 ]
