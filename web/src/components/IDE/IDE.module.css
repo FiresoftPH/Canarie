@@ -49,6 +49,7 @@
   box-sizing: border-box;
 
   width: 100% !important;
+  min-height: 10px;
   /* grid-template-columns: 1fr 1fr; */
 }
 
