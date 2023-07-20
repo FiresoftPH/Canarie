@@ -116,9 +116,8 @@ const IDE = (props) => {
     });
   };
 
-  console.log(y)
   const fixedHeightEditor = EditorView.theme({
-    "& ": { height:  -y + "px"},
+    "& ": { height:  -y + 300 + "px" },
     // ".cm-gutter .cm-editor" : {minHeight : "50vh"}
   });
 
@@ -133,9 +132,6 @@ const IDE = (props) => {
     dockerfile: langs.dockerfile(),
     dart: langs.dart(),
     go: langs.go(),
-    html: langs.html(),
-    lua: langs.lua(),
-    mysql: langs.mysql(),
     php: langs.php(),
   };
   useEffect(() => {
