@@ -104,7 +104,7 @@ class FlaskServer(Flask):
         CORS(self)
         self.oauth = OAuth(self)
 
-    def verify_google_token(token):
+    def verify_google_token(self, token):
         try:
             google_auth_url = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
             params = {'access_token': token}
@@ -118,7 +118,7 @@ class FlaskServer(Flask):
         except Exception as e:
             raise e
         
-    def get_google_user_info(access_token):
+    def get_google_user_info(self, access_token):
         try:
             google_people_api_url = 'https://people.googleapis.com/v1/people/me'
             headers = {'Authorization': f'Bearer {access_token}'}
