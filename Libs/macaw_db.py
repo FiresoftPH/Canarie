@@ -8,7 +8,7 @@ class Database:
     def __init__(self):
 
         # file = open("Libs/parrot_db_keys.txt", "r")
-        config = dotenv_values("Libs/.env")
+        config = dotenv_values(".env")
         self.connection = pymysql.connect(
         host=config["HOST_ALT"],
         port=int(config["PORT_ALT"]),
@@ -24,37 +24,40 @@ class Database:
             command_0 = "CREATE TABLE courses (id INT AUTO_INCREMENT PRIMARY KEY, course_name VARCHAR(255), assignments VARCHAR(255))"
             self.cursor.execute(command_0)
         except pymysql.err.OperationalError:
-            # print("Already initialized")
+            print("Already initialized")
             pass
 
         try:
-            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255),  email VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255))"
+            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255),  email VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255), consent VARCHAR(255))"
             self.cursor.execute(command_1)
         except pymysql.err.OperationalError:
-            # print("Already initialized")
+            print("Already initialized")
             pass
 
         try:
             command_2 = "CREATE TABLE statistics (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255),  overall_understanding VARCHAR(255), most_asked_course VARCHAR(255), average_session_time VARCHAR(255))"
             self.cursor.execute(command_2)
         except pymysql.err.OperationalError:
-            # print("Already initialized")
+            print("Already initialized")
             pass
 
         try:
-            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), course_name VARCHAR(255), assignment_name VARCHAR(255), log BLOB)"
+            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), course_name VARCHAR(255), room_name VARCHAR(255), log BLOB)"
             self.cursor.execute(command_3)
         except pymysql.err.OperationalError:
+            print("Already initialized")
             pass
 
         try:
             command_4 = "CREATE TABLE assignments (id INT AUTO_INCREMENT PRIMARY KEY, assignment_name VARCHAR(255), assignment_details VARCHAR(255))"
             self.cursor.execute(command_4)
         except pymysql.err.OperationalError:
+            print("Already initialized")
             pass
 
     # Reset the table values to nothing in case something gone wrong. This is used for development only.
     def resetTable(self):
+        self.cursor = self.connection.cursor()
         # self.cursor.execute("DROP TABLE courses")
         self.cursor.execute("DROP TABLE users")
         self.cursor.execute("DROP TABLE statistics")
@@ -63,10 +66,12 @@ class Database:
 
     # Alter the table columns to add more functionalities. This is used for development only
     def alterTable(self):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("ALTER TABLE statistics ADD assignment_details VARCHAR(255) DEFAULT ''")
 
     # Add course data to the courses table. In the final development, this will be automatically integrated with canvas
     def addCourseData(self, course_name, assignment_list):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT course_name, assignments FROM courses")
         registered_course = self.cursor.fetchall()
         assignment_list = self.stringFromArray(assignment_list)
@@ -80,6 +85,7 @@ class Database:
 
     # User register, each user have to have a name, username and password.
     def userRegister(self, email, username):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT email FROM users")
         result = self.cursor.fetchall()
         new_user_data = (email, )        
@@ -96,6 +102,7 @@ class Database:
 
     # Used to show course data in the database. Some modes will be removed from the final version.
     def showCourseData(self, mode=0):
+        self.cursor = self.connection.cursor()
         if mode == 0:
             self.cursor.execute("SELECT course_name, assignments FROM courses")
             result = self.cursor.fetchall()
@@ -122,8 +129,9 @@ class Database:
 
     # Shows the data from the users table. Some modes will be removed in the final version.
     def showUserData(self, mode=0):
+        self.cursor = self.connection.cursor()
         if mode == 0:
-            self.cursor.execute("SELECT name, username FROM users")
+            self.cursor.execute("SELECT email, username FROM users")
             result = self.cursor.fetchall()
             user_data = []
             for row in result:
@@ -156,6 +164,7 @@ class Database:
 
     # Use together with flask webserver to fetch the user whole information
     def fetchUserData(self, username):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT * FROM users WHERE username = %s", username)
         result = self.cursor.fetchall()
         transform_courses = self.arrayFromString(result[0][4])
@@ -164,6 +173,7 @@ class Database:
     
     # Use together with flask webserver to fetch the course data enrolled by a given user.
     def fetchUserCourseData(self, username):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT enrolled_courses WHERE username = %s", username)
         result = self.cursor.fetchall()
         transform_courses = self.arrayFromString(result[0][0])
@@ -171,6 +181,7 @@ class Database:
     
     # Shows the data from the statistics table. 
     def showStatisticsData(self):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT username FROM statistics")
 
         result = self.cursor.fetchall()
@@ -189,6 +200,7 @@ class Database:
 
     # Provided login functionalities and returns the credentials to the applications.
     def userLogin(self, username, password):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT username, password FROM users")
         result = self.cursor.fetchall()
         credentials = (username, password)        
@@ -201,6 +213,7 @@ class Database:
 
     # Used when enrolling courses for each user.
     def enrollCourse(self, username, course_list):
+        self.cursor = self.connection.cursor()
         # course_list_data = self.stringFromArray(course_list)
         difference_enrolled_course = self.checkEnrolledCourse(username, course_list)
         course_list_data = self.stringFromArray(difference_enrolled_course)
@@ -224,6 +237,7 @@ class Database:
 
     # Used when enrolling courses for each user. This method checks if the selected courses are already enrolled or not
     def checkEnrolledCourse(self, username, course_list):
+        self.cursor = self.connection.cursor()
         command = "SELECT enrolled_courses FROM users WHERE username = %s"
         self.cursor.execute(command, username)
         enrolled_course = self.cursor.fetchall()
@@ -234,6 +248,7 @@ class Database:
 
     # Used when enrolling courses for each user. This method checks if the selected courses are registered or not.
     def checkRegisteredCourse(self, course_name):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT course_name FROM courses")
         enrolled_course = self.cursor.fetchall()
         # enrolled_course = self.arrayFromString(enrolled_course)
@@ -246,6 +261,7 @@ class Database:
     
     # Used together with the login method. This checks whether the user enrolled any courses yet.
     def checkInitialSetup(self, username):
+        self.cursor = self.connection.cursor()
         command = "SELECT enrolled_courses FROM users WHERE username = %s"
         self.cursor.execute(command, username)
         enrolled_courses = self.cursor.fetchall()
@@ -256,6 +272,7 @@ class Database:
     
     # Returns the users enrolled courses as the name suggested.
     def showUserEnrolledCourse(self, username):
+        self.cursor = self.connection.cursor()
         command = "SELECT enrolled_courses FROM users WHERE username = %s"
         self.cursor.execute(command, username)
         enrolled_courses = self.cursor.fetchall()
@@ -264,6 +281,7 @@ class Database:
     
     # Admin login to access other user's data
     def adminLogin(self, username, password):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT username, password FROM users")
         result = self.cursor.fetchall()
         credentials = (username, password)        
@@ -281,17 +299,14 @@ class Database:
     
     # Promote a standard user to be an admin. Only used during development and authorized use.ss
     def promoteUser(self, username):
+        self.cursor = self.connection.cursor()
         command = "UPDATE users SET status = %s WHERE username = %s"
         self.cursor.execute(command, ("admin", username))
         self.connection.commit()
 
-    # Function to create a chat room.
-    def createChatRoom(self, username, course, assignment):
-        command = "INSERT INTO chat_history (username, course_name, assignment_name) VALUES (%s, %s, %s)"
-        self.cursor.execute(command, (username, course, assignment))
-
     # Show all chat history stored in the database
     def showChatHistory(self):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT * FROM chat_history")
         result = self.cursor.fetchall()
         for row in result:
@@ -299,43 +314,39 @@ class Database:
 
     # Show all tables listed in the database.
     def showAllTables(self):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SHOW TABLES")
         result = self.cursor.fetchall()
         for row in result:
             print(row)
 
     # Update chat history in the database. This will be updated when the session ends.
-    def storeChatHistory(self, username, course, assignment, history):
+    def storeChatHistory(self, username, email, course, room_name, history):
+        self.cursor = self.connection.cursor()
         history = pickle.dumps(history)
-        self.cursor.execute("SELECT username, course_name, assignment_name from chat_history WHERE username = %s", username)
-        enrolled_data = self.cursor.fetchall()
-        values = (username, course, assignment)
-        if values not in enrolled_data:
-            self.cursor.execute("INSERT INTO chat_history (username, course_name, assignment_name, log) VALUES (%s, %s, %s, %s)", (username, course, assignment, history))
-            self.connection.commit()
-        else:
-            # self.cursor.execute("UPDATE chat_history SET history WHERE (username, course_name, assignment_name) = (%s, %s, %s)", (username, course, assignment, history))
-            self.cursor.execute("SELECT id, username, course_name, assignment_name from chat_history WHERE username = %s", username)
-            related_id = self.cursor.fetchall()
-            for data in related_id:
-                if (username, course, assignment) == (data[1], data[2], data[3]):
-                    user_id = data[0]
+        self.cursor.execute("UPDATE chat_history SET log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
+                                    (history, email, username, course, room_name))
+        self.connection.commit()
 
-            self.cursor.execute("UPDATE chat_history SET log = %s WHERE id = %s", (history, user_id))
-            self.connection.commit()
+    # Function to create a chat room.
+    def createChatRoom(self, username, email, course, room_name):
+        self.cursor = self.connection.cursor()
+        command = "INSERT INTO chat_history (username, email, course_name, room_name) VALUES (%s, %s, %s, %s)"
+        self.cursor.execute(command, (username, email, course, room_name))
+    
+    def loadChatHistory(self, username, email, course, room_name):
+        self.cursor = self.connection.cursor()
+        try:
+            self.cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))
+            result = self.cursor.fetchall()
+            temp = result[0][0]
+            return pickle.loads(temp)
 
-    def loadChatHistory(self, username, course, assignment):
-        self.cursor.execute("SELECT course_name, assignment_name, log FROM chat_history WHERE username = %s", username)
-        all_history = self.cursor.fetchall()
-        for data in all_history:
-            if data[0] == course and data[1] == assignment:
-                temp = data[2]
-                print(temp)
-                return pickle.loads(temp)
-            
-        return False
+        except pymysql.OperationalError:
+            return False
     
     def printChatHistory(self, username):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT assignment_name FROM chat_history WHERE username = %s", username)
         all_history = self.cursor.fetchall()
         for data in all_history:
@@ -344,10 +355,12 @@ class Database:
         return False
 
     def showColumnNames(self):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT * from chat_history")
         print(self.cursor.description)
 
     def getUserChatRoom(self, username):
+        self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT assignment_name from chat_history WHERE username = %s", username)
         result = self.cursor.fetchall()
         print(result)
@@ -356,8 +369,7 @@ class Database:
 TESTING THE FUNCTIONALITIES OF THE DATABASE
 """
 
-test = Database()
-test.showAllTables()
+# test = Database()
 # test.resetTable()
 # print(test.loadChatHistory("hutao", "Computer System", ""))
 # print(test.loadChatHistory("hutao"))

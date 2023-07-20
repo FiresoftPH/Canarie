@@ -11,7 +11,8 @@ import secrets
 import requests
 import os
 try: 
-    import macaw_db, macaw_ai
+    import macaw_db
+    import macaw_ai
 
 except:
     from Libs import macaw_db, macaw_ai
@@ -77,46 +78,6 @@ class DatabaseOperations:
     # fetch user related data and send to frontend
     def fetchUserData(self, username):
         return self.db.fetchUserData(username)
-
-class AIOperations:
-    def __init__(self):
-        self.ai = macaw_ai.AI()
-        self.prompt = macaw_ai.GeneratePrompt()
-        self.db = macaw_db.Database()
-        self.template = {"error_checking" : "Can you recheck this response?: ", "rating" : "Can you rate this conversation from 1 - 10"}
-
-    def getPrompt(self, prompt, code):
-        try:
-            if code == None:
-                return prompt
-            else:
-                return self.prompt.codePrompt(prompt, code)
-
-        except FileNotFoundError:
-            return prompt
-        
-        except TypeError:
-            return prompt
-
-    def putContext(self, header):
-        self.prompt.contextPrompt(header)
-    
-    def storeChatHistory(self, username, course, assignment, chat_history):
-        # chat_history = self.ai.getCachedMemory()
-        self.db.storeChatHistory(username, course, assignment, chat_history)
-
-    def getResponse(self, prompt):
-        return self.ai.getResponse(prompt)
-    
-    def loadChatHistory(self, username, course, assignment):
-        old_chat = self.db.loadChatHistory(username, course, assignment)
-        if old_chat == False:
-            return
-        else:
-            return old_chat
-        
-    def getChainedResponse(self, prompt, history):
-        return self.ai.getChainResponse(prompt, history)
     
 # The actual flask server
 class FlaskServer(Flask):
@@ -135,8 +96,9 @@ class FlaskServer(Flask):
         self.route('/compileCode', methods = ["POST"])(self.compileCode)
 
         # Init class
-        self.db = DatabaseOperations()
-        self.ai = AIOperations()
+        self.db = macaw_db.Database()
+        self.prompt_generation = macaw_ai.GeneratePrompt()
+        self.ai = macaw_ai.Chat()
         self.credentials = None
         self.current_chat_room = None
         CORS(self)
@@ -224,31 +186,27 @@ class FlaskServer(Flask):
 
     def getResponse(self):
         username = request.form['username']
+        email = request.form['email']
+        code = request.form['code']
         course = request.form['course']
-        assignment = request.form['assignment']
-        question = request.form['question']
-        history = self.ai.loadChatHistory(username, course, assignment)
-        
-        if 'file' in request.files:
-            recieved_file = request.files['file']
-            cached_files = os.listdir("cache")
-            output_filename = str(random.randint(1, 1000000))
-            while output_filename in cached_files:
-                output_filename = str(random.randint(1, 1000000))
-
-            filename = "cache/" + output_filename
-            recieved_file.save(filename)
-            prompt = self.ai.getPrompt(question, filename)
-            response = self.ai.getChainedResponse(prompt, history)
-            self.ai.storeChatHistory(username, course, assignment, response[1])
+        chatroom = request.form['chatroom_name']
+        message = request.form['question']
+        if code == [] or code == None or code == "":
+            prompt = message
         else:
-            filename = None
-            prompt = self.ai.getPrompt(question, filename) 
-            response = self.ai.getChainedResponse(prompt, history)
-            print(response)
-            self.ai.storeChatHistory(username, course, assignment, response[1])
+            prompt = self.prompt_generation.codePrompt()
 
-        return json.dumps({'answer': response[0], 'error': ""})
+        history_check = self.db.loadChatHistory(username, email, course, chatroom)
+        if history_check != False:
+            chat_cache, answer = self.ai.chatsession(history_check, prompt)
+        else:
+            self.db.createChatRoom()
+            conversation = self.ai.newchat()
+            chat_cache, answer = self.ai.chatsession(conversation, prompt)
+
+        self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
+ 
+        return json.dumps({"message": answer, "sender": "ai", "rating": "none"})
     
     def compileCode(self):
         # recieved_file = Cache(self, config={'CACHE_TYPE': 'simple'})
