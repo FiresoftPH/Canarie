@@ -13,13 +13,13 @@ import userSlice from "../../store/userSlice";
 //   {
 //     assignmentId: "w1",
 //     chatHistory: [
-//       { chatId: 0, message: "Hello.", sender: "user" },
-//       {
-//         chatId: 1,
-//         message: "Hi, any help u need with assignment 1?",
-//         sender: "ai",
-//         rating: "none",
-//       },
+      // { chatId: 0, message: "Hello.", sender: "user" },
+      // {
+      //   chatId: 1,
+      //   message: "Hi, any help u need with assignment 1?",
+      //   sender: "ai",
+      //   rating: "none",
+      // },
 //     ],
 //   },
 // ];
@@ -45,17 +45,18 @@ const ChatUI = () => {
   const location = useLocation();
 
   const [history, setHistory] = useState(
-    data
-      .filter((sub) => {
-        return sub.course == courseName;
-      })[0]
-      .assignments.map((ass) => {
-        const asArray = Object.entries(ass);
+    // data
+    //   .filter((sub) => {
+    //     return sub.course == courseName;
+    //   })[0]
+    //   .assignments.map((ass) => {
+    //     const asArray = Object.entries(ass);
 
-        const filtered = asArray.filter(([key, value]) => key !== "files");
+    //     const filtered = asArray.filter(([key, value]) => key !== "files");
 
-        return Object.fromEntries(filtered);
-      })
+    //     return Object.fromEntries(filtered);
+    //   })
+    data.filter(sub => sub.course === courseName)[0]
   );
 
   // console.log(history);

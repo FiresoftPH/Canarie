@@ -1,12 +1,4 @@
 import styles from "./LongSidebar.module.css";
-import SearchBox from "src/components/SearchBox/SearchBox";
-import AssignmentCard from "../AssignmentCard/AssignmentCard";
-import FileCard from "../FileCard/FileCard";
-import ScrollBar from "../ScrollBar/ScrollBar";
-
-import DownV from "../../assets/DownV.svg";
-import LeftV from "../../assets/LeftV.svg";
-import UpV from "../../assets/UpV.svg";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -20,67 +12,67 @@ import Back_Button from "../../assets/Back_Button.svg";
 import Collapse from "../../assets/Collapse.svg";
 import Upload from "../../assets/Upload.svg";
 
-function Dimension(el) {
-  // Get the DOM Node if you pass in a string
-  el = typeof el === "string" ? document.querySelector(el) : el;
+// function Dimension(el) {
+//   // Get the DOM Node if you pass in a string
+//   el = typeof el === "string" ? document.querySelector(el) : el;
 
-  var styles = window.getComputedStyle(el);
-  var margin =
-    parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
+//   var styles = window.getComputedStyle(el);
+//   var margin =
+//     parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
 
-  return Math.ceil(el.offsetHeight + margin);
-}
+//   return Math.ceil(el.offsetHeight + margin);
+// }
 
 function LongSidebar(props) {
   const nav = useNavigate();
 
   // const chatHeight = useRef(null);
-  const [cHeight, setCHeight] = useState(0);
+  // const [cHeight, setCHeight] = useState(0);
 
-  const [change, setChange] = useState(false);
-  const [mode, setMode] = useState("General");
+  // const [change, setChange] = useState(false);
+  // const [mode, setMode] = useState("General");
 
   const [file, setFile] = useState();
   const data = useSelector((state) => state.bigData);
-  const code = useSelector((state) => state.chat.code);
+  // const code = useSelector((state) => state.chat.code);
 
   // const assHeightRef = useRef()
 
   const { subjectId, assignmentId } = useParams();
 
-  useEffect(() => {
-    setTimeout(() => {
-      const height =
-        Dimension(document.getElementById("total")) -
-        Dimension(document.getElementById("assignment")) -
-        Dimension(document.getElementById("chat")) -
-        Dimension(document.getElementById("file-upload"));
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const height =
+  //       Dimension(document.getElementById("total")) -
+  //       Dimension(document.getElementById("assignment")) -
+  //       Dimension(document.getElementById("chat")) -
+  //       Dimension(document.getElementById("file-upload"));
 
-      setCHeight(height - 15);
-    }, 200);
-  }, [change]);
+  //     setCHeight(height - 15);
+  //   }, 200);
+  // }, [change]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const height =
-        Dimension(document.getElementById("total")) -
-        Dimension(document.getElementById("assignment")) -
-        Dimension(document.getElementById("chat")) -
-        Dimension(document.getElementById("file-upload"));
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const height =
+  //       Dimension(document.getElementById("total")) -
+  //       Dimension(document.getElementById("assignment")) -
+  //       Dimension(document.getElementById("chat")) -
+  //       Dimension(document.getElementById("file-upload"));
 
-      setCHeight(height - 20);
-    }, 1000);
-  }, []);
+  //     setCHeight(height - 20);
+  //   }, 1000);
+  // }, []);
 
-  const onReRender = () => {
-    setChange(!change);
-  };
+  // const onReRender = () => {
+  //   setChange(!change);
+  // };
 
-  const selectModeHandler = (id) => {
-    setMode(id);
-    console.log(id);
-    props.onSelectMode(id);
-  };
+  // const selectModeHandler = (id) => {
+  //   setMode(id);
+  //   console.log(id);
+  //   props.onSelectMode(id);
+  // };
 
   const fileDownloadHandler = (f) => {
     // console.log(file);
@@ -138,22 +130,25 @@ function LongSidebar(props) {
           />
           <div className={styles.sepLine} />
         </div>
-        <section id="file-upload" className={styles.file_uploaded}>
-          <p>File Uploaded</p>
-          <img onClick={fileDownloadHandler} src={Upload} />
-        </section>
-        <FileList
-          sf={(f) => {
-            setFile(f);
-          }}
-          mh={cHeight}
-        />
+        <ChatList />
+        <div className={styles.fileThing}>
+          <section id="file-upload" className={styles.file_uploaded}>
+            <p>File Uploaded</p>
+            <img onClick={fileDownloadHandler} src={Upload} />
+          </section>
+          <FileList
+            sf={(f) => {
+              setFile(f);
+            }}
+            // mh={cHeight}
+          />
+        </div>
       </div>
-      <CourseSlideUp
+      {/* <CourseSlideUp
         // mh={cHeight}
         onSelectMode={selectModeHandler}
         re_render={onReRender}
-      />
+      /> */}
     </div>
   );
 }

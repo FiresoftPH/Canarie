@@ -4,12 +4,12 @@ import FileCard from "../FileCard/FileCard";
 import styles from "./FileList.module.css";
 
 // const DUMMY_DATA = [
-//   { id: 1, name: "Untitled-1" },
-//   { id: 2, name: "Untitled-2" },
-//   { id: 3, name: "Untitled-3" },
-//   { id: 4, name: "Untitled-4" },
-//   { id: 5, name: "Untitled-5" },
-//   { id: 6, name: "Untitled-6" },
+  // { id: 1, name: "Untitled-1" },
+  // { id: 2, name: "Untitled-2" },
+  // { id: 3, name: "Untitled-3" },
+  // { id: 4, name: "Untitled-4" },
+  // { id: 5, name: "Untitled-5" },
+  // { id: 6, name: "Untitled-6" },
 // ];
 
 // import DUMMY_DATA from './FileNames.json'
@@ -91,9 +91,9 @@ const FileList = (props) => {
   return (
     <>
       <section
-        style={{
-          maxHeight: props.mh,
-        }}
+        // style={{
+        //   maxHeight: props.mh,
+        // }}
         className={styles.file_status}
       >
         {/* <FileCard selected name="Untitled-1" />

@@ -13,6 +13,10 @@ const DUMMY_DATA = [
   { id: 1, assignment: "Chem", sessionName: "organic chem" },
   { id: 2, assignment: "Physics", sessionName: "fluid mechanics" },
   { id: 3, assignment: "Math", sessionName: "calculus" },
+  { id: 4, assignment: "Math", sessionName: "calculus" },
+  { id: 5, assignment: "Math", sessionName: "calculus" },
+  { id: 6, assignment: "Math", sessionName: "calculus" },
+  { id: 7, assignment: "Math", sessionName: "calculus" },
 ];
 
 const ChatList = (props) => {
@@ -58,6 +62,7 @@ const ChatList = (props) => {
             />
           );
         })}
+
       </section>
     </>
   );
