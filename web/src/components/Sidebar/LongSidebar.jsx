@@ -16,6 +16,10 @@ import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
 import FileList from "../FileList/FileList";
 import { useSelector } from "react-redux";
 
+import Back_Button from '../../assets/Back_Button.svg';
+import Collapse from '../../assets/Collapse.svg';
+import Upload from '../../assets/Upload.svg';
+
 function Dimension(el) {
   // Get the DOM Node if you pass in a string
   el = typeof el === "string" ? document.querySelector(el) : el;
@@ -29,8 +33,6 @@ function Dimension(el) {
 
 function LongSidebar(props) {
   const nav = useNavigate();
-  // const [hideCourse, setHideCourse] = useState(false);
-  // const [hideAss, setHideAss] = useState(false);
 
   const chatHeight = useRef(null);
   const [cHeight, setCHeight] = useState(0);
@@ -52,14 +54,6 @@ function LongSidebar(props) {
       Dimension(document.getElementById("file-upload"));
 
     setCHeight(height - 15);
-
-    // console.log(
-    //   Dimension(document.getElementById("total")),
-    //   Dimension(document.getElementById("assignment")),
-    //   Dimension(document.getElementById("chat")),
-    //   Dimension(document.getElementById("newChatBtn")),
-    //   Dimension(document.getElementById("file-upload"))
-    // );
   }, [change]);
 
   useEffect(() => {
@@ -85,8 +79,8 @@ function LongSidebar(props) {
   };
 
   const fileDownloadHandler = (f) => {
-    console.log(file);
-    console.log(data);
+    // console.log(file);
+    // console.log(data);
 
     const transformedData = data
       .filter((sub) => sub.course === subjectId)[0]
@@ -127,26 +121,20 @@ function LongSidebar(props) {
             onClick={() => {
               nav("/Course");
             }}
-            src="/src/assets/Back_Button.svg"
+            src={Back_Button}
           />
           <p>Macaw Chat</p>
           <img
             onClick={() => {
               props.close();
             }}
-            src="/src/assets/Collapse.svg"
+            src={Collapse}
           />
           <div className={styles.sepLine} />
-          {/* <SearchBox dark holder="Search" /> */}
         </div>
-        {/* <ChatList maxHeight={cHeight / 2} /> */}
-        {/* <section id="newChatBtn" className={styles.new_chat}>
-          <img src="src/assets/New button.svg" />
-          <p>New Chat</p>
-        </section> */}
         <section id="file-upload" className={styles.file_uploaded}>
           <p>File Uploaded</p>
-          <img onClick={fileDownloadHandler} src="/src/assets/Upload.svg" />
+          <img onClick={fileDownloadHandler} src={Upload} />
         </section>
         <FileList
           sf={(f) => {

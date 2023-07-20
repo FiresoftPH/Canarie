@@ -7,10 +7,13 @@ import FileIcon from "src/assets/FileIcon.svg";
 import styles from "./ChattingCardUser.module.css";
 import { useState } from "react";
 import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
+import { memo } from "react";
 
-const ChattingCardUser = (props) => {
-  console.log(props.file_attachment);
+const ChattingCardUser = memo(function ChattingCardUser(props) {
+  // console.log(props.file_attachment);
   const [toggle, setToggle] = useState(false);
+
+  console.log("USER CARD RE-RENDER")
 
   return (
     <div className={styles.wrapper}>
@@ -37,6 +40,6 @@ const ChattingCardUser = (props) => {
       /> : ""}
     </div>
   );
-};
+});
 
 export default ChattingCardUser;

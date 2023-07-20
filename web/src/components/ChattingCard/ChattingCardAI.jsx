@@ -9,8 +9,11 @@ import LikeIconFilled from "src/assets/LikeIconFilled.svg";
 
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { memo } from "react";
+import { useMemo } from "react";
 
-const ChattingCardAI = (props) => {
+const ChattingCardAI = memo(function ChattingCardAI(props) {
+  console.log("ChattingCardAI component is called")
 
   return (
     <div className={styles.wrapper}>
@@ -76,6 +79,6 @@ const ChattingCardAI = (props) => {
       </div>
     </div>
   );
-};
+});
 
 export default ChattingCardAI;

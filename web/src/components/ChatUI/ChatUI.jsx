@@ -5,8 +5,8 @@ import RenameIcon from "src/assets/RenameIcon.svg";
 import ClearChatHistoryIcon from "src/assets/ClearChatHistoryIcon.svg";
 import ChatInputField from "../ChatInputField/ChatInputField";
 import ChatScreenInitalized from "../ChatScreen/ChatScreenInitialized";
-import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { memo, useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import userSlice from "../../store/userSlice";
 
 // const DUMMY_TEXT_DATA = [
@@ -24,53 +24,58 @@ import userSlice from "../../store/userSlice";
 //   },
 // ];
 
-import DUMMY_TEXT_DATA from "./ChatData.json";
-import BIG_DUMMY_DATA from "./BigData.json";
 import ChatScreenNotInit from "../ChatScreen/ChatScreenNotInit";
 import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
 import { useSelector } from "react-redux";
+import { useRef } from "react";
 
 let shouldUpdate = false;
-const ChatUI = (props) => {
+const ChatUI = () => {
   // let chatName = props.mode;
-  const data = useSelector(state => state.bigData)
+  const data = useSelector((state) => state.bigData, () => true);
 
-  let chatName = useParams().assignmentId;
-  const courseName = useParams().subjectId;
+  // let chatName = useParams().assignmentId;
+  // const courseName = useParams().subjectId;
+  const { subjectId, assignmentId } = useParams()
+  let chatName = assignmentId;
+  const courseName = subjectId;
+
+  const nav = useNavigate()
 
   const location = useLocation();
-  // let chatName = "Calculus 1"
-
-  // console.log(data.filter((sub) => {
-  //     console.log(sub.course)
-  //     console.log(courseName)
-
-  //     return sub.course == courseName
-  //   })[0].assignments)
-
-  // console.log(chatName);
 
   const [history, setHistory] = useState(
-    data.filter((sub) => {
-      return sub.course == courseName;
-    })[0].assignments
+    data
+      .filter((sub) => {
+        return sub.course == courseName;
+      })[0]
+      .assignments.map((ass) => {
+        const asArray = Object.entries(ass);
+
+        const filtered = asArray.filter(([key, value]) => key !== "files");
+
+        return Object.fromEntries(filtered);
+      })
   );
 
+  // console.log(history);
+
   const [topName, setTopName] = useState("-");
+  // const topNameRef = useRef()
 
   const [lock, setLock] = useState(false);
   const [openFiles, setOpenFiles] = useState(false);
 
-  const [fileAttached, setFileAttached] = useState(null)
+  const [fileAttached, setFileAttached] = useState(null);
 
   const addChatToAssignment = (chatMessage, sender, fileAttach) => {
     // console.log(fileAttached)
 
     let attachment;
     if (fileAttach === null || fileAttach === undefined) {
-      attachment = []
+      attachment = [];
     } else {
-      attachment = fileAttach
+      attachment = fileAttach;
     }
 
     setHistory((prevState) =>
@@ -85,7 +90,7 @@ const ChatUI = (props) => {
                 message: chatMessage,
                 sender: sender,
                 rating: "none",
-                file_attachments: attachment
+                file_attachments: attachment,
               },
             ],
           };
@@ -95,7 +100,7 @@ const ChatUI = (props) => {
       })
     );
 
-    setFileAttached(null)
+    setFileAttached(null);
   };
 
   const askAIHandler = (question) => {
@@ -140,7 +145,6 @@ const ChatUI = (props) => {
 
   const ratingHandler = (rating, id) => {
     shouldUpdate = true;
-    // console.log(rating, id)
 
     setHistory((prevState) =>
       prevState.map((assignment) => {
@@ -168,13 +172,12 @@ const ChatUI = (props) => {
   };
 
   useEffect(() => {
+    console.log("Initialized chat screen re rendered")
+
     if (chatName !== "General") {
-      console.log("I run after");
-      console.log(shouldUpdate);
       if (shouldUpdate === false) {
         const scrollBar = document.getElementById("chatScroll");
         scrollBar.scrollTop = scrollBar.scrollHeight;
-        // console.log("Go to bottom")
       } else {
         shouldUpdate = false;
       }
@@ -182,12 +185,8 @@ const ChatUI = (props) => {
         history.filter((ass) => ass.assignmentId === chatName)[0].name
       );
     }
-  }, [
-    <ChatScreenInitalized
-      onRate={ratingHandler}
-      history={history.filter((ass) => ass.assignmentId === chatName)[0]}
-    />,
-  ]);
+  }, [history.filter((ass) => ass.assignmentId === chatName)[0]])
+  // }, [<ChatScreenInitalized onRate={ratingHandler} history={history.filter((ass) => ass.assignmentId === chatName)[0]} />]);
 
   const fileAttachHandler = () => {
     setOpenFiles(!openFiles);
@@ -196,7 +195,8 @@ const ChatUI = (props) => {
 
   useEffect(() => {
     if (location.state !== null) {
-      console.log(location);
+      console.log("Adding chat")
+      // console.log(location);
       setHistory((prevState) =>
         prevState.map((assignment) => {
           if (assignment.assignmentId === chatName) {
@@ -238,25 +238,29 @@ const ChatUI = (props) => {
   }, [chatName]);
 
   const fileAddHandler = (files) => {
-    setFileAttached(files)
-  }
+    setFileAttached(files);
+  };
+
+  console.log("ChatUI refreshed");
 
   return (
     <>
-      {openFiles ? (
+      {/* {openFiles ? (
         <FileAttachmentModal
           files={
-            data.filter(
-              (sub) => sub.course === courseName
-            )[0].assignments.filter((ass) => ass.assignmentId === chatName)[0]
+            data
+              .filter((sub) => sub.course === courseName)[0]
+              .assignments.filter((ass) => ass.assignmentId === chatName)[0]
               .files
           }
-          toggle={() => {setOpenFiles(!openFiles)}}
+          toggle={() => {
+            setOpenFiles(!openFiles);
+          }}
           onSubmit={fileAddHandler}
         />
       ) : (
         ""
-      )}
+      )} */}
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <div className={styles.header}>
