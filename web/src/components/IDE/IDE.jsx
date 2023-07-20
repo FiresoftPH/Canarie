@@ -1,6 +1,6 @@
 import styles from "./IDE.module.css";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import runIcon from "../../assets/RunBtn.svg";
 
@@ -11,9 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bigDataAction } from "../../store/bigDataSlice";
 
 import interact from "interactjs";
-
 import * as alls from "@uiw/codemirror-themes-all";
-import { useRef } from "react";
 
 const IDE = (props) => {
   const [mouseDown, setMouseDown] = useState(false);
@@ -27,7 +25,6 @@ const IDE = (props) => {
     if (mouseDown == false) {
       return;
     }
-
     // console.log(window.innerHeight - mousePos.y);
     setIdeDimention({ y: window.innerHeight - mousePos.y + 10 });
   }, [mousePos]);
@@ -45,11 +42,11 @@ const IDE = (props) => {
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
+  const [y, setY] = useState("");
 
   const fileId = useSelector((state) => state.chat.fid);
   const { subjectId, assignmentId } = useParams();
   const dispatch = useDispatch();
-
   // const codeData = useSelector(state => state.chat.code)
 
   const codeData = useSelector((state) => state.chat.code);
@@ -88,7 +85,6 @@ const IDE = (props) => {
   };
 
   const excutePythonCode = (code) => {
-    // CacheStorage.bind('python:',code);
     const cacheName = "file.py";
     const fileContent = code;
 
@@ -120,9 +116,10 @@ const IDE = (props) => {
     });
   };
 
+  console.log(y)
   const fixedHeightEditor = EditorView.theme({
-    // "&": { height: "inherit" },
-    ".cm-content": { overflow: "scroll" },
+    "& ": { height:  -y + "px"},
+    // ".cm-gutter .cm-editor" : {minHeight : "50vh"}
   });
 
   const langTemplate = {
@@ -141,14 +138,11 @@ const IDE = (props) => {
     mysql: langs.mysql(),
     php: langs.php(),
   };
-
   useEffect(() => {
     interact(ideRef.current).resizable({
       edges: { top: true, left: false, bottom: false, right: false },
       listeners: {
         move: function (event) {
-          console.log("Event triggered");
-
           let { x, y } = event.target.dataset;
 
           x = (parseFloat(x) || 0) + event.deltaRect.left;
@@ -161,6 +155,7 @@ const IDE = (props) => {
           });
 
           Object.assign(event.target.dataset, { x, y });
+          setY(y)
         },
       },
     });
@@ -187,66 +182,66 @@ const IDE = (props) => {
       },
     });
   });
-
+  
   return (
     <div
       className={styles.big_ide_container}
-      style={{
-        height: ideDimention.y,
-      }}
+      // style={{
+      //   height: ideDimention.y,
+      // }}
       ref={ideRef}
     >
-        <div
-          className={styles.sidin}
-        >
-          =
-        </div>
-        <div className={styles.ide_output}>
-          <section ref={textEditor} className={styles.ide_container}>
-            <div className={styles.ide_topbar}>
-              <label>
-                Languages:
-                <select
-                  className={styles.lang_selection}
-                  value={language}
-                  onChange={(evn) => handleLangChange(evn.target.value)}
-                >
-                  {Object.keys(langTemplate)
-                    .sort()
-                    .map((item, key) => {
-                      return (
-                        <option key={key} value={item}>
-                          {item}
-                        </option>
-                      );
-                    })}
-                </select>
-              </label>
-              <img
-                className={styles.run_btn}
-                src={runIcon}
-                onClick={executeCode}
-              />
-              {/* <img src={MinimizeIcon} /> */}
-            </div>
-            <div onBlur={fileSaveHandler}>
-              <CodeMirror
-                className={styles.ide}
-                value={code}
-                theme={[alls.atomone]}
-                extensions={[
-                  langTemplate[language],
-                  fixedHeightEditor,
-                  EditorView.lineWrapping,
-                ]}
-                onChange={onChange}
-              />
-            </div>
-            <div className={styles.verticalSlide}>||</div>
-          </section>
-          <section className={styles.output}>{output}</section>
-        </div>
+      <div
+        className={styles.sidin}
+      >
+        =
       </div>
+      <div className={styles.ide_output}>
+        <section ref={textEditor} className={styles.ide_container}>
+          <div className={styles.ide_topbar}>
+            <label>
+              Languages:
+              <select
+                className={styles.lang_selection}
+                value={language}
+                onChange={(evn) => handleLangChange(evn.target.value)}
+              >
+                {Object.keys(langTemplate)
+                  .sort()
+                  .map((item, key) => {
+                    return (
+                      <option key={key} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+              </select>
+            </label>
+            <img
+              className={styles.run_btn}
+              src={runIcon}
+              onClick={executeCode}
+            />
+            {/* <img src={MinimizeIcon} /> */}
+          </div>
+          <div className={styles.ide_bottombar} onBlur={fileSaveHandler}>
+            <CodeMirror
+              className={styles.ide}
+              value={code}
+              theme={[alls.atomone]}
+              extensions={[
+                langTemplate[language],
+                fixedHeightEditor,
+                EditorView.lineWrapping,
+              ]}
+              onChange={onChange}
+            />
+          </div>
+          <div className={styles.verticalSlide}>||</div>
+        </section>
+        <section className={styles.output}>{output}</section>
+      </div>
+    </div>
   );
 };
 

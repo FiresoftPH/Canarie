@@ -30,20 +30,6 @@
   /* height: fit-content; */
 }
 
-.big_ide_container {
-  grid-area: IDE;
-
-  display: grid;
-  grid-template-areas: 
-  "slide slide"
-  "Editor Output";
-  grid-template-rows: 25px 1fr;
-
-  position: relative;
-  bottom: 0;
-  /* grid-template-columns: 1fr 1fr; */
-}
-
 .chat {
   grid-area: Chatzone;
   width: 100%;
