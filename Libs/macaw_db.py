@@ -347,7 +347,7 @@ class Database:
         try:
             self.cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))
             result = self.cursor.fetchall()
-            temp = result[0][0]
+            temp = result[0]
             return pickle.loads(temp)
 
         except pymysql.OperationalError:
