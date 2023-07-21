@@ -10,3 +10,4 @@ uploads
 node_modules
 models
 .vscode
+Libs/Dockerfile

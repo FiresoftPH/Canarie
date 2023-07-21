@@ -57,6 +57,14 @@ class Database:
 
     # Reset the table values to nothing in case something gone wrong. This is used for development only.
     def resetTable(self):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
         # self.cursor.execute("DROP TABLE courses")
         self.cursor.execute("DROP TABLE users")
@@ -68,6 +76,7 @@ class Database:
     def alterTable(self):
         self.cursor = self.connection.cursor()
         self.cursor.execute("ALTER TABLE statistics ADD assignment_details VARCHAR(255) DEFAULT ''")
+        self.cursor.close()
 
     # Add course data to the courses table. In the final development, this will be automatically integrated with canvas
     def addCourseData(self, course_name, assignment_list):
@@ -82,9 +91,18 @@ class Database:
             command = "INSERT INTO courses (course_name, assignments) VALUES (%s, %s)"
             self.cursor.execute(command, new_course_data)
             self.connection.commit()
+        self.cursor.close()
 
     # User register, each user have to have a name, username and password.
     def userRegister(self, email, username):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT email FROM users")
         result = self.cursor.fetchall()
@@ -93,20 +111,48 @@ class Database:
             if row == new_user_data:
                 print("User already exist")
                 return False
-
+            
         new_user_data_long = (email, username, "", "user", "yes")
         command = "INSERT INTO users (email, username, enrolled_courses, status, consent) VALUES (%s, %s, %s, %s, %s)"
         self.cursor.execute(command, new_user_data_long)
         self.connection.commit()
+        self.cursor.close()
         return True
 
     def temporaryEnroll(self, email, username):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
         command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
         temp_course = ["Principal Of Computing Applications", "Computer Systems", "Advanced Calculus", "Database Technology", "Cloud Computing"]
         course_data = self.stringFromArray(temp_course)
         self.cursor.execute(command, (course_data, email, username))
         self.connection.commit()
+        self.cursor.close()
+
+    def getUserData(self, email, username):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
+        self.cursor = self.connection.cursor()
+        command = "SELECT enrolled_courses from users WHERE email = %s AND username = %s"
+        self.cursor.execute(command, (email, username))
+        result = self.cursor.fetchall()
+        course_data = result[0][0]
+        course_data = self.arrayFromString(course_data)
+        self.cursor.close()
+        return course_data
 
     # Used to show course data in the database. Some modes will be removed from the final version.
     def showCourseData(self, mode=0):
@@ -172,6 +218,14 @@ class Database:
 
     # Use together with flask webserver to fetch the user whole information
     def fetchUserData(self, username):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
         self.cursor.execute("SELECT * FROM users WHERE username = %s", username)
         result = self.cursor.fetchall()
@@ -219,40 +273,29 @@ class Database:
 
         return False
 
-    # Used when enrolling courses for each user.
-    def enrollCourse(self, username, course_list):
+    # Used when enrolling courses for each user. (WIP)
+    def enrollCourse(self, email, username, course_list):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
-        # course_list_data = self.stringFromArray(course_list)
-        difference_enrolled_course = self.checkEnrolledCourse(username, course_list)
-        course_list_data = self.stringFromArray(difference_enrolled_course)
-        self.cursor.execute("SELECT enrolled_courses FROM users WHERE username = %s", username)
-
-        enrolled_course = self.cursor.fetchall()
-        compare_course_data = enrolled_course[0][0]
-        if '' != compare_course_data:
-            if course_list_data != "":
-                compare_course_data = compare_course_data + ',' + course_list_data
-            # Reset course data (Used for debugging only)
-            # compare_course_data = ""
-        else:
-            compare_course_data = course_list_data
-
-        command = "UPDATE users SET enrolled_courses = %s WHERE username = %s"
-        value = (compare_course_data, username)
-        self.cursor.execute(command, value)
-        self.connection.commit()
-        # print("Initial enroll finished")
 
     # Used when enrolling courses for each user. This method checks if the selected courses are already enrolled or not
-    def checkEnrolledCourse(self, username, course_list):
+    def checkEnrolledCourse(self, email, username, course):
         self.cursor = self.connection.cursor()
-        command = "SELECT enrolled_courses FROM users WHERE username = %s"
-        self.cursor.execute(command, username)
+        command = "SELECT enrolled_courses FROM users WHERE email = %sAND username = %s"
+        self.cursor.execute(command, (email, username))
         enrolled_course = self.cursor.fetchall()
         enrolled_course = enrolled_course[0][0]
-        enrolled_course = self.arrayFromString(enrolled_course)
-        same = list(set(course_list).difference(enrolled_course))
-        return same
+        if course in enrolled_course:
+            return True
+        else:
+            return False
 
     # Used when enrolling courses for each user. This method checks if the selected courses are registered or not.
     def checkRegisteredCourse(self, course_name):
@@ -330,25 +373,61 @@ class Database:
 
     # Update chat history in the database. This will be updated when the session ends.
     def storeChatHistory(self, username, email, course, room_name, history):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
-        history = pickle.dumps(history)
+        # history = pickle.dumps(history)
         self.cursor.execute("UPDATE chat_history SET log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
                                     (history, email, username, course, room_name))
         self.connection.commit()
+        self.cursor.close()
 
     # Function to create a chat room.
     def createChatRoom(self, username, email, course, room_name):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
         command = "INSERT INTO chat_history (username, email, course_name, room_name) VALUES (%s, %s, %s, %s)"
         self.cursor.execute(command, (username, email, course, room_name))
+        self.cursor.close()
     
     def loadChatHistory(self, username, email, course, room_name):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
         self.cursor = self.connection.cursor()
         try:
             self.cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))
             result = self.cursor.fetchall()
-            temp = result[0]
-            return pickle.loads(temp)
+            temp = result[0][0]
+            self.cursor.close()
+            if temp == "" or temp == None:
+                return False
+            else:
+                return pickle.loads(temp)
+        
+        except IndexError:
+            return False
+        
+        except ValueError:
+            return False
 
         except pymysql.OperationalError:
             return False

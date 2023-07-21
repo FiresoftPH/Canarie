@@ -1,9 +1,27 @@
 import requests
-import json
-url = 'http://localhost:2424/compileCode'  # Replace with your server's URL
 
-file_to_send = {'file': open('test_files/TwT.cpp', 'rb')}
+url = 'https://api.parrot.cmkl.ai/ai/getResponse'  # Replace with your server's URL
 
-response = requests.post(url, files=file_to_send)
+# prompt = "What is coffee?"
+# prompt = "Why is it popular?"
+prompt = "Woo!"
 
-print(response.json())  # Print the response from the server
+payload = {
+    'username': "Pattarapark Chutisamoot",
+    'email': "pattarapark.c@cmkl.ac.th",
+    'code': [],
+    "course": "Computer System",
+    "chatroom_name": "general",
+    "question": prompt
+}
+
+try:
+    response = requests.post(url, json=payload)
+    response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+
+    # Wait for the response and then print it out
+    response_data = response.json()
+    print(response_data)
+
+except requests.exceptions.RequestException as e:
+    print("An error occurred:", str(e))

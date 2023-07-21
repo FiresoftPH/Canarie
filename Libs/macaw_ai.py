@@ -77,6 +77,7 @@ class Chat:
     def __init__(self):
         self.chatio = SimpleChatIO(multiline=True)
         model_path = "mosaicml/mpt-30b-chat"
+        self.model_path = model_path
         device = "cuda"
         num_gpus = 2
         max_gpu_memory = None
@@ -108,11 +109,12 @@ class Chat:
 
         #self.conv = get_conversation_template(model_path)
 
-    def newchat(self):
+    def newchat(self, message=[]):
         conv = get_conversation_template(self.model_path)
+        conv.messages = message
         return conv
 
-    def chatsession(self, conv, inp_fromweb):
+    def chatsession(self, msg, inp_fromweb):
         #conv = get_conversation_template(self.model_path)
         try:
             #inp = chatio.prompt_for_input(conv.roles[0])
@@ -121,7 +123,12 @@ class Chat:
             inp = self.chatio.prompt_for_input(inp)
 
         except EOFError:
+            print("what????????")
             inp = ""
+
+        conv = self.newchat(msg)
+        # conv = pickle.loads(conv)
+        # conv = get_conversation_template(self.model_path)
 
         conv.append_message(conv.roles[0], inp)
         conv.append_message(conv.roles[1], None)
@@ -149,9 +156,11 @@ class Chat:
         )
         t = time.time()
         outputs = self.chatio.stream_output(output_stream)
-        output_db = pickle.dumps(outputs)
+        # output_db = pickle.dumps(outputs)
         duration = time.time() - t
         conv.update_last_message(outputs.strip())
+        # print("Chat Output:", outputs)
+        # print("Type: ", type(outputs))
 
         # if debug:
         #     num_tokens = len(tokenizer.encode(outputs))
@@ -163,8 +172,10 @@ class Chat:
         #     }
         #     print(f"\n{msg}\n")
 
-        conv_db = pickle.dumps(conv)
-        return conv_db, output_db
+        # conv_db = pickle.dumps(conv)
+        # print("message saved = ", conv.messages)
+        conv_db = pickle.dumps(conv.messages)
+        return conv_db, outputs
 
 
 # inp = "what is coffee"

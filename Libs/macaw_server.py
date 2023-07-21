@@ -6,7 +6,8 @@ from flask_cors import CORS
 from flask_caching import Cache
 from flask_oauthlib.client import OAuth
 from dotenv import dotenv_values
-import secrets 
+import secrets
+import pickle
 
 import requests
 import os
@@ -89,9 +90,10 @@ class FlaskServer(Flask):
 
         # Routing applications
         self.route('/auth/login', methods = ["POST"])(self.login)
-        self.route('/ai/get_response', methods = ["POST"])(self.getResponse)
+        self.route('/ai/getResponse', methods = ["POST"])(self.getResponse)
         self.route('/ai/getFullHistory', methods = ["POST"])(self.getFullHistory)
         self.route('/compileCode', methods = ["POST"])(self.compileCode)
+        # self.route('/auth/userData', methods = ["POST"])
         # Future routings
         # self.route('/user/enroll', methods = ["POST"])(self.enroll)
         # self.route('/user/unenroll', methods = ["POST"])(self.unenroll)
@@ -156,7 +158,8 @@ class FlaskServer(Flask):
 
             self.db.userRegister(email, username)
             self.db.temporaryEnroll(email, username)
-            return jsonify({'email': email, 'username': username})
+            courses = self.db.getUserData(email, username)
+            return jsonify({'email': email, 'username': username, 'courses': courses})
         except ValueError as e:
             print(str(e))
 
@@ -193,11 +196,12 @@ class FlaskServer(Flask):
 
         history_check = self.db.loadChatHistory(username, email, course, chatroom)
         if history_check != False:
+            # continue_chat = self.ai.newchat(history_check)
             chat_cache, answer = self.ai.chatsession(history_check, prompt)
         else:
-            self.db.createChatRoom()
-            conversation = self.ai.newchat()
-            chat_cache, answer = self.ai.chatsession(conversation, prompt)
+            self.db.createChatRoom(username, email, course, chatroom)
+            # conversation = self.ai.newchat()
+            chat_cache, answer = self.ai.chatsession([], prompt)
 
         self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
  
