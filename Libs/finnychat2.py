@@ -141,91 +141,69 @@ def chat_loop(
 
     # Chat
     def new_chat():
-        if conv_template:
-            conv = get_conv_template(conv_template)
-        else:
-            conv = get_conversation_template(model_path)
-            #conv = get_conversation_template("victrained")
+        conv = get_conversation_template(model_path)
         return conv
 
     #conv = None
     conv = new_chat()
     print(conv.system)
     def chatsession(conv):
-        while True:
-            # if not history or not conv:
-            #     conv = new_chat()
+        try:
+            inp = chatio.prompt_for_input(conv.roles[0])
+        except EOFError:
+            inp = ""
 
-            try:
-                inp = chatio.prompt_for_input(conv.roles[0])
-            except EOFError:
-                inp = ""
+        conv.append_message(conv.roles[0], inp)
+        conv.append_message(conv.roles[1], None)
+        prompt = conv.get_prompt()
 
-            if inp == "!!exit" or not inp:
-                print("exit...")
-                break
+        if is_codet5p:  # codet5p is a code completion model.
+            prompt = inp
 
-            if inp == "!!save":
-                print("saving...")
-                ingest_to_db = pickle.dumps(conv)
-                print(type(ingest_to_db))
-                return ingest_to_db
+        gen_params = {
+            "model": model_path,
+            "prompt": prompt,
+            "temperature": temperature,
+            "repetition_penalty": repetition_penalty,
+            "max_new_tokens": max_new_tokens,
+            "stop": conv.stop_str,
+            "stop_token_ids": conv.stop_token_ids,
+            "echo": False,
+        }
 
-            if inp == "!!reset":
-                print("resetting...")
-                conv = new_chat()
-                continue
+        chatio.prompt_for_output(conv.roles[1])
+        output_stream = generate_stream_func(
+            model,
+            tokenizer,
+            gen_params,
+            device,
+            context_len=context_len,
+            judge_sent_end=judge_sent_end,
+        )
+        t = time.time()
+        outputs = chatio.stream_output(output_stream)
+        duration = time.time() - t
+        conv.update_last_message(outputs.strip())
 
-            conv.append_message(conv.roles[0], inp)
-            conv.append_message(conv.roles[1], None)
-            prompt = conv.get_prompt()
-
-            if is_codet5p:  # codet5p is a code completion model.
-                prompt = inp
-
-            gen_params = {
-                "model": model_path,
+        if debug:
+            num_tokens = len(tokenizer.encode(outputs))
+            msg = {
+                "conv_template": conv.name,
                 "prompt": prompt,
-                "temperature": temperature,
-                "repetition_penalty": repetition_penalty,
-                "max_new_tokens": max_new_tokens,
-                "stop": conv.stop_str,
-                "stop_token_ids": conv.stop_token_ids,
-                "echo": False,
+                "outputs": outputs,
+                "speed (token/s)": round(num_tokens / duration, 2),
             }
+            print(f"\n{msg}\n")
 
-            chatio.prompt_for_output(conv.roles[1])
-            output_stream = generate_stream_func(
-                model,
-                tokenizer,
-                gen_params,
-                device,
-                context_len=context_len,
-                judge_sent_end=judge_sent_end,
-            )
-            t = time.time()
-            outputs = chatio.stream_output(output_stream)
-            duration = time.time() - t
-            conv.update_last_message(outputs.strip())
+        ingest_to_db = pickle.dumps(conv)
+        print(type(ingest_to_db))
+        return ingest_to_db
 
-            if debug:
-                num_tokens = len(tokenizer.encode(outputs))
-                msg = {
-                    "conv_template": conv.name,
-                    "prompt": prompt,
-                    "outputs": outputs,
-                    "speed (token/s)": round(num_tokens / duration, 2),
-                }
-                print(f"\n{msg}\n")
     
     convhistory = chatsession(conv)
-    while True:
-        c = input("continue? (y/n)")
-        if c.lower() == "y":
-            convhistory = pickle.loads(convhistory)
-            convhistory = chatsession(convhistory)
-        elif c.lower() == "n":
-            break
+
+    convhistory = pickle.loads(convhistory)
+    convhistory = chatsession(convhistory)
 
 try:
     chat_loop(

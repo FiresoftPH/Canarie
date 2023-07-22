@@ -6,12 +6,14 @@ from flask_cors import CORS
 from flask_caching import Cache
 from flask_oauthlib.client import OAuth
 from dotenv import dotenv_values
-import secrets 
+import secrets
+import pickle
 
 import requests
 import os
 try: 
-    import macaw_db, macaw_ai
+    import macaw_db
+    import macaw_ai
 
 except:
     from Libs import macaw_db, macaw_ai
@@ -77,72 +79,34 @@ class DatabaseOperations:
     # fetch user related data and send to frontend
     def fetchUserData(self, username):
         return self.db.fetchUserData(username)
-
-class AIOperations:
-    def __init__(self):
-        self.ai = macaw_ai.AI()
-        self.prompt = macaw_ai.GeneratePrompt()
-        self.db = macaw_db.Database()
-        self.template = {"error_checking" : "Can you recheck this response?: ", "rating" : "Can you rate this conversation from 1 - 10"}
-
-    def getPrompt(self, prompt, code):
-        try:
-            if code == None:
-                return prompt
-            else:
-                return self.prompt.codePrompt(prompt, code)
-
-        except FileNotFoundError:
-            return prompt
-        
-        except TypeError:
-            return prompt
-
-    def putContext(self, header):
-        self.prompt.contextPrompt(header)
-    
-    def storeChatHistory(self, username, course, assignment, chat_history):
-        # chat_history = self.ai.getCachedMemory()
-        self.db.storeChatHistory(username, course, assignment, chat_history)
-
-    def getResponse(self, prompt):
-        return self.ai.getResponse(prompt)
-    
-    def loadChatHistory(self, username, course, assignment):
-        old_chat = self.db.loadChatHistory(username, course, assignment)
-        if old_chat == False:
-            return
-        else:
-            return old_chat
-        
-    def getChainedResponse(self, prompt, history):
-        return self.ai.getChainResponse(prompt, history)
     
 # The actual flask server
 class FlaskServer(Flask):
     def __init__(self, name):
         super().__init__(name)
         # Flask server configurations
-        config = dotenv_values("Libs/.env")
+        config = dotenv_values(".env")
         self.secret_key = config['SECRET_KEY']
 
         # Routing applications
         self.route('/auth/login', methods = ["POST"])(self.login)
-        self.route('/auth/register')(self.register)
-        self.route('/test/temp_login')(self.tempLogin)
-        self.route('/auth/enrolled_courses')(self.getEnrolledCourse)
-        self.route('/ai/get_response', methods = ["POST"])(self.getResponse)
+        self.route('/ai/getResponse', methods = ["POST"])(self.getResponse)
+        self.route('/ai/getFullHistory', methods = ["POST"])(self.getFullHistory)
         self.route('/compileCode', methods = ["POST"])(self.compileCode)
+        # self.route('/auth/userData', methods = ["POST"])
+        # Future routings
+        # self.route('/user/enroll', methods = ["POST"])(self.enroll)
+        # self.route('/user/unenroll', methods = ["POST"])(self.unenroll)
+        # self.route('/user/courses', methods = ["POST"])(self.getEnrolledCourse)
 
         # Init class
-        self.db = DatabaseOperations()
-        self.ai = AIOperations()
-        self.credentials = None
-        self.current_chat_room = None
+        self.db = macaw_db.Database()
+        self.prompt_generation = macaw_ai.GeneratePrompt()
+        self.ai = macaw_ai.Chat()
         CORS(self)
         self.oauth = OAuth(self)
 
-    def verify_google_token(token):
+    def verify_google_token(self, token):
         try:
             google_auth_url = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
             params = {'access_token': token}
@@ -156,7 +120,7 @@ class FlaskServer(Flask):
         except Exception as e:
             raise e
         
-    def get_google_user_info(access_token):
+    def get_google_user_info(self, access_token):
         try:
             google_people_api_url = 'https://people.googleapis.com/v1/people/me'
             headers = {'Authorization': f'Bearer {access_token}'}
@@ -193,62 +157,62 @@ class FlaskServer(Flask):
                 raise ValueError('Failed to retrieve user information from token.')
 
             self.db.userRegister(email, username)
-            return jsonify({'email': email, 'username': username})
+            self.db.temporaryEnroll(email, username)
+            courses = self.db.getUserData(email, username)
+            return jsonify({'email': email, 'username': username, 'courses': courses})
         except ValueError as e:
             print(str(e))
 
             return jsonify({'error': str(e)})
     
-    def tempLogin(self):
-        data = self.db.fetchUserData(self.credentials[0])
-        
-        return json.dumps(data)
-
-    def register(self):
-        data = request.json
-        name = data.get("name")
-        username = data.get("username")
-        password = data.get("password")
-        success = self.db.userRegister(name, username, password)
-        if success is True:
-            response = {'message': 'Done!'}
-        else:
-            response = {'message': "User already register, use login instead"}
-
-        return json.dumps(response)
-    
     def getEnrolledCourse(self):
         course_list = self.db.showUserEnrolledCourse(self.credentials[0])
         print(json.dumps(course_list))
         return json.dumps(course_list)
+    
+    def getFullHistory(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        chatroom = data['chatroom_name']
+        full_history = self.db.loadChatHistory(username, email, course, chatroom)
+        user_history = full_history[0]
+        ai_history = full_history[1]
+        return json.dumps({"user": user_history, "ai": ai_history})
 
     def getResponse(self):
-        username = request.form['username']
-        course = request.form['course']
-        assignment = request.form['assignment']
-        question = request.form['question']
-        history = self.ai.loadChatHistory(username, course, assignment)
-        
-        if 'file' in request.files:
-            recieved_file = request.files['file']
-            cached_files = os.listdir("cache")
-            output_filename = str(random.randint(1, 1000000))
-            while output_filename in cached_files:
-                output_filename = str(random.randint(1, 1000000))
-
-            filename = "cache/" + output_filename
-            recieved_file.save(filename)
-            prompt = self.ai.getPrompt(question, filename)
-            response = self.ai.getChainedResponse(prompt, history)
-            self.ai.storeChatHistory(username, course, assignment, response[1])
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        code = data['code']
+        course = data['course']
+        chatroom = data['chatroom_name']
+        message = data['question']
+        check_auth = self.db.checkUserRegister(email, username)
+        print(check_auth)
+        if check_auth is False:
+            return json.dumps({"Error": "User not registered"})
         else:
-            filename = None
-            prompt = self.ai.getPrompt(question, filename) 
-            response = self.ai.getChainedResponse(prompt, history)
-            print(response)
-            self.ai.storeChatHistory(username, course, assignment, response[1])
+            pass
 
-        return json.dumps({'answer': response[0], 'error': ""})
+        if code == [] or code == None or code == "":
+            prompt = message
+        else:
+            prompt = self.prompt_generation.codePrompt()
+
+        history_check = self.db.loadChatHistory(username, email, course, chatroom)
+        if history_check != False:
+            # continue_chat = self.ai.newchat(history_check)
+            chat_cache, answer = self.ai.chatsession(history_check, prompt)
+        else:
+            self.db.createChatRoom(username, email, course, chatroom)
+            # conversation = self.ai.newchat()
+            chat_cache, answer = self.ai.chatsession([], prompt)
+
+        self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
+ 
+        return json.dumps({"message": answer, "sender": "ai", "rating": "none"})
     
     def compileCode(self):
         # recieved_file = Cache(self, config={'CACHE_TYPE': 'simple'})
@@ -301,5 +265,5 @@ class FlaskServer(Flask):
         
 if __name__ == '__main__':
     app = FlaskServer(__name__)
-    # app.run(host = '0.0.0.0', port=2424)
-    app.run(host = "localhost", port=2424)
+    app.run(host = '0.0.0.0', port=2424)
+    # app.run(host = "localhost", port=2424)
