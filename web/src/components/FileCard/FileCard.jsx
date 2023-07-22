@@ -33,7 +33,6 @@ const FileCard = (props) => {
         }
       }}
     >
-      {/* <> */}
       {props.selected ? <div className={styles.backdrop} /> : ""}
       <img className={styles.editIcon} src={EditIcon} />
       <p>{fname}</p>
@@ -46,7 +45,6 @@ const FileCard = (props) => {
           // console.log("selecte1")
         }}
       />}
-      {/* </> */}
     </div>
   );
 };

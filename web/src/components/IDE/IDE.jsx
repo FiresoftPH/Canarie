@@ -14,29 +14,28 @@ import interact from "interactjs";
 import * as alls from "@uiw/codemirror-themes-all";
 
 const IDE = (props) => {
-  const [mouseDown, setMouseDown] = useState(false);
-  const [mousePos, setMousePos] = useState({});
-  const [ideDimention, setIdeDimention] = useState({ x: "10rem", y: "20rem" });
-
   const ideRef = useRef(null);
   const textEditor = useRef(null);
-
-  useEffect(() => {
-    if (mouseDown == false) {
-      return;
-    }
-    // console.log(window.innerHeight - mousePos.y);
-    setIdeDimention({ y: window.innerHeight - mousePos.y + 10 });
-  }, [mousePos]);
+  const prevCode = useRef();
 
   function handleLangChange(lang) {
     setLanguage(lang);
   }
 
+  const [saveStatus, setSaveStatus] = useState(styles.save_icon)
   const fileSaveHandler = () => {
-    // console.log("File saved!1!!")
-    // console.log(fileId)
     dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
+    console.log('ehe')
+    // if code changed the save icon color changed
+    if (code !== prevCode.current){
+      setSaveStatus(styles.save_icon_green);
+      console.log('aroi changed');
+    // if code doesn't change the save icon is the same
+    } else if (code === prevCode.current){
+      setSaveStatus(styles.save_icon);
+    }
+    // save the new code
+    prevCode.current = code;
   };
 
   const [language, setLanguage] = useState("javascript");
@@ -57,10 +56,16 @@ const IDE = (props) => {
   }, [codeData, fid]);
 
   // IDE stuff //
-  const onChange = useCallback((value) => {
-    setCode(value);
-  }, []);
-
+  // const onChange = useCallback((value) => {
+  //   setCode(value);
+  // }, []);
+  const keystroke = useCallback((value) => {
+    setSaveStatus(styles.save_icon_yellow)
+  })
+  const onChange1 = event => {
+    setCode(event);
+    keystroke(event)
+  };
   const executeCode = () => {
     try {
       let result;
@@ -117,8 +122,7 @@ const IDE = (props) => {
   };
 
   const fixedHeightEditor = EditorView.theme({
-    "& ": { height:  -y + 300 + "px" },
-    // ".cm-gutter .cm-editor" : {minHeight : "50vh"}
+    "& ": { height:  -y + 200 + "px" }
   });
 
   const langTemplate = {
@@ -180,15 +184,12 @@ const IDE = (props) => {
   return (
     <div
       className={styles.big_ide_container}
-      // style={{
-      //   height: ideDimention.y,
-      // }}
       ref={ideRef}
     >
       <div
         className={styles.sidin}
       >
-        =
+      
       </div>
       <div className={styles.ide_output}>
         <section ref={textEditor} className={styles.ide_container}>
@@ -211,14 +212,17 @@ const IDE = (props) => {
                   })}
               </select>
             </label>
+            <div className={styles.new_file_btn}>new</div>
             <img
               className={styles.run_btn}
               src={runIcon}
               onClick={executeCode}
             />
+            <div className={saveStatus}/>
             {/* <img src={MinimizeIcon} /> */}
           </div>
-          <div className={styles.ide_bottombar} onBlur={fileSaveHandler}>
+          {/* i think we have to move the on focus and blur inside codemirror */}
+          <div className={styles.ide_bottombar} >
             <CodeMirror
               className={styles.ide}
               value={code}
@@ -228,7 +232,8 @@ const IDE = (props) => {
                 fixedHeightEditor,
                 EditorView.lineWrapping,
               ]}
-              onChange={onChange}
+              onBlur={fileSaveHandler}
+              onChange={onChange1}
             />
           </div>
           <div className={styles.verticalSlide}>||</div>

@@ -130,6 +130,34 @@
   position:relative;
   padding: 0.5%;
   justify-content: space-between;
+  align-items: center;
+}
+
+.new_file_btn{
+  background-color: white;
+  padding: 0 1rem;
+  border-radius: 1rem;
+}
+
+.save_icon{
+  background-color: red;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+}
+
+.save_icon_green{
+  background-color: rgb(0, 255, 13);
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+}
+
+.save_icon_yellow{
+  background-color: rgb(255, 251, 0);
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
 }
 
 .ide * {
