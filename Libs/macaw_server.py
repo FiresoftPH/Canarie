@@ -189,6 +189,13 @@ class FlaskServer(Flask):
         course = data['course']
         chatroom = data['chatroom_name']
         message = data['question']
+        check_auth = self.db.checkUserRegister(email, username)
+        print(check_auth)
+        if check_auth is False:
+            return json.dumps({"Error": "User not registered"})
+        else:
+            pass
+
         if code == [] or code == None or code == "":
             prompt = message
         else:

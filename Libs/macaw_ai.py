@@ -123,7 +123,7 @@ class Chat:
             inp = self.chatio.prompt_for_input(inp)
 
         except EOFError:
-            print("what????????")
+            print("EOF Error")
             inp = ""
 
         conv = self.newchat(msg)
@@ -175,6 +175,7 @@ class Chat:
         # conv_db = pickle.dumps(conv)
         # print("message saved = ", conv.messages)
         conv_db = pickle.dumps(conv.messages)
+        # latest_output = conv.messages[1][len(conv.messages) - 1]
         return conv_db, outputs
 
 

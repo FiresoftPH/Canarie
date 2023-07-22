@@ -431,6 +431,15 @@ class Database:
 
         except pymysql.OperationalError:
             return False
+        
+    def checkUserRegister(self, email, username):
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("SELECT email, username FROM users")
+        registered = self.cursor.fetchall()
+        if (email, username) in registered:
+            return True
+        else:
+            return False
     
     def printChatHistory(self, username):
         self.cursor = self.connection.cursor()

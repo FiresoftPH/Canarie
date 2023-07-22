@@ -4,7 +4,7 @@ url = 'https://api.parrot.cmkl.ai/ai/getResponse'  # Replace with your server's 
 
 # prompt = "What is coffee?"
 # prompt = "Why is it popular?"
-prompt = "Woo!"
+prompt = "So what is a list?"
 
 payload = {
     'username': "Pattarapark Chutisamoot",
