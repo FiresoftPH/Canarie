@@ -77,23 +77,13 @@ const bigDataSlice = createSlice({
     },
     deleteFile: (state, action) => {
       const subId = action.payload.subjectId;
-      const assId = action.payload.assignmentId;
       const fid = action.payload.fileId;
 
       const transformedData = state.map((sub) => {
         if (sub.course === subId) {
           return {
             ...sub,
-            assignments: sub.assignments.map((ass) => {
-              if (ass.assignmentId === assId) {
-                return {
-                  ...ass,
-                  files: ass.files.filter((file) => file.id !== fid)
-                };
-              } else {
-                return ass;
-              }
-            }),
+            files: sub.files.filter(file => file.id !== fid)
           };
         } else {
           return sub;

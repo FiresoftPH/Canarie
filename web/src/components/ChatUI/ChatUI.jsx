@@ -32,6 +32,8 @@ import { useRef } from "react";
 let shouldUpdate = false;
 const ChatUI = () => {
   // let chatName = props.mode;
+
+  // Fetch data only once
   const data = useSelector(
     (state) => state.bigData,
     () => true
@@ -175,21 +177,35 @@ const ChatUI = () => {
     );
   };
 
+  // Check if the selected subject is null or not, if it is not, set the subject name to the selected subject
   useEffect(() => {
-    console.log("Initialized chat screen re rendered");
-
     if (chatName !== "General") {
+      // ScrollBar related code
       if (shouldUpdate === false) {
         const scrollBar = document.getElementById("chatScroll");
         scrollBar.scrollTop = scrollBar.scrollHeight;
       } else {
         shouldUpdate = false;
       }
-      setTopName(
-        history.filter((ass) => ass.assignmentId === chatName)[0].name
-      );
+      setTopName(history.filter((ass) => ass.assignmentId === chatName)[0].name)
     }
-  }, [history.filter((ass) => ass.assignmentId === chatName)[0]]);
+  }, [assignmentId])
+
+  // useEffect(() => {
+  //   console.log("Initialized chat screen re rendered");
+
+  //   if (chatName !== "General") {
+      // if (shouldUpdate === false) {
+      //   const scrollBar = document.getElementById("chatScroll");
+      //   scrollBar.scrollTop = scrollBar.scrollHeight;
+      // } else {
+      //   shouldUpdate = false;
+      // }
+  //     setTopName(
+  //       history.filter((ass) => ass.assignmentId === chatName)[0].name
+  //     );
+  //   }
+  // }, [history.filter((ass) => ass.assignmentId === chatName)[0]]);
   // }, [<ChatScreenInitalized onRate={ratingHandler} history={history.filter((ass) => ass.assignmentId === chatName)[0]} />]);
 
   const fileAttachHandler = () => {
@@ -286,20 +302,20 @@ const ChatUI = () => {
             />
           ) : (
             <ChatScreenNotInit
-              onRate={ratingHandler}
-              history={
-                history.filter((ass) => ass.assignmentId === chatName)[0]
-              }
-              onChose={() => {
-                setLock(false);
-              }}
+              // onRate={ratingHandler}
+              // history={
+              //   history.filter((ass) => ass.assignmentId === chatName)[0]
+              // }
+              // onChose={() => {
+              //   setLock(false);
+              // }}
             />
           )}
           <ChatInputField
             onFileAttach={fileAttachHandler}
             onUploadFile={fileAddHandler}
             onSend={askAIHandler}
-            lock={lock}
+            // lock={lock}
           />
         </div>
         <div className={styles.backdrops}>

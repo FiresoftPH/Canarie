@@ -20,6 +20,8 @@ npm install boxicons --save
 npm install js-cookie
 npm install --save interactjs
 npm install react-transition-group --save
+npm install nanoid
+
 */
 
 const router = createBrowserRouter([

@@ -5,7 +5,9 @@ import ChattingCardUser from "../ChattingCard/ChattingCardUser";
 import styles from "./ChatScreenNotInit.module.css";
 
 const ChatScreenNotInit = (props) => {
-   const [update, setUpdate] = useState(false)
+  return <div className={styles.wrapper}></div>;
+
+  const [update, setUpdate] = useState(false)
   const [prevUpdate, setPrevUpdate] = useState(false)
 
   const nav = useNavigate()

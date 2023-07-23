@@ -1,9 +1,7 @@
 [
   {
     "course": "Principal Of Computing Applications",
-    "assignments": [
-
-    ],
+    "assignments": [],
     "files": [
       { "id": 1, "name": "Untitled-1", "code":"console.log('hallo world')" },
       { "id": 2, "name": "Untitled-2", "code":"console.log('hallo world')" },
