@@ -175,6 +175,7 @@ class Chat:
         # conv_db = pickle.dumps(conv)
         # print("message saved = ", conv.messages)
         conv_db = pickle.dumps(conv.messages)
+        print(conv.messages)
         # latest_output = conv.messages[1][len(conv.messages) - 1]
         return conv_db, outputs
 

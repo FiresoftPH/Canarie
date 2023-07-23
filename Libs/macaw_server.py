@@ -176,10 +176,18 @@ class FlaskServer(Flask):
         email = data['email']
         course = data['course']
         chatroom = data['chatroom_name']
-        full_history = self.db.loadChatHistory(username, email, course, chatroom)
-        user_history = full_history[0]
-        ai_history = full_history[1]
-        return json.dumps({"user": user_history, "ai": ai_history})
+        check_auth = self.db.checkUserRegister(email, username)
+        print(check_auth)
+        if check_auth is False:
+            return json.dumps({"Error": "User not registered"})
+        else:
+            pass
+
+        full_history = self.db.fetchChatHistory(email, username, course, chatroom)
+        # user_history = full_history[0]
+        # ai_history = full_history[1]
+        # return json.dumps({"user": user_history, "ai": ai_history})
+        return json.dumps({"content": full_history})
 
     def getResponse(self):
         data = request.get_json()
@@ -202,6 +210,7 @@ class FlaskServer(Flask):
             prompt = self.prompt_generation.codePrompt()
 
         history_check = self.db.loadChatHistory(username, email, course, chatroom)
+        print(history_check)
         if history_check != False:
             # continue_chat = self.ai.newchat(history_check)
             chat_cache, answer = self.ai.chatsession(history_check, prompt)

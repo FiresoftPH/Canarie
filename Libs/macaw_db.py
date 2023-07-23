@@ -401,8 +401,24 @@ class Database:
         self.cursor = self.connection.cursor()
         command = "INSERT INTO chat_history (username, email, course_name, room_name) VALUES (%s, %s, %s, %s)"
         self.cursor.execute(command, (username, email, course, room_name))
+        self.connection.commit()
         self.cursor.close()
-    
+
+    def fetchChatHistory(self, email, username, course, room_name):
+        config = dotenv_values(".env")
+        self.connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"]
+        )
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))        
+        history = self.cursor.fetchall()
+        self.cursor.close()
+        return history
+
     def loadChatHistory(self, username, email, course, room_name):
         config = dotenv_values(".env")
         self.connection = pymysql.connect(
