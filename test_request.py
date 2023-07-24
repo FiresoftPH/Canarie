@@ -5,7 +5,7 @@ def getAnswer():
 
     # prompt = "What is coffee?"
     # prompt = "Why is it popular?"
-    # prompt = "Can you compare it to tea?"
+    prompt = "Who is Anakin Skywalker?"
 
     payload = {
         'username': "Pattarapark Chutisamoot",
