@@ -1,15 +1,25 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styles from "./CreateChatModal.module.css";
 
 const CreateChatModal = (props) => {
-  const inputRef = useRef()
+  const inputRef = useRef();
+  const [cla, setCla] = useState()
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <div className={styles.header}>What's going to be the chat name?</div>
         <div className={styles.middle}>
-          <input ref={inputRef} placeholder="Enter chat name here" />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (inputRef.current.value !== "") {
+                props.onSubmit(inputRef.current.value);
+              }
+            }}
+          >
+            <input ref={inputRef} placeholder="Enter chat name here" />
+          </form>
         </div>
         <div className={styles.footer}>
           <button
@@ -19,12 +29,24 @@ const CreateChatModal = (props) => {
           >
             Cancel
           </button>
-          <button onClick={() => {
-            props.onSubmit(inputRef.current.value)
-            // console.log(inputRef.current.value)
-          }}>Create chat</button>
+          <button
+            onClick={() => {
+              if (inputRef.current.value !== "") {
+                props.onSubmit(inputRef.current.value);
+              }
+              // console.log(inputRef.current.value)
+            }}
+          >
+            Create chat
+          </button>
         </div>
       </div>
+      <div
+        onClick={() => {
+          props.toggle();
+        }}
+        className={styles.backdrop}
+      ></div>
     </div>
   );
 };
