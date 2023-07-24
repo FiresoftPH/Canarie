@@ -34,10 +34,7 @@ const ChatUI = () => {
   // let chatName = props.mode;
 
   // Fetch data only once
-  const data = useSelector(
-    (state) => state.bigData,
-    () => true
-  );
+  const data = useSelector((state) => state.bigData);
 
   // let chatName = useParams().assignmentId;
   // const courseName = useParams().subjectId;
@@ -46,23 +43,21 @@ const ChatUI = () => {
   const courseName = subjectId;
 
   const nav = useNavigate();
-
   const location = useLocation();
 
+  // console.log(data.filter((sub) => sub.course === courseName)[0].assignments.filter((ass) => ass.assignmentId === chatName)[0])
+
   const [history, setHistory] = useState(
-    // data
-    //   .filter((sub) => {
-    //     return sub.course == courseName;
-    //   })[0]
-    //   .assignments.map((ass) => {
-    //     const asArray = Object.entries(ass);
-
-    //     const filtered = asArray.filter(([key, value]) => key !== "files");
-
-    //     return Object.fromEntries(filtered);
-    //   })
-    data.filter((sub) => sub.course === courseName)[0]
+    data.filter((sub) => sub.course === courseName)[0].assignments
   );
+
+  useEffect(() => {
+    setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
+  }, [data.filter((sub) => sub.course === courseName)[0].assignments]);
+
+  // useEffect(() => {
+  //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
+  // });
 
   // console.log(history);
 
@@ -187,20 +182,22 @@ const ChatUI = () => {
       } else {
         shouldUpdate = false;
       }
-      setTopName(history.filter((ass) => ass.assignmentId === chatName)[0].name)
+      setTopName(
+        history.filter((ass) => ass.assignmentId === chatName)[0].name
+      );
     }
-  }, [assignmentId])
+  }, [assignmentId]);
 
   // useEffect(() => {
   //   console.log("Initialized chat screen re rendered");
 
   //   if (chatName !== "General") {
-      // if (shouldUpdate === false) {
-      //   const scrollBar = document.getElementById("chatScroll");
-      //   scrollBar.scrollTop = scrollBar.scrollHeight;
-      // } else {
-      //   shouldUpdate = false;
-      // }
+  // if (shouldUpdate === false) {
+  //   const scrollBar = document.getElementById("chatScroll");
+  //   scrollBar.scrollTop = scrollBar.scrollHeight;
+  // } else {
+  //   shouldUpdate = false;
+  // }
   //     setTopName(
   //       history.filter((ass) => ass.assignmentId === chatName)[0].name
   //     );
@@ -213,49 +210,51 @@ const ChatUI = () => {
     // console.log(history)
   };
 
-  useEffect(() => {
-    if (location.state !== null) {
-      console.log("Adding chat");
-      // console.log(location);
-      setHistory((prevState) =>
-        prevState.map((assignment) => {
-          if (assignment.assignmentId === chatName) {
-            return {
-              ...assignment,
-              chatHistory: [...assignment["chatHistory"], location.state],
-            };
-          } else {
-            return assignment;
-          }
-        })
-      );
+  // For general to actual chat transition
 
-      setHistory((prevState) =>
-        prevState.map((assignment) => {
-          if (assignment.assignmentId === chatName) {
-            return {
-              ...assignment,
-              chatHistory: [
-                ...assignment["chatHistory"],
-                {
-                  chatId: Math.random(),
-                  message: "No. Do it yourself.",
-                  sender: "ai",
-                  rating: "none",
-                  assignment: history.map((ass) => {
-                    if (ass.name !== "General")
-                      return { name: ass.name, id: ass.assignmentId };
-                  }),
-                },
-              ],
-            };
-          } else {
-            return assignment;
-          }
-        })
-      );
-    }
-  }, [chatName]);
+  // useEffect(() => {
+  //   if (location.state !== null) {
+  //     console.log("Adding chat");
+  //     // console.log(location);
+  //     setHistory((prevState) =>
+  //       prevState.map((assignment) => {
+  //         if (assignment.assignmentId === chatName) {
+  //           return {
+  //             ...assignment,
+  //             chatHistory: [...assignment["chatHistory"], location.state],
+  //           };
+  //         } else {
+  //           return assignment;
+  //         }
+  //       })
+  //     );
+
+  //     setHistory((prevState) =>
+  //       prevState.map((assignment) => {
+  //         if (assignment.assignmentId === chatName) {
+  //           return {
+  //             ...assignment,
+  //             chatHistory: [
+  //               ...assignment["chatHistory"],
+  //               {
+  //                 chatId: Math.random(),
+  //                 message: "No. Do it yourself.",
+  //                 sender: "ai",
+  //                 rating: "none",
+  //                 assignment: history.map((ass) => {
+  //                   if (ass.name !== "General")
+  //                     return { name: ass.name, id: ass.assignmentId };
+  //                 }),
+  //               },
+  //             ],
+  //           };
+  //         } else {
+  //           return assignment;
+  //         }
+  //       })
+  //     );
+  //   }
+  // }, [chatName]);
 
   const fileAddHandler = (files) => {
     setFileAttached(files);
@@ -302,13 +301,13 @@ const ChatUI = () => {
             />
           ) : (
             <ChatScreenNotInit
-              // onRate={ratingHandler}
-              // history={
-              //   history.filter((ass) => ass.assignmentId === chatName)[0]
-              // }
-              // onChose={() => {
-              //   setLock(false);
-              // }}
+            // onRate={ratingHandler}
+            // history={
+            //   history.filter((ass) => ass.assignmentId === chatName)[0]
+            // }
+            // onChose={() => {
+            //   setLock(false);
+            // }}
             />
           )}
           <ChatInputField

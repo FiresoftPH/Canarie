@@ -16,12 +16,13 @@ const ChatScreenInitialized = ({ history, onRate }) => {
 
   const { subjectId, assignmentId } = useParams();
 
+  console.log(history);
+  
   const optimizedData = useMemo(() => {
+    // console.log(history)
     return history.chatHistory;
   }, [history]);
-
-  console.log(history);
-
+  
   if (history == undefined) {
     return <div className={styles.wrapper}></div>;
   }

@@ -21,41 +21,46 @@ import { chatAction } from "../../store/chatSlice";
 import { bigDataAction } from "../../store/bigDataSlice";
 import Transition from "react-transition-group/Transition";
 
+let shouldUpdateId = true;
+let hadRendered = false;
+
 const FileList = (props) => {
   const { subjectId, assignmentId } = useParams();
-
-  const [files, setFiles] = useState([]);
-  const [selectedFile, setSelectedFile] = useState();
-
   const dispatch = useDispatch();
   const data = useSelector((state) => state.bigData);
+
+  const [files, setFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(
+    data.filter((sub) => sub.course === subjectId)[0].files[0].id
+  );
 
   //   const mh = props.maxHeight;
 
   useEffect(() => {
     // if (assignmentId !== "General") {
 
-      // console.log(data)
+    // console.log(data)
 
-      const transformedData = data.filter((sub) => sub.course === subjectId)[0].files;
-      // console.log(transformedData)
+    const transformedData = data.filter((sub) => sub.course === subjectId)[0]
+      .files;
+    // console.log(transformedData)
 
-      setFiles(transformedData);
-      setSelectedFile(transformedData[0].id);
-      props.sf(transformedData[0].id);
-      dispatch(chatAction.setCode(transformedData[0].code));
+    setFiles(transformedData);
+    // setSelectedFile(transformedData[0].id);
+    props.sf(transformedData[0].id);
+    dispatch(chatAction.setCode(transformedData[0].code));
     // }
   }, [data.filter((sub) => sub.course === subjectId)[0].files]);
 
   // When a file card is deleted, trigger this event
   const fileDeleteHandler = (id) => {
+    shouldUpdateId = false;
     const filteredData = files.filter((file) => {
       return file.id !== id;
     });
 
-    setFiles(filteredData);
-
     dispatch(bigDataAction.deleteFile({ subjectId, fileId: id }));
+    setFiles(filteredData);
 
     if (files.length !== 0) {
       const transformedData = filteredData[0];
@@ -74,9 +79,15 @@ const FileList = (props) => {
   // When a file card is clicked, trigger this event
   const fileSelectHandler = (id) => {
     // console.log(files.filter(fie => fie.id === id)[0].code)
-    dispatch(chatAction.setCode(files.filter((fie) => fie.id === id)[0].code));
-    dispatch(chatAction.setFileId(id));
-    setSelectedFile(id);
+    if (shouldUpdateId === true) {
+      dispatch(
+        chatAction.setCode(files.filter((fie) => fie.id === id)[0].code)
+      );
+      dispatch(chatAction.setFileId(id));
+      setSelectedFile(id);
+    } else {
+      shouldUpdateId = true;
+    }
     props.sf(id);
   };
 
@@ -95,9 +106,9 @@ const FileList = (props) => {
           return (
             <FileCard
               onSelect={fileSelectHandler}
+              onDelete={fileDeleteHandler}
               name={file.name}
               id={file.id}
-              onDelete={fileDeleteHandler}
               selected={selectedFile === file.id}
             />
           );

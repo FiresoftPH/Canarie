@@ -80,7 +80,6 @@ function LongSidebar(props) {
 
     const transformedData = data
       .filter((sub) => sub.course === subjectId)[0]
-      .assignments.filter((ass) => ass.assignmentId === assignmentId)[0]
       .files.filter((f) => f.id === file)[0];
 
     console.log(transformedData);

@@ -23,6 +23,7 @@ const IDE = (props) => {
   }
 
   const [saveStatus, setSaveStatus] = useState(styles.save_icon)
+  
   const fileSaveHandler = () => {
     dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
     console.log('ehe')
@@ -51,6 +52,7 @@ const IDE = (props) => {
   const codeData = useSelector((state) => state.chat.code);
   const fid = useSelector((state) => state.chat.fid);
 
+  // Set code in the IDE everytime the code for ide or the file id is changed
   useEffect(() => {
     setCode(codeData);
   }, [codeData, fid]);
@@ -61,11 +63,13 @@ const IDE = (props) => {
   // }, []);
   const keystroke = useCallback((value) => {
     setSaveStatus(styles.save_icon_yellow)
-  })
+  }, [])
+
   const onChange1 = event => {
     setCode(event);
     keystroke(event)
   };
+
   const executeCode = () => {
     try {
       let result;
@@ -138,6 +142,8 @@ const IDE = (props) => {
     go: langs.go(),
     php: langs.php(),
   };
+
+  // Initializes a listener event for resizing the ide after rendering
   useEffect(() => {
     interact(ideRef.current).resizable({
       edges: { top: true, left: false, bottom: false, right: false },

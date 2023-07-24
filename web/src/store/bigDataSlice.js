@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import BIG_DATA from "../components/ChatUI/BigData.json";
 
+import { nanoid } from "@reduxjs/toolkit";
+
 const initState = BIG_DATA;
 
 const bigDataSlice = createSlice({
@@ -18,23 +20,14 @@ const bigDataSlice = createSlice({
         if (sub.course === action.payload.subjectId) {
           return {
             ...sub,
-            assignments: sub.assignments.map((ass) => {
-              if (ass.assignmentId === action.payload.assignmentId) {
-                return {
-                  ...ass,
-                  files: [
-                    ...ass["files"],
-                    {
-                      id: Math.random(),
-                      name: action.payload.name,
-                      code: action.payload.code,
-                    },
-                  ],
-                };
-              } else {
-                return ass;
-              }
-            }),
+            files: [
+              {
+                id: nanoid(),
+                name: action.payload.name,
+                code: action.payload.code,
+              },
+              ...sub.files,
+            ],
           };
         } else {
           return sub;
@@ -48,23 +41,14 @@ const bigDataSlice = createSlice({
         if (sub.course === action.payload.subjectId) {
           return {
             ...sub,
-            assignments: sub.assignments.map((ass) => {
-              if (ass.assignmentId === action.payload.assignmentId) {
+            files: sub.files.map((file) => {
+              if (file.id === action.payload.fileId) {
                 return {
-                  ...ass,
-                  files: ass.files.map((f) => {
-                    if (f.id === action.payload.fileId) {
-                      return {
-                        ...f,
-                        code: action.payload.code,
-                      };
-                    } else {
-                      return f;
-                    }
-                  }),
+                  ...file,
+                  code: action.payload.code,
                 };
               } else {
-                return ass;
+                return file;
               }
             }),
           };
@@ -77,13 +61,55 @@ const bigDataSlice = createSlice({
     },
     deleteFile: (state, action) => {
       const subId = action.payload.subjectId;
+      const assId = action.payload.assignmentId;
       const fid = action.payload.fileId;
 
       const transformedData = state.map((sub) => {
         if (sub.course === subId) {
           return {
             ...sub,
-            files: sub.files.filter(file => file.id !== fid)
+            files: sub.files.filter((file) => file.id !== fid),
+          };
+        } else {
+          return sub;
+        }
+      });
+
+      return transformedData;
+    },
+    addChat: (state, action) => {
+      const chatName = action.payload.name
+      const subId = action.payload.subjectId;
+
+      const transformedData = state.map((sub) => {
+        if (sub.course === subId) {
+          return {
+            ...sub,
+            assignments: [
+              {
+                assignmentId: nanoid(),
+                name: chatName,
+                chatHistory: []
+              },
+              ...sub["assignments"],
+            ]
+          };
+        } else {
+          return sub;
+        }
+      });
+
+      return transformedData;
+    },
+    deleteChat: (state, action) => {
+      const subId = action.payload.subjectId;
+      const assId = action.payload.assignmentId
+
+      const transformedData = state.map((sub) => {
+        if (sub.course === subId) {
+          return {
+            ...sub,
+            assignments: sub.assignments.filter(ass => ass.id !== assId)
           };
         } else {
           return sub;
