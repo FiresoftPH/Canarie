@@ -1,8 +1,8 @@
 /* Wrapper */
 .container {
   grid-area: Sidebar;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 100px 1fr 50px 1fr;
   /* justify-content: space-between; */
   background-color: #2f325a;
 }
@@ -11,10 +11,10 @@
 .sidebar_top {
   width: 100%;
   height: auto;
-  flex: 1;
+  /* flex: 1; */
   display: flex;
   flex-direction: column;
-  /* background-color: rgba(38, 41, 82, 1); */
+  background-color: rgb(7, 23, 247);
 }
 
 /* Return back to COURSE page button */
@@ -41,7 +41,8 @@
 }
 
 .fileThing {
-  flex: 1;
+  /* flex: 1; */
+  /* overflow-y: scroll; */
 }
 
 .top p {
@@ -100,6 +101,7 @@
   justify-content: space-between;
   /* margin-top: 6.875rem; */
   /* background-color: #2f325a; */
+  overflow-y: auto;
   padding-left: 1.64rem;
 }
 

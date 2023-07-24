@@ -13,7 +13,7 @@
   /* background-color: #ffffff; */
 }
 
-.leftSide {
+.right_side {
   display: flex;
   grid-area: LeftSide;
   flex-direction: column;

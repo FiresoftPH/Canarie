@@ -70,13 +70,45 @@ const IDE = (props) => {
     try {
       let result;
       switch (language) {
-        case "javascript":
+        case "c":
           result = excuteJavascriptCode(code);
           console.log("1");
           break;
-        case "python":
+        case "csharp":
           result = excutePythonCode(code);
           console.log("2");
+          break;
+        case "css":
+          result = excuteJavascriptCode(code);
+          console.log("3");
+          break;
+        case "docker":
+          result = excutePythonCode(code);
+          console.log("4");
+          break;
+        case "go":
+          result = excuteJavascriptCode(code);
+          console.log("5");
+          break;
+        case "java":
+          result = excutePythonCode(code);
+          console.log("6");
+          break;
+        case "javascript":
+          result = excuteJavascriptCode(code);
+          console.log("7");
+          break;
+        case "php":
+          result = excutePythonCode(code);
+          console.log("8");
+          break;
+        case "python":
+          result = excutePythonCode(code);
+          console.log("9");
+          break;
+        case "typescript":
+          result = excutePythonCode(code);
+          console.log("10");
           break;
         default:
           throw new Error(`Language mode "${language}" is not supported.`);
@@ -134,7 +166,6 @@ const IDE = (props) => {
     css: langs.css(),
     csharp: langs.csharp(),
     dockerfile: langs.dockerfile(),
-    dart: langs.dart(),
     go: langs.go(),
     php: langs.php(),
   };

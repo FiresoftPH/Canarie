@@ -38,9 +38,6 @@ const ChatList = (props) => {
   return (
     <>
       <section
-        style={{
-          maxHeight: props.maxHeight,
-        }}
         className={styles.chatList}
       >
         {chats.map((chat) => {

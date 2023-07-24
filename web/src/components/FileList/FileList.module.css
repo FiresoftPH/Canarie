@@ -1,24 +1,11 @@
 .file_status {
-  /* display: flex;
-  justify-content: safe;
-  flex-direction: column; */
-  /* grid-template-columns: 1fr; */
-
-  /* max-height: 100%; */
   padding: 1.5rem;
   padding-bottom: 0rem;
   margin-bottom: 1rem;
-  /* overflow-y: scroll; */
-  overflow-x: hidden;
-
-  /* flex: 1; */
   overflow-y: scroll;
+
   height: 100%;
 }
-
-/* .file_status > * {
-    margin-top: .5rem;
-  } */
 
 .file_status::-webkit-scrollbar {
   width: 5px;
