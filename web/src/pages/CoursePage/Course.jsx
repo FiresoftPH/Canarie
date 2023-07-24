@@ -15,7 +15,8 @@ function Course() {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
-  const courses = useSelector((state) => state.user.courses);
+  // const courses = useSelector((state) => state.user.courses);
+  const courses = JSON.parse(localStorage.getItem("data")).courses
   const user = useSelector((state) => state.user);
 
   const [inputbox, setInputbox] = useState("");

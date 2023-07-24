@@ -63,7 +63,7 @@ function Login() {
         localStorage.setItem("LOGGED IN", "I TTINK")
 
         // Store the JWT token in local storage or cookies for subsequent API requests.
-        localStorage.setItem("Token", res.json)
+        localStorage.setItem("data", JSON.stringify(res.data))
         navigate("/Course");
       } catch (error) {
         console.error("Error during login:", error);

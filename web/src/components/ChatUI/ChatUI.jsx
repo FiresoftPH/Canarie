@@ -28,6 +28,7 @@ import ChatScreenNotInit from "../ChatScreen/ChatScreenNotInit";
 import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
 import { useSelector } from "react-redux";
 import { useRef } from "react";
+import axios from "axios";
 
 let shouldUpdate = false;
 const ChatUI = () => {
@@ -104,13 +105,28 @@ const ChatUI = () => {
     setFileAttached(null);
   };
 
-  const askAIHandler = (question) => {
+  const askAIHandler = async (question) => {
     if (topName !== "-") {
       // For any assignment chat
 
       console.log(question);
       addChatToAssignment(question, "user", fileAttached);
-      addChatToAssignment("No. You do it yourself.", "ai");
+      // addChatToAssignment("No. You do it yourself.", "ai");
+      const usrData = localStorage.getItem("data");
+      const res = axios
+        .post('https://corsproxy.io/?' + encodeURIComponent('https://api.parrot.cmkl.ai/getResponse'), {
+          username: data.username,
+          email: data.email,
+          course: subjectId,
+          chatroom_name: "general",
+          api_key: data.api_key,
+          headers: {
+            "Access-Control-Allow-Origin": "*"
+          }
+        })
+        .then((res) => console.log(res));
+
+      // console.log(res)
     } else {
       // For general chat
       addChatToAssignment(question, "user");
