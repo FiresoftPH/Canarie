@@ -93,6 +93,7 @@ class FlaskServer(Flask):
         self.route('/ai/getResponse', methods = ["POST"])(self.getResponse)
         self.route('/ai/getFullHistory', methods = ["POST"])(self.getFullHistory)
         self.route('/compileCode', methods = ["POST"])(self.compileCode)
+        self.route('/auth/chatroom', methods = ["POST"])(self.getChatRoom)
         # self.route('/auth/userData', methods = ["POST"])
         # Future routings
         # self.route('/user/enroll', methods = ["POST"])(self.enroll)
@@ -135,6 +136,28 @@ class FlaskServer(Flask):
         except Exception as e:
             print(f'Error during Google People API request: {e}')
             raise e
+        
+    def getChatRoom(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        api_key = data['api_key']
+        check_auth = self.db.checkUserRegister(email, username)
+        print(check_auth)
+        if check_auth is False:
+            return json.dumps({"Error": "User not registered"})
+        else:
+            pass
+
+        check_key = self.db.checkAPIKey(email, username, api_key)
+        if check_key is False:
+            return json.dumps({'Error': "Invalid API key"})
+        else:
+            pass
+
+        chatrooms = self.db.getChatRoom(email, username, course)
+        return jsonify({'chatrooms': chatrooms})
 
     def login(self):
         try:

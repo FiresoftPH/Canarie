@@ -16,9 +16,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         # file.close()
@@ -70,9 +70,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         # cursor.execute("DROP TABLE courses")
@@ -90,9 +90,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("ALTER TABLE statistics ADD assignment_details VARCHAR(255) DEFAULT ''")
@@ -107,9 +107,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT email FROM users")
@@ -136,14 +136,14 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         command = "SELECT email, username, api_key FROM users"
-        load = (email, username, api_key)
-        cursor.execute(command, load)
+        load = (str(email), str(username), str(api_key))
+        cursor.execute(command)
         result = cursor.fetchall()
         cursor.close()
         if load in result:
@@ -159,9 +159,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
@@ -179,9 +179,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         command = "SELECT enrolled_courses from users WHERE email = %s AND username = %s"
@@ -201,9 +201,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM users WHERE username = %s", username)
@@ -230,9 +230,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT email, username FROM users")
@@ -251,9 +251,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
 
@@ -266,9 +266,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         # history = pickle.dumps(history)
@@ -286,9 +286,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         command = "INSERT INTO chat_history (username, email, course_name, room_name) VALUES (%s, %s, %s, %s)"
@@ -304,9 +304,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))        
@@ -323,9 +323,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         try:
@@ -346,6 +346,29 @@ class Database:
 
         except pymysql.OperationalError:
             return False
+        
+    def getChatRoom(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        command = "SELECT room_name FROM chat_history WHERE email = %s AND username = %s AND course_name = %s"
+        load = (email, username, course)
+        cursor.execute(command, load)
+        result = cursor.fetchall()
+        chatroom = []
+        for x in result:
+            chatroom.append(x[0])
+
+        return chatroom
     
 """
 TESTING THE FUNCTIONALITIES OF THE DATABASE
