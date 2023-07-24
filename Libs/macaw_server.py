@@ -149,14 +149,12 @@ class FlaskServer(Flask):
             username = None
             if names:
                 username = names[0].get('displayName')
-
-            print(username)
-            print(email)
             
             if email is None or username is None:
                 raise ValueError('Failed to retrieve user information from token.')
 
             key = self.db.userRegister(email, username)
+            print(key)
             self.db.temporaryEnroll(email, username)
             courses = self.db.getUserData(email, username)
             return jsonify({'email': email, 'username': username, 'courses': courses, 'api_key': key})
