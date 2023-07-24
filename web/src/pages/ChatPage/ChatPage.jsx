@@ -36,7 +36,7 @@ function Chat() {
           />
         )}
       </Transition>
-      <div className={styles.leftSide}>
+      <div className={styles.right_side}>
         <section id="ChatUI" className={styles.chat}>
           <ChatUI />
         </section>

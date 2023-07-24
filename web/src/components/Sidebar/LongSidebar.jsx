@@ -54,7 +54,7 @@ function LongSidebar(props) {
 
   // useEffect(() => {
   //   setTimeout(() => {
-  //     const height =
+ //     const height =
   //       Dimension(document.getElementById("total")) -
   //       Dimension(document.getElementById("assignment")) -
   //       Dimension(document.getElementById("chat")) -
@@ -112,37 +112,38 @@ function LongSidebar(props) {
 
   return (
     <div id="total" className={cssClasses.join(" ")}>
-      <div className={styles.sidebar_top}>
-        <div id="chat" className={styles.top}>
-          <img
-            onClick={() => {
-              nav("/Course");
-            }}
-            src={Back_Button}
-          />
-          <p>Parrot Chat</p>
-          <img
-            onClick={() => {
-              props.close();
-            }}
-            src={Collapse}
-          />
-          <div className={styles.sepLine} />
-        </div>
-        <ChatList />
-        <div className={styles.fileThing}>
-          <section id="file-upload" className={styles.file_uploaded}>
-            <p>File Uploaded</p>
-            <img onClick={fileDownloadHandler} src={Upload} />
-          </section>
-          <FileList
-            sf={(f) => {
-              setFile(f);
-            }}
-            // mh={cHeight}
-          />
-        </div>
+      <div id="chat" className={styles.top}>
+        <img
+          onClick={() => {
+            nav("/Course");
+          }}
+          src={Back_Button}
+        />
+        <p>Parrot Chat</p>
+        <img
+          onClick={() => {
+            props.close();
+          }}
+          src={Collapse}
+        />
+        <div className={styles.sepLine} />
       </div>
+      {/* <div className={styles.sidebar_top}> */}
+      <ChatList />
+      {/* </div> */}
+      <section id="file-upload" className={styles.file_uploaded}>
+        <p>File Uploaded</p>
+        <img onClick={fileDownloadHandler} src={Upload} />
+      </section>
+      {/* <div className={styles.fileThing}> */}
+      <FileList
+        sf={(f) => {
+          setFile(f);
+        }}
+        // mh={cHeight}
+      />
+      {/* </div> */}
+
       {/* <CourseSlideUp
         // mh={cHeight}
         onSelectMode={selectModeHandler}
