@@ -11,6 +11,8 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { memo } from "react";
 import { useMemo } from "react";
+import ReactMarkdown from 'react-markdown'
+
 
 const ChattingCardAI = memo(function ChattingCardAI(props) {
   console.log("ChattingCardAI component is called")
@@ -27,7 +29,8 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
         : ""} */}
       <div className={styles.message}>
         <div>
-          <p>{props.message}</p>
+          {/* <p>{props.message}</p> */}
+          <ReactMarkdown className={styles.markdown}>{props.message}</ReactMarkdown>
           <div className={styles.assignmentList}>
             {props.assignments
               ? props.assignments.map((assignment) => {

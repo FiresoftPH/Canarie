@@ -2,6 +2,8 @@
   display: flex;
   margin-top: 1.5rem;
   /* width: auto; */
+  width: 100%;
+  /* margin: 0; */
 }
 
 .message {
@@ -11,12 +13,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 65%;
+  /* max-width: 65%;  */
 
   padding: 1rem;
   position: relative;
 
   margin-left: 1rem;
+  /* font-weight: .1rem; */
+
+  flex: 1;
 }
 
 .preference {
@@ -31,7 +36,7 @@
 
   position: absolute;
   right: 0;
-  bottom: -35%;
+  bottom: -1rem;
 }
 
 .preferenceSelected {
@@ -45,7 +50,7 @@
 
   position: absolute;
   right: 0;
-  bottom: -35%;
+  bottom: -1rem;
 }
 
 .like {
@@ -69,4 +74,8 @@
 
 .assignmentList p:hover {
   cursor: pointer;
+}
+
+.markdown {
+
 }

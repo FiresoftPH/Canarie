@@ -31,20 +31,21 @@ import { useRef } from "react";
 import axios from "axios";
 
 let shouldUpdate = false;
-const ChatUI = () => {
+const ChatUI = async () => {
   // let chatName = props.mode;
 
-  // Fetch data only once
-  const data = useSelector((state) => state.bigData);
-
-  // let chatName = useParams().assignmentId;
-  // const courseName = useParams().subjectId;
   const { subjectId, assignmentId } = useParams();
   let chatName = assignmentId;
   const courseName = subjectId;
 
   const nav = useNavigate();
   const location = useLocation();
+
+  // Fetch data only once
+  const data = useSelector((state) => state.bigData);
+
+  // let chatName = useParams().assignmentId;
+  // const courseName = useParams().subjectId;
 
   // console.log(data.filter((sub) => sub.course === courseName)[0].assignments.filter((ass) => ass.assignmentId === chatName)[0])
 
@@ -55,6 +56,25 @@ const ChatUI = () => {
   useEffect(() => {
     setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
   }, [data.filter((sub) => sub.course === courseName)[0].assignments]);
+
+
+  const usrData = JSON.parse(localStorage.getItem("data"));
+
+  // let data = useSelector((state) => state.bigData);
+  useEffect(() => {
+    const cleanUp = async () => {
+      const newData = await axios
+        .post("https://api.parrot.cmkl.ai/getFullHistory", {
+          username: usrData.username,
+          email: usrData.email,
+          course: subjectId,
+          chatroom_name: "general",
+          api_key: usrData.api_key,
+        })
+        .then((res) => console.log(res));
+    }
+    cleanUp()
+  }, []);
 
   // useEffect(() => {
   //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
@@ -112,20 +132,35 @@ const ChatUI = () => {
       console.log(question);
       addChatToAssignment(question, "user", fileAttached);
       // addChatToAssignment("No. You do it yourself.", "ai");
-      const usrData = localStorage.getItem("data");
-      const res = axios
-        .post('https://corsproxy.io/?' + encodeURIComponent('https://api.parrot.cmkl.ai/getResponse'), {
-          username: data.username,
-          email: data.email,
+      const usrData = JSON.parse(localStorage.getItem("data"));
+      setLock(true);
+      const res = await axios.post(
+        "https://corsproxy.io/?" +
+          encodeURIComponent("https://api.parrot.cmkl.ai/ai/getResponse"),
+        {
+          // username: data.username,
+          // email: data.email,
+          // course: subjectId,
+          // chatroom_name: "general",
+          api_key: usrData.api_key,
+          username: usrData.username,
+          email: usrData.email,
+          code: [],
           course: subjectId,
           chatroom_name: "general",
-          api_key: data.api_key,
+          question,
+        },
+        {
           headers: {
-            "Access-Control-Allow-Origin": "*"
-          }
-        })
-        .then((res) => console.log(res));
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
 
+      console.log(res.data);
+      addChatToAssignment(res.data.message, "ai", res.data.rating);
+
+      setLock(false);
       // console.log(res)
     } else {
       // For general chat
@@ -330,7 +365,7 @@ const ChatUI = () => {
             onFileAttach={fileAttachHandler}
             onUploadFile={fileAddHandler}
             onSend={askAIHandler}
-            // lock={lock}
+            lock={lock}
           />
         </div>
         <div className={styles.backdrops}>
