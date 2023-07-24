@@ -1,20 +1,24 @@
 import requests
+from dotenv import dotenv_values
 
+config = dotenv_values("Libs/.env")
+
+# Checked
 def getAnswer():
     url = 'https://api.parrot.cmkl.ai/ai/getResponse'  # Replace with your server's URL
 
     # prompt = "What is coffee?"
     # prompt = "Why is it popular?"
-    prompt = "What is Assembly (Programming language)?"
+    prompt = "What is a for loop and why is it considered more simple than while loops?"
 
     payload = {
-        'username': "Pattarapark Chutisamoot",
-        'email': "pattarapark.c@cmkl.ac.th",
+        'username': config["TEST_USERNAME"],
+        'email': config["TEST_EMAIL"],
         'code': [],
-        "course": "Computer System",
-        "chatroom_name": "Assembly",
+        "course": "Cloud Computing",
+        "chatroom_name": "Python",
         "question": prompt,
-        "api_key" : "99a895702749b7923b52c230cb6328d91623c5b5c641dc1cae35b85711544af8977f713d60a532256b8fe5380039bdfad329f356e56666ea7992674cc3c0ddc4"
+        "api_key" : config['TEST_API_KEY']
     }
 
     try:
@@ -28,15 +32,16 @@ def getAnswer():
     except requests.exceptions.RequestException as e:
         print("An error occurred:", str(e))
 
+# Checked
 def getHistory():
     url = 'https://api.parrot.cmkl.ai/ai/getFullHistory'  # Replace with your server's URL
 
     payload = {
-        'username': "Pattarapark Chutisamoot",
-        'email': "pattarapark.c@cmkl.ac.th",
+        'username': config["TEST_USERNAME"],
+        'email': config["TEST_EMAIL"],
         "course": "Computer System",
         "chatroom_name": "general",
-        "api_key" : "99a895702749b7923b52c230cb6328d91623c5b5c641dc1cae35b85711544af8977f713d60a532256b8fe5380039bdfad329f356e56666ea7992674cc3c0ddc4"
+        "api_key" : config['TEST_API_KEY']
     }
 
     try:
@@ -49,17 +54,16 @@ def getHistory():
 
     except requests.exceptions.RequestException as e:
         print("An error occurred:", str(e))
-        
-import requests
 
-def getChatRoom():
-    url = 'https://api.parrot.cmkl.ai/auth/chatroom'  # Replace with your server's URL
+# Checked
+def enrollCourse():
+    url = 'https://api.parrot.cmkl.ai/auth/enroll'  # Replace with your server's URL
 
     payload = {
-        'username': "Pattarapark Chutisamoot",
-        'email': "pattarapark.c@cmkl.ac.th",
-        "course": "Computer System",
-        "api_key" : "99a895702749b7923b52c230cb6328d91623c5b5c641dc1cae35b85711544af8977f713d60a532256b8fe5380039bdfad329f356e56666ea7992674cc3c0ddc4"
+        'username': config["TEST_USERNAME"],
+        'email': config["TEST_EMAIL"],
+        "course": "Calculus 1",
+        "api_key" : config['TEST_API_KEY']
     }
 
     try:
@@ -72,6 +76,78 @@ def getChatRoom():
 
     except requests.exceptions.RequestException as e:
         print("An error occurred:", str(e))
+
+# Checked
+def getChatRoom():
+    url = 'https://api.parrot.cmkl.ai/auth/chatroom/fetch'  # Replace with your server's URL
+
+    payload = {
+        'username': config["TEST_USERNAME"],
+        'email': config["TEST_EMAIL"],
+        "course": "Cloud Computing",
+        "api_key" : config['TEST_API_KEY']
+    }
+
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+
+        # Wait for the response and then print it out
+        response_data = response.json()
+        print(response_data)
+
+    except requests.exceptions.RequestException as e:
+        print("An error occurred:", str(e))
+
+# Checked
+def unenrollCourse():
+    url = 'https://api.parrot.cmkl.ai/auth/unenroll'  # Replace with your server's URL
+
+    payload = {
+        'username': config["TEST_USERNAME"],
+        'email': config["TEST_EMAIL"],
+        "course": "Computer Systems",
+        "api_key" : config['TEST_API_KEY']
+    }
+
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+
+        # Wait for the response and then print it out
+        response_data = response.json()
+        print(response_data)
+
+    except requests.exceptions.RequestException as e:
+        print("An error occurred:", str(e))
+
+# Checked
+def deleteChatRoom():
+    url = 'https://api.parrot.cmkl.ai/auth/chatroom/delete'  # Replace with your server's URL
+
+    payload = {
+        'username': config["TEST_USERNAME"],
+        'email': config["TEST_EMAIL"],
+        "course": "Cloud Computing",
+        "chatroom_name": "Python",
+        "api_key" : config['TEST_API_KEY']
+    }
+
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+
+        # Wait for the response and then print it out
+        response_data = response.json()
+        print(response_data)
+
+    except requests.exceptions.RequestException as e:
+        print("An error occurred:", str(e))
+
+
 # getAnswer()
 # getHistory()
 getChatRoom()
+# enrollCourse()
+# unenrollCourse()
+# deleteChatRoom()

@@ -171,6 +171,57 @@ class Database:
         connection.commit()
         cursor.close()
 
+    def checkenrolledCourse(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        command = "SELECT enrolled_courses from users WHERE email = %s AND username = %s"
+        cursor.execute(command, (email, username))
+        result = cursor.fetchall()
+        course_list = self.arrayFromString(result[0][0])
+        
+        if course in course_list:
+            return True, course_list
+        else:
+            return False, course_list
+
+    def enrollCourse(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        check_course = self.checkenrolledCourse(email, username, course)
+        if check_course[0] != False:
+            return False
+        else:
+            new_course_list = check_course[1]
+            new_course_list.append(course)
+            temp = new_course_list
+            new_course_list = self.stringFromArray(new_course_list)
+            command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
+            load = (new_course_list, email, username)
+            cursor.execute(command, load)
+            connection.commit()
+            cursor.close()
+            return temp
+
     def getUserData(self, email, username):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -241,21 +292,6 @@ class Database:
             return True
         else:
             return False
-
-    # Used when enrolling courses for each user. (WIP)
-    def enrollCourse(self, email, username, course_list):
-        config = dotenv_values(".env")
-        connection = pymysql.connect(
-        host=config["HOST_ALT"],
-        port=int(config["PORT_ALT"]),
-        user=config["USER"],
-        password=config["PASSWORD"],
-        database=config["DATABASE"],
-        connect_timeout=60,
-        read_timeout=1800,
-        write_timeout=1800
-        )
-        cursor = connection.cursor()
 
     # Update chat history in the database. This will be updated when the session ends.
     def storeChatHistory(self, username, email, course, room_name, history):
@@ -370,11 +406,64 @@ class Database:
 
         return chatroom
     
-"""
-TESTING THE FUNCTIONALITIES OF THE DATABASE
-"""
-
-# test = Database()
-# test.resetTable()
-# print(test.loadChatHistory("hutao", "Computer System", ""))
-# print(test.loadChatHistory("hutao"))
+    def unenrollCourse(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        check_course = self.checkenrolledCourse(email, username, course)
+        if check_course[0] == False:
+            return False
+        else:
+            new_course_list = check_course[1]
+            new_course_list.remove(course)
+            temp = new_course_list
+            new_course_list = self.stringFromArray(new_course_list)
+            command_1 = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
+            load_1 = (new_course_list, email, username)
+            cursor.execute(command_1, load_1)
+            connection.commit()
+            command_2 = "DELETE FROM chat_history WHERE email = %s AND username = %s AND course_name = %s"
+            load_2 = (email, username, course)
+            cursor.execute(command_2, load_2)
+            connection.commit()
+            cursor.close()
+            return temp
+        
+    def deleteChatRoom(self, email, username, course, chatroom):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        check_course = self.checkenrolledCourse(email, username, course)
+        if check_course[0] == False:
+            return False
+        else:
+            check_chatroom = self.getChatRoom(email, username, course)
+            if chatroom not in check_chatroom:
+                return False
+            else:
+                pass
+            
+            command = "DELETE FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s"
+            load = (email, username, course, chatroom)
+            cursor.execute(command, load)
+            connection.commit()
+            cursor.close()
+            return True   
