@@ -149,17 +149,15 @@ class FlaskServer(Flask):
             username = None
             if names:
                 username = names[0].get('displayName')
-
-            print(username)
-            print(email)
             
             if email is None or username is None:
                 raise ValueError('Failed to retrieve user information from token.')
 
-            self.db.userRegister(email, username)
+            key = self.db.userRegister(email, username)
+            print(key)
             self.db.temporaryEnroll(email, username)
             courses = self.db.getUserData(email, username)
-            return jsonify({'email': email, 'username': username, 'courses': courses})
+            return jsonify({'email': email, 'username': username, 'courses': courses, 'api_key': key})
         except ValueError as e:
             print(str(e))
 
@@ -176,10 +174,17 @@ class FlaskServer(Flask):
         email = data['email']
         course = data['course']
         chatroom = data['chatroom_name']
+        api_key = data['api_key']
         check_auth = self.db.checkUserRegister(email, username)
         print(check_auth)
         if check_auth is False:
             return json.dumps({"Error": "User not registered"})
+        else:
+            pass
+
+        check_key = self.db.checkAPIKey(email, username, api_key)
+        if check_key is False:
+            return json.dumps({'Error': "Invalid API key"})
         else:
             pass
 
@@ -197,10 +202,17 @@ class FlaskServer(Flask):
         course = data['course']
         chatroom = data['chatroom_name']
         message = data['question']
+        api_key = data['api_key']
         check_auth = self.db.checkUserRegister(email, username)
         print(check_auth)
         if check_auth is False:
             return json.dumps({"Error": "User not registered"})
+        else:
+            pass
+
+        check_key = self.db.checkAPIKey(email, username, api_key)
+        if check_key is False:
+            return json.dumps({'Error': "Invalid API key"})
         else:
             pass
 

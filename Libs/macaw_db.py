@@ -3,6 +3,7 @@ import numpy as np
 import json
 import pickle
 from dotenv import dotenv_values
+import secrets
 
 class Database:
     def __init__(self):
@@ -31,7 +32,7 @@ class Database:
             pass
 
         try:
-            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255),  email VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255), consent VARCHAR(255))"
+            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255),  email VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255), consent VARCHAR(255), api_key VARCHAR(255))"
             cursor.execute(command_1)
         except pymysql.err.OperationalError:
             print("Already initialized")
@@ -118,13 +119,37 @@ class Database:
             if row == new_user_data:
                 print("User already exist")
                 return False
-            
-        new_user_data_long = (email, username, "", "user", "yes")
-        command = "INSERT INTO users (email, username, enrolled_courses, status, consent) VALUES (%s, %s, %s, %s, %s)"
+        
+        api_key = secrets.token_hex(64)
+        new_user_data_long = (email, username, "", "user", "yes", api_key)
+        command = "INSERT INTO users (email, username, enrolled_courses, status, consent, api_key) VALUES (%s, %s, %s, %s, %s, %s)"
         cursor.execute(command, new_user_data_long)
         connection.commit()
         cursor.close()
-        return True
+        return api_key
+    
+    def checkAPIKey(self, email, username, api_key):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=30,
+        read_timeout=300,
+        write_timeout=300
+        )
+        cursor = connection.cursor()
+        command = "SELECT email, username, api_key FROM users"
+        load = (email, username, api_key)
+        cursor.execute(command, load)
+        result = cursor.fetchall()
+        cursor.close()
+        if load in result:
+            return True
+        else:
+            return False
 
     def temporaryEnroll(self, email, username):
         config = dotenv_values(".env")
