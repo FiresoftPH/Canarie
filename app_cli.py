@@ -2,7 +2,7 @@
 The CLI (Command Line Interface) is for testing the user journey and visualizing the steps programmically. Initial demonstration will be done here.
 Note that the CLI will not be updated once the WebUI is completed.
 """
-from Libs import macaw_server as server
+from Libs import parrot_server as server
 
 class appCLI:
     def __init__(self):

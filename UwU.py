@@ -7,10 +7,10 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationTokenBufferMemory
 import time
 import torch
-from Libs import macaw_ai
+from Libs import parrot_ai
 import sys
 
-arima = macaw_ai.GeneratePrompt()
+arima = parrot_ai.GeneratePrompt()
 prompt = arima.codePrompt("explain this code ", "test_files/waifus.py")
 
 #tokenizer = LlamaTokenizer.from_pretrained("/lustre/scratch/project/cmkl/ai-chat/llama-13b-meta-hf")

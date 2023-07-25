@@ -3,7 +3,7 @@ The admin CLI (Command Line Interface) is for testing the user journey and visua
 Note that the CLI will not be updated once the WebUI is completed.
 """
 
-from Libs import macaw_server as server
+from Libs import parrot_server as server
 
 class adminCLI:
     def __init__(self):

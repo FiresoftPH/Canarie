@@ -1,6 +1,7 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
+from Libs import parrot_ai
 from flask import Flask, request, jsonify, redirect, url_for
 from flask_cors import CORS
 from flask_caching import Cache
@@ -12,11 +13,11 @@ import pickle
 import requests
 import os
 try: 
-    import macaw_db
-    import macaw_ai
+    import Libs.parrot_db as parrot_db
+    import Libs.parrot_ai as parrot_ai
 
 except:
-    from Libs import macaw_db, macaw_ai
+    from Libs import parrot_db
 
 import json
 import subprocess
@@ -44,9 +45,9 @@ class FlaskServer(Flask):
         self.route('/auth/unenroll', methods = ["POST"])(self.unenrollCourse)
 
         # Init class
-        self.db = macaw_db.Database()
-        self.prompt_generation = macaw_ai.GeneratePrompt()
-        self.ai = macaw_ai.Chat()
+        self.db = parrot_db.Database()
+        self.prompt_generation = parrot_ai.GeneratePrompt()
+        self.ai = parrot_ai.Chat()
         CORS(self)
         self.oauth = OAuth(self)
 
@@ -166,6 +167,12 @@ class FlaskServer(Flask):
         check = self.checkAuthencity(email, username, api_key)
         if check != None:
             return check
+        else:
+            pass
+
+        chatroom_check = self.db.checkChatRoom(email, username, course, chatroom)
+        if chatroom_check == True:
+            return {"Error": "Chatroom already exist"}
         else:
             pass
 
