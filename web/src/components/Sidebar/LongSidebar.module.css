@@ -2,8 +2,7 @@
 .container {
   grid-area: Sidebar;
   display: grid;
-  grid-template-rows: 100px 1fr 50px 1fr;
-  /* justify-content: space-between; */
+  grid-template-rows: 1fr 4fr 1fr 4fr;
   background-color: #2f325a;
 }
 
@@ -40,11 +39,6 @@
   margin-right: 1.75rem;
 }
 
-.fileThing {
-  /* flex: 1; */
-  /* overflow-y: scroll; */
-}
-
 .top p {
   grid-area: textArea;
   font-size: 1.5rem;
@@ -78,7 +72,6 @@
 .new_chat {
   display: flex;
   align-items: center;
-
   margin: 1.5rem;
   margin-top: 0.5rem;
   padding: 0.3rem;
@@ -99,9 +92,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* margin-top: 6.875rem; */
-  /* background-color: #2f325a; */
-  overflow-y: auto;
   padding-left: 1.64rem;
 }
 

@@ -29,6 +29,7 @@ import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
 import { useSelector } from "react-redux";
 import { useRef } from "react";
 import axios from "axios";
+import { nanoid } from "@reduxjs/toolkit";
 
 let shouldUpdate = false;
 const ChatUI = () => {
@@ -59,26 +60,68 @@ const ChatUI = () => {
 
   // Fetch recent history data
   useEffect(() => {
-    // console.log("FETCHING HISTORY")
+    console.log("FETCHING HISTORY");
     // console.log(usrData)
 
     const cleanUp = async () => {
-      const fetchedHistory = await axios.post(
-        "https://api.parrot.cmkl.ai/ai/getFullHistory",
-        {
+      // console.log(usrData)
+
+      const fetchedHistory = await axios
+        .post("https://api.parrot.cmkl.ai/ai/getFullHistory", {
           username: usrData.username,
           email: usrData.email,
           course: subjectId,
           chatroom_name: assignmentId,
           api_key: usrData.api_key,
-        }
-      ).then(res => res.data);
+        })
+        .then((res) => res.data.content)
+        .catch((err) => console.log(err));
 
-      console.log(fetchedHistory)
-    }
+      console.log(history);
 
-    cleanUp()
-  }, [subjectId. assignmentId]);
+      console.log(fetchedHistory);
+      // setHistory(fetchedHistory.map(chat => {
+      //   return {
+      //     chatId: nanoid(),
+      //     message: chat[1],
+      //     sender: chat[0] === "<|im_start|>user" ? "user" : "ai",
+      //     rating: "none",
+      //     file_attachments: []
+      //   }
+      // }))
+      // if (fetchedHistory !== undefined) {
+
+      if (fetchedHistory != undefined) {
+        setHistory((prev) =>
+          prev.map((ass) => {
+            if (ass.name === assignmentId) {
+              return {
+                ...ass,
+                chatHistory: fetchedHistory.map((chat) => {
+                  return {
+                    chatId: nanoid(),
+                    message: chat[1],
+                    sender: chat[0] === "<|im_start|>user" ? "user" : "ai",
+                    rating: "none",
+                    file_attachments: [],
+                  };
+                }),
+              };
+            } else {
+              return ass;
+            }
+          })
+        );
+      }
+
+
+      // } else {
+      //   setHistory([])
+      // }
+    };
+
+    cleanUp();
+  }, [subjectId, assignmentId]);
 
   // useEffect(() => {
   //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
@@ -106,7 +149,7 @@ const ChatUI = () => {
 
     setHistory((prevState) =>
       prevState.map((assignment) => {
-        if (assignment.assignmentId === chatName) {
+        if (assignment.name === chatName) {
           return {
             ...assignment,
             chatHistory: [
@@ -171,7 +214,7 @@ const ChatUI = () => {
 
       setHistory((prevState) =>
         prevState.map((assignment) => {
-          if (assignment.assignmentId === chatName) {
+          if (assignment.name === chatName) {
             return {
               ...assignment,
               chatHistory: [
@@ -203,7 +246,7 @@ const ChatUI = () => {
 
     setHistory((prevState) =>
       prevState.map((assignment) => {
-        if (assignment.assignmentId === chatName) {
+        if (assignment.name === chatName) {
           const ratedChat = assignment.chatHistory.map((chat) => {
             if (chat.sender === "ai" && chat.chatId === id) {
               return {
@@ -236,9 +279,7 @@ const ChatUI = () => {
       } else {
         shouldUpdate = false;
       }
-      setTopName(
-        history.filter((ass) => ass.assignmentId === chatName)[0].name
-      );
+      setTopName(history.filter((ass) => ass.name === chatName)[0].name);
     }
   }, [assignmentId]);
 
@@ -272,7 +313,7 @@ const ChatUI = () => {
   //     // console.log(location);
   //     setHistory((prevState) =>
   //       prevState.map((assignment) => {
-  //         if (assignment.assignmentId === chatName) {
+  //         if (assignment.name === chatName) {
   //           return {
   //             ...assignment,
   //             chatHistory: [...assignment["chatHistory"], location.state],
@@ -285,7 +326,7 @@ const ChatUI = () => {
 
   //     setHistory((prevState) =>
   //       prevState.map((assignment) => {
-  //         if (assignment.assignmentId === chatName) {
+  //         if (assignment.name === chatName) {
   //           return {
   //             ...assignment,
   //             chatHistory: [
@@ -314,8 +355,9 @@ const ChatUI = () => {
     setFileAttached(files);
   };
 
-  console.log("ChatUI refreshed");
+  // console.log("ChatUI refreshed");
   console.log(history);
+  console.log(history.filter((ass) => ass.name === chatName)[0]);
 
   return (
     <>
@@ -350,9 +392,7 @@ const ChatUI = () => {
           {chatName !== "General" ? (
             <ChatScreenInitalized
               onRate={ratingHandler}
-              history={
-                history.filter((ass) => ass.assignmentId === chatName)[0]
-              }
+              history={history.filter((ass) => ass.name === chatName)[0]}
             />
           ) : (
             <ChatScreenNotInit
