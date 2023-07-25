@@ -44,14 +44,14 @@ def getHistory():
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
-        "course": "Computer System",
-        "chatroom_name": "general",
+        "course": "Computer Systems",
+        "chatroom_name": "pgvxLjGb6W_cQMjzSL4it",
         "api_key" : config['TEST_API_KEY']
     }
 
     try:
         response = requests.post(url, json=payload)
-        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+        response.raise_for_status()  # Raise an exceptiPrincipal Of Computing Applicationson for 4xx and 5xx status codes
 
         # Wait for the response and then print it out
         response_data = response.json()
@@ -60,10 +60,7 @@ def getHistory():
     except requests.exceptions.RequestException as e:
         print("An error occurred:", str(e))
 
-# Checked
-def enrollCourse():
-    url = 'https://api.parrot.cmkl.ai/auth/enroll'  # Replace with your server's URL
-
+# CheckedPrincipal Of Computing Applications
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
@@ -89,7 +86,7 @@ def getChatRoom():
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
-        "course": "Cloud Computing",
+        "course": "Computer Systems",
         "api_key" : config['TEST_API_KEY']
     }
 
@@ -129,7 +126,9 @@ def unenrollCourse():
 # Checked
 def deleteChatRoom():
     url = 'https://api.parrot.cmkl.ai/auth/chatroom/delete'  # Replace with your server's URL
+# Raise an exceptiPrincipal Of Computing Applicationson for 4xx and 5xx status codes
 
+            # Wait for the response and then print it out
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
@@ -149,10 +148,81 @@ def deleteChatRoom():
     except requests.exceptions.RequestException as e:
         print("An error occurred:", str(e))
 
+# Checked
+def runPythonCode():
+    url = 'https://api.parrot.cmkl.ai/compileCode' 
+
+#     code = '''
+# def factorial(n):
+#     if n == 0:
+#         return 1
+#     else:
+#         return n * factorial(n - 1)
+
+# result = factorial(5)
+# print("Factorial of 5:", result)
+# '''
+#     code = '''
+# #include <stdio.h>
+
+# int factorial(int n) {
+#     if (n == 0) {
+#         return 1;
+#     } else {
+#         return n * factorial(n - 1);
+#     }
+# }
+
+# int main() {
+#     int number = 5;
+#     int result = factorial(number);
+#     printf("Factorial of %d: %d\\n", number, result);
+#     return 0;
+# }
+# '''
+    code = '''
+#include <iostream>
+
+int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+int main() {
+    int number = 5;
+    int result = factorial(number);
+    std::cout << "Factorial of " << number << ": " << result << std::endl;
+    return 0;
+}
+'''
+
+    payload = {
+        'username': config["TEST_USERNAME"],
+        'email': config["TEST_EMAIL"],
+        'code' : code,
+        "api_key" : config['TEST_API_KEY'],
+        "file_extension": ".cpp"
+    }
+
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+
+        # Wait for the response and then print it out
+        # response_data = response.json()
+        print(response.json())
+
+    except requests.exceptions.RequestException as e:
+        print("An error occurred:", str(e))
+
 
 # getAnswer()
-getHistory()
+# getHistory()
 # getChatRoom()
 # enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()
+runPythonCode()

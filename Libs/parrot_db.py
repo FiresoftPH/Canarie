@@ -118,7 +118,9 @@ class Database:
         for row in result:
             if row == new_user_data:
                 print("User already exist")
-                return False
+                cursor.execute("SELECT api_key FROM users WHERE email = %s AND username = %s", (email, username))
+                result = cursor.fetchall()
+                return result[0][0]
         
         api_key = secrets.token_hex(64)
         new_user_data_long = (email, username, "", "user", "yes", api_key)
