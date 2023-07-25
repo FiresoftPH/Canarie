@@ -11,9 +11,12 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { memo } from "react";
 import { useMemo } from "react";
+import ReactMarkdown from "react-markdown";
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
+import {dark} from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 const ChattingCardAI = memo(function ChattingCardAI(props) {
-  console.log("ChattingCardAI component is called")
+  console.log("ChattingCardAI component is called");
 
   return (
     <div className={styles.wrapper}>
@@ -26,8 +29,35 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
           })
         : ""} */}
       <div className={styles.message}>
-        <div>
-          <p>{props.message}</p>
+        <div className={styles.markdown_container}>
+          {/* <p>{props.message}</p> */}
+          <ReactMarkdown
+            children={props.message}
+            className={styles.markdown}
+            components={{
+              code({ node, inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    {...props}
+                    children={String(children).replace(/\n$/, "")}
+                    style={dark}
+                    language={match[1]}
+                    PreTag="div"
+                    // useInlineStyles={false}
+                    // customStyle={styles.code_highlight}
+                    // customStyle
+                    // showLineNumbers
+                    // customStyle={styles.code_highlight}
+                  />
+                ) : (
+                  <code {...props} className={styles.code_highlight}>
+                    {children}
+                  </code>
+                );
+              },
+            }}
+          />
           <div className={styles.assignmentList}>
             {props.assignments
               ? props.assignments.map((assignment) => {

@@ -2,6 +2,15 @@
   display: flex;
   margin-top: 1.5rem;
   /* width: auto; */
+  max-width: 100%;
+  width: fit-content;
+  /* margin: 0; */
+
+
+}
+
+.wrapper img {
+  margin-bottom: auto;
 }
 
 .message {
@@ -9,14 +18,33 @@
   background: linear-gradient(0deg, #252525 0%, #252525 100%), #252525;
 
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  max-width: 65%;
+  /* max-width: 65%;  */
 
   padding: 1rem;
   position: relative;
 
   margin-left: 1rem;
+  /* font-weight: .1rem; */
+
+  flex: 1;
+  max-width: 90%;
+  /* margin: auto; */
+  /* width: 100%; */
+  /* width: auto; */
+}
+
+.message:first-child {
+  overflow-x: scroll;
+}
+
+.markdown_container {
+  width: 100%;
+}
+
+.code_highlight > * {
+  font-size: 1rem !important;
 }
 
 .preference {
@@ -31,7 +59,7 @@
 
   position: absolute;
   right: 0;
-  bottom: -35%;
+  bottom: -1rem;
 }
 
 .preferenceSelected {
@@ -45,7 +73,7 @@
 
   position: absolute;
   right: 0;
-  bottom: -35%;
+  bottom: -1rem;
 }
 
 .like {
@@ -69,4 +97,10 @@
 
 .assignmentList p:hover {
   cursor: pointer;
+}
+
+.markdown {
+  overflow-x: scroll;
+
+  font-size: 1rem;
 }

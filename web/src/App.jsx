@@ -21,6 +21,8 @@ npm install js-cookie
 npm install --save interactjs
 npm install react-transition-group --save
 npm install nanoid
+npm install axios
+npm install react-syntax-highlighter --save
 
 */
 

@@ -1,6 +1,7 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
+from Libs import parrot_ai
 from flask import Flask, request, jsonify, redirect, url_for
 from flask_cors import CORS
 from flask_caching import Cache
@@ -12,11 +13,11 @@ import pickle
 import requests
 import os
 try: 
-    import macaw_db
-    import macaw_ai
+    import Libs.parrot_db as parrot_db
+    import Libs.parrot_ai as parrot_ai
 
 except:
-    from Libs import macaw_db, macaw_ai
+    from Libs import parrot_db
 
 import json
 import subprocess
@@ -24,61 +25,6 @@ import json
 from pygments.lexers import guess_lexer_for_filename
 import os
 import random
-
-class DatabaseOperations:
-    def __init__(self):
-        self.db = macaw_db.Database()
-
-    # Add course data to the courses table. In the final development, this will be automatically integrated with canvas
-    def addCourseData(self, course_name, assignment_list):
-        self.db.addCourseData(course_name, assignment_list)
-
-    # User register, each user have to have a name, username and password.
-    def userRegister(self, email, username):
-        return self.db.userRegister(email, username)
-
-    # Provided login functionalities and returns the credentials to the applications.
-    def userLogin(self, username, password):
-        return self.db.userLogin(username, password)
-
-    # Used when enrolling courses for each user.
-    def enrollCourse(self, username, course_list):
-        self.db.enrollCourse(username, course_list)
-
-    # Used when enrolling courses for each user. This method checks if the selected courses are already enrolled or not
-    def checkEnrolledCourse(self, username, course_list):
-        return self.db.checkEnrolledCourse(self, username, course_list)
-
-    # Used when enrolling courses for each user. This method checks if the selected courses are registered or not.
-    def checkRegisteredCourse(self, course_name):
-        return self.db.checkRegisteredCourse(course_name)
-    
-    # Used together with the login method. This checks whether the user enrolled any courses yet.
-    def checkInitialSetup(self, username):
-        return self.db.checkInitialSetup(username)
-    
-    # Returns the users enrolled courses as the name suggested.
-    def showUserEnrolledCourse(self, username):
-        return self.db.showUserEnrolledCourse(username)
-    
-    # Admin login to access other user's data
-    def adminLogin(self, username, password):
-        return self.db.adminLogin(username, password)
-
-    def showCourseData(self, mode):
-        return self.db.showCourseData(mode)
-    
-    # Promote a standard user to be an admin. Only used during development and authorized use.ss
-    def promoteUser(self, username):
-        return self.db.promoteUser(username)
-
-    # Get all chatroom assosiated with a user and course name (WIP):
-    def getUserChatRoom(self, username):
-        return self.db.getUserChatRoom(username)
-
-    # fetch user related data and send to frontend
-    def fetchUserData(self, username):
-        return self.db.fetchUserData(username)
     
 # The actual flask server
 class FlaskServer(Flask):
@@ -93,18 +39,30 @@ class FlaskServer(Flask):
         self.route('/ai/getResponse', methods = ["POST"])(self.getResponse)
         self.route('/ai/getFullHistory', methods = ["POST"])(self.getFullHistory)
         self.route('/compileCode', methods = ["POST"])(self.compileCode)
-        # self.route('/auth/userData', methods = ["POST"])
-        # Future routings
-        # self.route('/user/enroll', methods = ["POST"])(self.enroll)
-        # self.route('/user/unenroll', methods = ["POST"])(self.unenroll)
-        # self.route('/user/courses', methods = ["POST"])(self.getEnrolledCourse)
+        self.route('/auth/chatroom/fetch', methods = ["POST"])(self.getChatRoom)
+        self.route('/auth/enroll', methods = ["POST"])(self.enrollCourse)
+        self.route('/auth/chatroom/delete', methods = ["POST"])(self.deleteChatRoom)
+        self.route('/auth/unenroll', methods = ["POST"])(self.unenrollCourse)
 
         # Init class
-        self.db = macaw_db.Database()
-        self.prompt_generation = macaw_ai.GeneratePrompt()
-        self.ai = macaw_ai.Chat()
+        self.db = parrot_db.Database()
+        self.prompt_generation = parrot_ai.GeneratePrompt()
+        self.ai = parrot_ai.Chat()
         CORS(self)
         self.oauth = OAuth(self)
+
+    def checkAuthencity(self, email, username, api_key):
+        check_auth = self.db.checkUserRegister(email, username)
+        if check_auth is False:
+            return json.dumps({"Error": "User not registered"})
+        else:
+            pass
+
+        check_key = self.db.checkAPIKey(email, username, api_key)
+        if check_key is False:
+            return json.dumps({'Error': "Invalid API key"})
+        else:
+            return None
 
     def verify_google_token(self, token):
         try:
@@ -135,6 +93,21 @@ class FlaskServer(Flask):
         except Exception as e:
             print(f'Error during Google People API request: {e}')
             raise e
+        
+    def getChatRoom(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        api_key = data['api_key']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+
+        chatrooms = self.db.getChatRoom(email, username, course)
+        return json.dumps({'chatrooms': chatrooms})
 
     def login(self):
         try:
@@ -149,26 +122,19 @@ class FlaskServer(Flask):
             username = None
             if names:
                 username = names[0].get('displayName')
-
-            print(username)
-            print(email)
             
             if email is None or username is None:
                 raise ValueError('Failed to retrieve user information from token.')
 
-            self.db.userRegister(email, username)
+            key = self.db.userRegister(email, username)
+            print(key)
             self.db.temporaryEnroll(email, username)
             courses = self.db.getUserData(email, username)
-            return jsonify({'email': email, 'username': username, 'courses': courses})
+            return json.dumps({'email': email, 'username': username, 'courses': courses, 'api_key': key})
         except ValueError as e:
             print(str(e))
 
-            return jsonify({'error': str(e)})
-    
-    def getEnrolledCourse(self):
-        course_list = self.db.showUserEnrolledCourse(self.credentials[0])
-        print(json.dumps(course_list))
-        return json.dumps(course_list)
+            return json.dumps({'error': str(e)})
     
     def getFullHistory(self):
         data = request.get_json()
@@ -176,10 +142,10 @@ class FlaskServer(Flask):
         email = data['email']
         course = data['course']
         chatroom = data['chatroom_name']
-        check_auth = self.db.checkUserRegister(email, username)
-        print(check_auth)
-        if check_auth is False:
-            return json.dumps({"Error": "User not registered"})
+        api_key = data['api_key']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
         else:
             pass
 
@@ -197,10 +163,16 @@ class FlaskServer(Flask):
         course = data['course']
         chatroom = data['chatroom_name']
         message = data['question']
-        check_auth = self.db.checkUserRegister(email, username)
-        print(check_auth)
-        if check_auth is False:
-            return json.dumps({"Error": "User not registered"})
+        api_key = data['api_key']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+
+        chatroom_check = self.db.checkChatRoom(email, username, course, chatroom)
+        if chatroom_check == True:
+            return {"Error": "Chatroom already exist"}
         else:
             pass
 
@@ -222,6 +194,60 @@ class FlaskServer(Flask):
         self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
  
         return json.dumps({"message": answer, "sender": "ai", "rating": "none"})
+    
+    def enrollCourse(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        api_key = data['api_key']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+
+        check_course = self.db.enrollCourse(email, username, course)
+        if check_course == False:
+            return json.dumps({'Error': "Course already enrolled in this user"})
+        else:
+            return json.dumps({'course_list': check_course})
+        
+    def unenrollCourse(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        api_key = data['api_key']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+        status = self.db.unenrollCourse(email, username, course)
+        if status == False:
+            return json.dumps({'Error': "Course does not exist or not enrolled"})
+        else:
+            return json.dumps({'courses_list': status})
+
+    def deleteChatRoom(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        chatroom = data['chatroom_name']
+        api_key = data['api_key']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+        
+        status = self.db.deleteChatRoom(email, username, course, chatroom)
+        if status == False:
+            return json.dumps({'Error': "Chatroom does not exist or not created"})
+        else:
+            return json.dumps({'status': 'Deleted Successfully'})
     
     def compileCode(self):
         # recieved_file = Cache(self, config={'CACHE_TYPE': 'simple'})

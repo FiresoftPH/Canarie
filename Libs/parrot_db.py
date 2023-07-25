@@ -3,6 +3,7 @@ import numpy as np
 import json
 import pickle
 from dotenv import dotenv_values
+import secrets
 
 class Database:
     def __init__(self):
@@ -15,9 +16,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         # file.close()
@@ -31,7 +32,7 @@ class Database:
             pass
 
         try:
-            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255),  email VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255), consent VARCHAR(255))"
+            command_1 = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255),  email VARCHAR(255), enrolled_courses VARCHAR(255), status VARCHAR(255), consent VARCHAR(255), api_key VARCHAR(255))"
             cursor.execute(command_1)
         except pymysql.err.OperationalError:
             print("Already initialized")
@@ -69,9 +70,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         # cursor.execute("DROP TABLE courses")
@@ -89,9 +90,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("ALTER TABLE statistics ADD assignment_details VARCHAR(255) DEFAULT ''")
@@ -106,9 +107,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT email FROM users")
@@ -118,13 +119,37 @@ class Database:
             if row == new_user_data:
                 print("User already exist")
                 return False
-            
-        new_user_data_long = (email, username, "", "user", "yes")
-        command = "INSERT INTO users (email, username, enrolled_courses, status, consent) VALUES (%s, %s, %s, %s, %s)"
+        
+        api_key = secrets.token_hex(64)
+        new_user_data_long = (email, username, "", "user", "yes", api_key)
+        command = "INSERT INTO users (email, username, enrolled_courses, status, consent, api_key) VALUES (%s, %s, %s, %s, %s, %s)"
         cursor.execute(command, new_user_data_long)
         connection.commit()
         cursor.close()
-        return True
+        return api_key
+    
+    def checkAPIKey(self, email, username, api_key):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        command = "SELECT email, username, api_key FROM users"
+        load = (str(email), str(username), str(api_key))
+        cursor.execute(command)
+        result = cursor.fetchall()
+        cursor.close()
+        if load in result:
+            return True
+        else:
+            return False
 
     def temporaryEnroll(self, email, username):
         config = dotenv_values(".env")
@@ -134,9 +159,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
@@ -146,6 +171,57 @@ class Database:
         connection.commit()
         cursor.close()
 
+    def checkenrolledCourse(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        command = "SELECT enrolled_courses from users WHERE email = %s AND username = %s"
+        cursor.execute(command, (email, username))
+        result = cursor.fetchall()
+        course_list = self.arrayFromString(result[0][0])
+        
+        if course in course_list:
+            return True, course_list
+        else:
+            return False, course_list
+
+    def enrollCourse(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        check_course = self.checkenrolledCourse(email, username, course)
+        if check_course[0] != False:
+            return False
+        else:
+            new_course_list = check_course[1]
+            new_course_list.append(course)
+            temp = new_course_list
+            new_course_list = self.stringFromArray(new_course_list)
+            command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
+            load = (new_course_list, email, username)
+            cursor.execute(command, load)
+            connection.commit()
+            cursor.close()
+            return temp
+
     def getUserData(self, email, username):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -154,9 +230,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         command = "SELECT enrolled_courses from users WHERE email = %s AND username = %s"
@@ -176,9 +252,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM users WHERE username = %s", username)
@@ -205,9 +281,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT email, username FROM users")
@@ -216,21 +292,6 @@ class Database:
             return True
         else:
             return False
-
-    # Used when enrolling courses for each user. (WIP)
-    def enrollCourse(self, email, username, course_list):
-        config = dotenv_values(".env")
-        connection = pymysql.connect(
-        host=config["HOST_ALT"],
-        port=int(config["PORT_ALT"]),
-        user=config["USER"],
-        password=config["PASSWORD"],
-        database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
-        )
-        cursor = connection.cursor()
 
     # Update chat history in the database. This will be updated when the session ends.
     def storeChatHistory(self, username, email, course, room_name, history):
@@ -241,9 +302,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         # history = pickle.dumps(history)
@@ -261,9 +322,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         command = "INSERT INTO chat_history (username, email, course_name, room_name) VALUES (%s, %s, %s, %s)"
@@ -279,9 +340,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))        
@@ -298,9 +359,9 @@ class Database:
         user=config["USER"],
         password=config["PASSWORD"],
         database=config["DATABASE"],
-        connect_timeout=30,
-        read_timeout=300,
-        write_timeout=300
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
         )
         cursor = connection.cursor()
         try:
@@ -321,12 +382,97 @@ class Database:
 
         except pymysql.OperationalError:
             return False
-    
-"""
-TESTING THE FUNCTIONALITIES OF THE DATABASE
-"""
+        
+    def getChatRoom(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        command = "SELECT room_name FROM chat_history WHERE email = %s AND username = %s AND course_name = %s"
+        load = (email, username, course)
+        cursor.execute(command, load)
+        result = cursor.fetchall()
+        chatroom = []
+        for x in result:
+            chatroom.append(x[0])
 
-# test = Database()
-# test.resetTable()
-# print(test.loadChatHistory("hutao", "Computer System", ""))
-# print(test.loadChatHistory("hutao"))
+        return chatroom
+    
+
+    def checkChatRoom(self, email, username, course, chatroom):
+        all_chatrooms = self.getChatRoom(email, username, course)
+        if chatroom in all_chatrooms:
+            return True
+        else:
+            return False
+    
+    def unenrollCourse(self, email, username, course):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        check_course = self.checkenrolledCourse(email, username, course)
+        if check_course[0] == False:
+            return False
+        else:
+            new_course_list = check_course[1]
+            new_course_list.remove(course)
+            temp = new_course_list
+            new_course_list = self.stringFromArray(new_course_list)
+            command_1 = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
+            load_1 = (new_course_list, email, username)
+            cursor.execute(command_1, load_1)
+            connection.commit()
+            command_2 = "DELETE FROM chat_history WHERE email = %s AND username = %s AND course_name = %s"
+            load_2 = (email, username, course)
+            cursor.execute(command_2, load_2)
+            connection.commit()
+            cursor.close()
+            return temp
+        
+    def deleteChatRoom(self, email, username, course, chatroom):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        check_course = self.checkenrolledCourse(email, username, course)
+        if check_course[0] == False:
+            return False
+        else:
+            check_chatroom = self.getChatRoom(email, username, course)
+            if chatroom not in check_chatroom:
+                return False
+            else:
+                pass
+
+            
+            command = "DELETE FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s"
+            load = (email, username, course, chatroom)
+            cursor.execute(command, load)
+            connection.commit()
+            cursor.close()
+            return True   

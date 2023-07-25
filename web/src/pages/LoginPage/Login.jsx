@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/userSlice";
 import Transition from "react-transition-group/Transition";
-import logo from "../../assets/Logo.svg"
-import cmkllogo from "../../assets/CMKL logo.svg"
+import logo from "../../assets/Logo.svg";
+import cmkllogo from "../../assets/CMKL logo.svg";
+import axios from "axios";
 
 import Cookies from "js-cookie";
 
 import CourseNames from "./CourseNames.json";
-import { loginAction } from "../../store/loginSlice";
+// import { loginAction } from "../../store/loginSlice";
 
 function Login() {
   const [show, setShow] = useState(false);
@@ -21,7 +22,57 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  
+
+  const handleGoogleLogin = async () => {
+    try {
+      const googleAuthUrl = "https://accounts.google.com/o/oauth2/auth";
+      const redirectUri = "https://parrot.cmkl.ai"; // Replace with your frontend redirect URL
+      const clientId =
+        "479838750655-1r50o7kf756vv7s0tpbco8uh25g143mr.apps.googleusercontent.com"; // Replace with your actual client ID
+      const scope =
+        "openid email profile https://www.googleapis.com/auth/contacts.readonly"; // Specify the scopes you need
+
+      // Construct the URL for Google Sign-In
+      const authUrl = `${googleAuthUrl}?response_type=token&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${encodeURIComponent(
+        scope
+      )}`;
+
+      // Open Google Sign-In in the same window without a popup
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error("Error during Google Sign-In:", error);
+    }
+  };
+
+  const getAccessTokenFromUrl = () => {
+    const hash = window.location.hash;
+    const params = new URLSearchParams(hash.substr(1));
+    return params.get("access_token");
+  };
+
+  const handleLoginFlow = async () => {
+    const accessToken = getAccessTokenFromUrl();
+
+    if (accessToken) {
+      try {
+        // Send the access token to the backend for verification and JWT generation
+        const res = await axios.post("https://api.parrot.cmkl.ai/auth/login", {
+          token: accessToken,
+        });
+
+        localStorage.setItem("LOGGED IN", "I TTINK")
+
+        // Store the JWT token in local storage or cookies for subsequent API requests.
+        localStorage.setItem("data", JSON.stringify(res.data))
+        navigate("/Course");
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
+    } else {
+      console.error("Access token not found in URL.");
+    }
+  };
+
   // const sendDataToBackend = async () => {
   //   try {
   //     const response = await fetch('/logintest', {
@@ -55,10 +106,13 @@ function Login() {
         courses: CourseNames,
         status: "user",
       })
-      );
+    );
 
     Cookies.set("Screen_Width", window.innerWidth);
     Cookies.set("Screen_Height", window.innerHeight);
+    if (window.location.hash.includes("access_token")) {
+      handleLoginFlow();
+    }
   }, []);
 
   const modalToggle = () => {
@@ -69,8 +123,7 @@ function Login() {
     setTouched(true);
 
     if (agree === true) {
-      navigate("/Course");
-      dispatch(loginAction.setLoggedIn(true))
+      handleGoogleLogin();
     }
   };
 
@@ -83,7 +136,7 @@ function Login() {
     <div className={styles.background}>
       <div className={styles.content}>
         <img className={styles.logo} src={logo} />
-        <p className={styles.app_name}>Macaw</p>
+        <p className={styles.app_name}>Parrot</p>
         <div className={styles.quote}>
           <section className={styles.left_text}>
             Let us <br />
@@ -133,7 +186,7 @@ function Login() {
         <div className={styles.red_circle}></div>
         <div className={styles.yellow_circle}></div>
       </div>
-      <Transition in={show} timeout={300} mountOnEnter unmountOnExit >
+      <Transition in={show} timeout={300} mountOnEnter unmountOnExit>
         {(state) => (
           <Term
             show={state}
