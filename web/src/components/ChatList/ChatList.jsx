@@ -7,6 +7,7 @@ import New_Button from "../../assets/New button.svg";
 import styles from "./ChatList.module.css";
 import CreateChatModal from "../CreateChatModal/CreateChatModal";
 import { bigDataAction } from "../../store/bigDataSlice";
+import axios from "axios";
 
 // const INITAL_STATE = [
 //   { id: 1, assignment: "Chem", sessionName: "organic chem" },
@@ -90,6 +91,8 @@ const ChatList = (props) => {
   const addChatHandler = (name) => {
     dispatch(bigDataAction.addChat({ name, subjectId }));
     setToggle(!toggle);
+
+    // axios.post('')
   };
 
   return (

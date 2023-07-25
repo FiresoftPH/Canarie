@@ -4,6 +4,8 @@ from dotenv import dotenv_values
 config = dotenv_values("Libs/.env")
 
 # Checked
+
+# Basiclly ask ai for answer to your question
 def getAnswer():
     url = 'https://api.parrot.cmkl.ai/ai/getResponse'  # Replace with your server's URL
 
@@ -33,6 +35,9 @@ def getAnswer():
         print("An error occurred:", str(e))
 
 # Checked
+
+# For getting the chat history for that certain room, backend automaticlly checks
+# if the room is created or not, just send the room name.
 def getHistory():
     url = 'https://api.parrot.cmkl.ai/ai/getFullHistory'  # Replace with your server's URL
 
@@ -146,8 +151,8 @@ def deleteChatRoom():
 
 
 # getAnswer()
-# getHistory()
-getChatRoom()
+getHistory()
+# getChatRoom()
 # enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()

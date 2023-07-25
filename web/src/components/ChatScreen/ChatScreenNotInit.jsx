@@ -5,6 +5,8 @@ import ChattingCardUser from "../ChattingCard/ChattingCardUser";
 import styles from "./ChatScreenNotInit.module.css";
 
 const ChatScreenNotInit = (props) => {
+  // console.log("Nothing to see here ;)")
+
   return <div className={styles.wrapper}></div>;
 
   const [update, setUpdate] = useState(false)

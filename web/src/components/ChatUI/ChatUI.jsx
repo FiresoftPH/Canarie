@@ -31,21 +31,21 @@ import { useRef } from "react";
 import axios from "axios";
 
 let shouldUpdate = false;
-const ChatUI = async () => {
+const ChatUI = () => {
   // let chatName = props.mode;
 
+  // Fetch data only once
+  let data = useSelector((state) => state.bigData);
+
+  // let chatName = useParams().assignmentId;
+  // const courseName = useParams().subjectId;
   const { subjectId, assignmentId } = useParams();
   let chatName = assignmentId;
   const courseName = subjectId;
 
   const nav = useNavigate();
   const location = useLocation();
-
-  // Fetch data only once
-  const data = useSelector((state) => state.bigData);
-
-  // let chatName = useParams().assignmentId;
-  // const courseName = useParams().subjectId;
+  const usrData = JSON.parse(localStorage.getItem("data"));
 
   // console.log(data.filter((sub) => sub.course === courseName)[0].assignments.filter((ass) => ass.assignmentId === chatName)[0])
 
@@ -57,24 +57,28 @@ const ChatUI = async () => {
     setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
   }, [data.filter((sub) => sub.course === courseName)[0].assignments]);
 
-
-  const usrData = JSON.parse(localStorage.getItem("data"));
-
-  // let data = useSelector((state) => state.bigData);
+  // Fetch recent history data
   useEffect(() => {
+    // console.log("FETCHING HISTORY")
+    // console.log(usrData)
+
     const cleanUp = async () => {
-      const newData = await axios
-        .post("https://api.parrot.cmkl.ai/getFullHistory", {
+      const fetchedHistory = await axios.post(
+        "https://api.parrot.cmkl.ai/ai/getFullHistory",
+        {
           username: usrData.username,
           email: usrData.email,
           course: subjectId,
-          chatroom_name: "general",
+          chatroom_name: assignmentId,
           api_key: usrData.api_key,
-        })
-        .then((res) => console.log(res));
+        }
+      ).then(res => res.data);
+
+      console.log(fetchedHistory)
     }
+
     cleanUp()
-  }, []);
+  }, [subjectId. assignmentId]);
 
   // useEffect(() => {
   //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
@@ -132,35 +136,34 @@ const ChatUI = async () => {
       console.log(question);
       addChatToAssignment(question, "user", fileAttached);
       // addChatToAssignment("No. You do it yourself.", "ai");
-      const usrData = JSON.parse(localStorage.getItem("data"));
+      // const usrData = JSON.parse(localStorage.getItem("data"))[0];
+
+      console.log(usrData);
+
       setLock(true);
-      const res = await axios.post(
-        "https://corsproxy.io/?" +
-          encodeURIComponent("https://api.parrot.cmkl.ai/ai/getResponse"),
-        {
-          // username: data.username,
-          // email: data.email,
-          // course: subjectId,
-          // chatroom_name: "general",
-          api_key: usrData.api_key,
-          username: usrData.username,
-          email: usrData.email,
-          code: [],
-          course: subjectId,
-          chatroom_name: "general",
-          question,
-        },
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      );
+      try {
+        const res = await axios
+          .post(
+            "https://corsproxy.io/?" +
+              encodeURIComponent("https://api.parrot.cmkl.ai/ai/getResponse"),
+            {
+              username: usrData.username,
+              email: usrData.email,
+              code: [],
+              course: subjectId,
+              chatroom_name: assignmentId,
+              api_key: usrData.api_key,
+              question: question,
+            }
+          )
+          .then((res) => res.data);
+        console.log(res);
+        addChatToAssignment(res.message, "ai", []);
+        setLock(false);
+      } catch {
+        setLock(false);
+      }
 
-      console.log(res.data);
-      addChatToAssignment(res.data.message, "ai", res.data.rating);
-
-      setLock(false);
       // console.log(res)
     } else {
       // For general chat
@@ -312,6 +315,7 @@ const ChatUI = async () => {
   };
 
   console.log("ChatUI refreshed");
+  console.log(history);
 
   return (
     <>

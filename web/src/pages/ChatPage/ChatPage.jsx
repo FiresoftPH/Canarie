@@ -7,31 +7,32 @@ import IDE from "../../components/IDE/IDE";
 import Transition from "react-transition-group/Transition";
 
 function Chat() {
-  const [close, setClose] = useState(false);
+  const [closev2, setClosev2] = useState(false);
 
-  const [mode, setMode] = useState("General");
 
-  const toggleClose = (val) => {
-    setClose(!close);
+  // const [mode, setMode] = useState("General");
+
+  const toggleClosev2 = (val) => {
+    setClosev2(!closev2);
   };
 
   // IDE stuff //
   return (
-    // <div className={`styles.bg_container ` + (close ? "close" : "open")}>
+    // <div className={`styles.bg_container ` + (closev2 ? "closev2" : "open")}>
     <div
-      className={`${styles.bg_container} ${close ? styles.close : styles.open}`}
+      className={`${styles.bg_container} ${closev2 ? styles.close : styles.open}`}
     >
-      <Transition in={close} timeout={300} mountOnEnter unmountOnExit>
-        {(state) => <ShortSideBar open={toggleClose} show={state} />}
+      <Transition in={closev2} timeout={300} mountOnEnter unmountOnExit>
+        {(state) => <ShortSideBar open={toggleClosev2} show={state} />}
       </Transition>
-      <Transition in={!close} timeout={300} mountOnEnter unmountOnExit>
+      <Transition in={!closev2} timeout={300} mountOnEnter unmountOnExit>
         {(state) => (
           <LongSidebar
             onSelectMode={(id) => {
               // setMode(id);
               console.log("ID: ", id);
             }}
-            close={toggleClose}
+            close={toggleClosev2}
             show={state}
           />
         )}
