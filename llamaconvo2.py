@@ -8,11 +8,11 @@ import langchain.chains
 import langchain.memory
 import time
 import torch
-from Libs import macaw_ai
+from Libs import parrot_ai
 import sys
 import pickle
 
-arima = macaw_ai.GeneratePrompt()
+arima = parrot_ai.GeneratePrompt()
 prompt = arima.codePrompt("what is wrong with the code below", "UwU.py")
 
 #tokenizer = LlamaTokenizer.from_pretrained("/lustre/scratch/project/cmkl/ai-chat/llama-13b-meta-hf")

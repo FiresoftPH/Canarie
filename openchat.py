@@ -7,7 +7,7 @@ import langchain.chains
 import langchain.memory
 import time
 import torch
-from Libs import macaw_ai
+from Libs import parrot_ai
 import sys
 import pickle
 

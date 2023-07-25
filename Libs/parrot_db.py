@@ -406,6 +406,14 @@ class Database:
 
         return chatroom
     
+
+    def checkChatRoom(self, email, username, course, chatroom):
+        all_chatrooms = self.getChatRoom(email, username, course)
+        if chatroom in all_chatrooms:
+            return True
+        else:
+            return False
+    
     def unenrollCourse(self, email, username, course):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -460,6 +468,7 @@ class Database:
                 return False
             else:
                 pass
+
             
             command = "DELETE FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s"
             load = (email, username, course, chatroom)

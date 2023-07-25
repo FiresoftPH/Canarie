@@ -48,5 +48,5 @@ WORKDIR /app
 EXPOSE 2424
 
 # Set the default command to run the server
-CMD [ "python3", "macaw_server.py" ]
+CMD [ "python3", "parrot_server.py" ]
 
