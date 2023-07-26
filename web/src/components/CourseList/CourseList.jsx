@@ -1,10 +1,10 @@
 import CourseCard from "src/components/CourseCard/CourseCard.jsx";
 import styles from "./CourseList.module.css";
 
-export default function CourseList(props) {
+export default function CourseList({displayData}) {
   return (
     <ul className={styles.course_container}>
-      <CourseCard data={props.displayData} />
+      <CourseCard data={displayData} />
     </ul>
   );
 }

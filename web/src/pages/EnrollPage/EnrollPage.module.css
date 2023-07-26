@@ -19,7 +19,7 @@
   gap: 2rem;
   height: 90vh;
   width: 95vw;
-  padding: 4rem 4.7rem;
+  padding: 3rem 4.2rem;
   /*the alpha value controls the transparency*/
   background: rgba(30, 34, 80, 0.63);
   /* This controls the blurring effect*/
@@ -61,10 +61,10 @@
 
 .header_topleft{
   display: grid;
-  grid-template: 2fr 1fr ;
+  grid-template: 2fr 1fr / 1fr 1fr;
   grid-template-areas: 
-  "enrolledText" 
-  "searchArea";
+  "enrolledText courseRedirect"
+  "searchArea searchArea";
   row-gap: 1.5rem;
   grid-area:title;
 }

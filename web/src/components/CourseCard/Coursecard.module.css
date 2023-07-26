@@ -1,6 +1,6 @@
 .container{
   display: grid;
-  grid-template: 1.5fr 1fr/ 1fr;
+  grid-template: 1fr 2fr/ 1fr;
   background-color: rgb(245, 106, 106);
   border-radius: 25px;
   border: 2px solid black;
@@ -8,11 +8,15 @@
   height: 14.375rem;
 }
 
-.text{
+.competency_name{
   background-color: white;
   border: 1px solid rgb(0, 0, 0);
   color: black;
   border-radius: 24px;
   padding: 10px 15px;
   grid-row: 2 / 3;
+}
+
+.text{
+  color: black;
 }

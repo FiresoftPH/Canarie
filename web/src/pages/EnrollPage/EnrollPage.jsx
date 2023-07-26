@@ -1,6 +1,6 @@
+import styles from './EnrollPage.module.css'
 import { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import styles from "./Course.module.css";
 import CourseList from "src/components/CourseList/CourseList.jsx";
 import SearchBox from "src/components/SearchBox/SearchBox";
 import { userActions } from "../../store/userSlice";
@@ -8,19 +8,11 @@ import "boxicons";
 import { useNavigate } from "react-router-dom";
 import user_with_suit from '../../assets/user-with-suit.jpeg'
 import { loginAction } from "../../store/loginSlice";
-import { bigDataAction } from "../../store/bigDataSlice";
 
-function Course() {
-  // Demo data set to user store (Logic will be added at login page)
+function EnrollPage() {
   const dispatch = useDispatch();
   const nav = useNavigate();
-
-  // const courses = useSelector((state) => state.user.courses);
-  const courses = JSON.parse(localStorage.getItem("data")).courses
-  const user = useSelector((state) => state.user);
-  const history = useSelector(state => state.bigData)
-
-  const name = JSON.parse(localStorage.getItem("data")).username
+  const subjects = JSON.parse(localStorage.getItem("data")).courses
 
   const [inputbox, setInputbox] = useState("");
   const [greet, setGreet] = useState("")
@@ -37,7 +29,7 @@ function Course() {
       return data.filter((item) => search(query, item));
     }
     if (typeof data === 'object' && data !== null) {
-      return Object.entries(data).some(([key, value]) => {
+      return Object.entries(data).some(([value]) => {
         return search(query, value)
       })
     }
@@ -50,26 +42,20 @@ function Course() {
     const hour = new Date().getHours()
     setGreet(`${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`)
   }, [])
-
-  useEffect(() => {
-    console.log("CLEANUP ONCE")
-    dispatch(bigDataAction.setHistory(courses))
-    console.log(history)
-  }, [])
-
   return (
     <>
       <div className={styles.bg_container}>
         <div className={styles.glass_layer_course}>
           <header className={styles.header_topleft}>
-            <p className={styles.title}>Courses</p>
+            <p className={styles.title}>Enroll</p>
+            <p>hi</p>
             <SearchBox onInputChange={inputChangeHandler} />
           </header>
           <header className={styles.userdropdown}>
             <p className={styles.username}>
               {" "}
               Good <span>{greet}</span>, <span>Mr/Mrs</span>{" "}
-              <span>{name}</span>
+              <span>Username</span>
             </p>
             <div className={styles.user_img}> <img src={user_with_suit} /> </div>
             {"  "}
@@ -84,7 +70,7 @@ function Course() {
               <box-icon color="white" size="3rem" name="log-out"></box-icon>
             </div>
           </header>
-          <CourseList displayData={filteredSearch}/>
+          <CourseList key={subjects.id} displayData={filteredSearch}/>
         </div>
         <div className={styles.mask}>
           <div className={styles.red_circle_course}></div>
@@ -92,7 +78,7 @@ function Course() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default Course;
+export default EnrollPage
