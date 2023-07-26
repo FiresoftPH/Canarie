@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./Course.module.css";
 import CourseList from "src/components/CourseList/CourseList.jsx";
 import SearchBox from "src/components/SearchBox/SearchBox";
-import Data from "../../mockDB/MOCK_DATA.json";
 import { userActions } from "../../store/userSlice";
 import "boxicons";
 import { useNavigate } from "react-router-dom";
@@ -14,10 +13,7 @@ function Course() {
   // Demo data set to user store (Logic will be added at login page)
   const dispatch = useDispatch();
   const nav = useNavigate();
-
-  // const courses = useSelector((state) => state.user.courses);
-  const courses = JSON.parse(localStorage.getItem("data")).courses
-  const user = useSelector((state) => state.user);
+  const subjects = JSON.parse(localStorage.getItem("data")).courses
 
   const [inputbox, setInputbox] = useState("");
   const [greet, setGreet] = useState("")
@@ -26,15 +22,25 @@ function Course() {
     setInputbox(event.target.value);
   }
 
-  const search = (data) => {
-    return data.filter((item) =>
-      item.toLowerCase().includes(inputbox.toLowerCase())
-    );
+  const search = (query, data) => {
+    if (!query) {
+      return data;
+    }
+    if (Array.isArray(data)) {
+      return data.filter((item) => search(query, item));
+    }
+    if (typeof data === 'object' && data !== null) {
+      return Object.entries(data).some(([value]) => {
+        return search(query, value)
+      })
+    }
+    return String(data).toLowerCase().includes(inputbox.toLowerCase());
   };
+
+  const filteredSearch = search(inputbox, subjects)
 
   useEffect(() => {
     const hour = new Date().getHours()
-    console.log(hour)
     setGreet(`${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`)
   }, [])
 
@@ -65,7 +71,7 @@ function Course() {
               <box-icon color="white" size="3rem" name="log-out"></box-icon>
             </div>
           </header>
-          <CourseList displayData={search(courses)} />
+          <CourseList key={subjects.id} displayData={filteredSearch}/>
         </div>
         <div className={styles.mask}>
           <div className={styles.red_circle_course}></div>

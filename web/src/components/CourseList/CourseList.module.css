@@ -1,9 +1,38 @@
 .course_container{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));;
-  /* justify-items: center; */
+  grid-template-columns: repeat(5, 1fr);;
   gap: 1rem;
   list-style: none;
   grid-area: main;
   overflow-y: scroll;
+}
+@media only screen and (max-width: 1500px){
+  .course_container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);;
+    gap: 1rem;
+    list-style: none;
+    grid-area: main;
+    overflow-y: scroll;
+  }
+}
+@media only screen and (max-width: 1200px){
+  .course_container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);;
+    gap: 1rem;
+    list-style: none;
+    grid-area: main;
+    overflow-y: scroll;
+  }
+}
+@media only screen and (max-width: 900px){
+  .course_container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);;
+    gap: 1rem;
+    list-style: none;
+    grid-area: main;
+    overflow-y: scroll;
+  }
 }
