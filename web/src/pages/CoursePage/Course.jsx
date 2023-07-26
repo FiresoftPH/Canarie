@@ -14,6 +14,7 @@ function Course() {
   const dispatch = useDispatch();
   const nav = useNavigate();
   const subjects = JSON.parse(localStorage.getItem("data")).courses
+  const name = JSON.parse(localStorage.getItem("data")).username
 
   const [inputbox, setInputbox] = useState("");
   const [greet, setGreet] = useState("")
@@ -56,7 +57,7 @@ function Course() {
             <p className={styles.username}>
               {" "}
               Good <span>{greet}</span>, <span>Mr/Mrs</span>{" "}
-              <span>Username</span>
+              <span>{name}</span>
             </p>
             <div className={styles.user_img}> <img src={user_with_suit} /> </div>
             {"  "}
