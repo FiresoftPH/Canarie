@@ -8,12 +8,19 @@ import "boxicons";
 import { useNavigate } from "react-router-dom";
 import user_with_suit from '../../assets/user-with-suit.jpeg'
 import { loginAction } from "../../store/loginSlice";
+import { bigDataAction } from "../../store/bigDataSlice";
 
 function Course() {
   // Demo data set to user store (Logic will be added at login page)
   const dispatch = useDispatch();
   const nav = useNavigate();
   const subjects = JSON.parse(localStorage.getItem("data")).courses
+  const name = JSON.parse(localStorage.getItem("data")).username
+
+  // const courses = useSelector((state) => state.user.courses);
+  const courses = JSON.parse(localStorage.getItem("data")).courses
+  const user = useSelector((state) => state.user);
+  const history = useSelector(state => state.bigData)
 
   const [inputbox, setInputbox] = useState("");
   const [greet, setGreet] = useState("")
@@ -37,11 +44,17 @@ function Course() {
     return String(data).toLowerCase().includes(inputbox.toLowerCase());
   };
 
-  const filteredSearch = search(inputbox, subjects)
+  const filteredSearch = search(inputbox, courses)
 
   useEffect(() => {
     const hour = new Date().getHours()
     setGreet(`${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`)
+  }, [])
+
+  useEffect(() => {
+    console.log("CLEANUP ONCE")
+    dispatch(bigDataAction.setHistory(courses))
+    console.log(history)
   }, [])
 
   return (
@@ -56,7 +69,7 @@ function Course() {
             <p className={styles.username}>
               {" "}
               Good <span>{greet}</span>, <span>Mr/Mrs</span>{" "}
-              <span>Username</span>
+              <span>{name}</span>
             </p>
             <div className={styles.user_img}> <img src={user_with_suit} /> </div>
             {"  "}

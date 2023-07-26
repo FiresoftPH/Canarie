@@ -1,6 +1,8 @@
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 10fr;
+  grid-template-areas: ". ."
+  ". typing";
   width: 100%;
   /* margin-left: 10%;
   margin-right: 10%; */
@@ -13,6 +15,62 @@
   z-index: 100;
   /* justify-content: center;
     align-items: center; */
+}
+
+.lower {
+  padding-bottom: 0;
+}
+
+.typing {
+  grid-area: typing;
+
+  display: flex;
+}
+
+.typing p {
+  margin-left: .3rem;
+}
+
+.typing1, .typing2, .typing3 {
+  width: .4rem;
+  height: .4rem;
+  border-radius: 50%;
+  background-color: white;
+  align-self: center;
+
+  margin-left: .2rem;
+  opacity: .7;
+}
+
+@keyframes typing {
+  0% {
+    opacity: .7;
+    transform: translateY(.2rem);
+  }
+  50% {
+    transform: translateY(-.2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typing1 {
+  margin: 0;
+
+  animation: typing 1s infinite;
+  animation-delay: 0ms;
+}
+
+.typing2 {
+  animation: typing 1s infinite ease-out;
+  /* animation-delay: 50ms; */
+}
+
+.typing3 {
+  animation: typing 1s infinite ease-in;
+  /* animation-delay: 100ms; */
 }
 
 .attachment {

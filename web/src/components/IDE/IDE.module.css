@@ -57,6 +57,8 @@
   grid-area: Editor;
   display: flex;
   /* width: 50%; */
+
+  /* background-color: #dd6174; */
 }
 
 .ide_output:last-child {
@@ -101,22 +103,25 @@
   padding-right: 10px;
 }
 
-.ide_bottombar{
+.ide_bottombar {
   height: 100%;
   width: auto;
   position: relative;
   /* overflow-y: scroll; */
 }
 
-.cm-scroller{
+.cm-scroller {
   overflow: auto;
 }
 
 .lang_selection {
-  color: black;
+  /* all: unset; */
+  color: white;
 }
+
 .lang_selection option {
-  color: black;
+  /* color: black; */
+  color: white;
 }
 
 .run_btn {
@@ -127,33 +132,55 @@
 
 .ide_topbar {
   display: flex;
-  position:relative;
+  position: relative;
   padding: 0.5%;
   justify-content: space-between;
   align-items: center;
+
+  background-color: #2d3e6a;
 }
 
-.new_file_btn{
+.ide_topbar label {
+  margin-left: 0.5rem;
+  display: flex;
+}
+
+.ide_topbar label select {
+  /* margin-left: 1rem; */
+  /* all: unset; */
+
+  /* margin-left: 0.4rem; */
+  background-color: grey;
+  /* padding: .1rem; */
+  /* padding-left: 1rem; */
+  /* border-radius: 1rem; */
+}
+
+.ide_topbar img {
+  margin-right: 0.5rem;
+}
+
+.new_file_btn {
   background-color: white;
   padding: 0 1rem;
   border-radius: 1rem;
 }
 
-.save_icon{
+.save_icon {
   background-color: red;
   height: 2rem;
   width: 2rem;
   border-radius: 50%;
 }
 
-.save_icon_green{
+.save_icon_green {
   background-color: rgb(0, 255, 13);
   height: 2rem;
   width: 2rem;
   border-radius: 50%;
 }
 
-.save_icon_yellow{
+.save_icon_yellow {
   background-color: rgb(255, 251, 0);
   height: 2rem;
   width: 2rem;

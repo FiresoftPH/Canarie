@@ -16,16 +16,19 @@ const ChatScreenInitialized = ({ history, onRate }) => {
 
   const { subjectId, assignmentId } = useParams();
 
-  console.log(history);
+  // console.log(history);
+  
+  if (history === undefined) {
+    // console.log("Abording")
+
+    return <div id="chatScroll" className={styles.wrapper}></div>;
+  }
   
   const optimizedData = useMemo(() => {
     // console.log(history)
     return history.chatHistory;
   }, [history]);
   
-  if (history == undefined) {
-    return <div className={styles.wrapper}></div>;
-  }
 
   // console.log("Expensive component re rendered")
 

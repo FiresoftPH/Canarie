@@ -30,9 +30,7 @@ const FileList = (props) => {
   const data = useSelector((state) => state.bigData);
 
   const [files, setFiles] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(
-    data.filter((sub) => sub.course === subjectId)[0].files[0].id
-  );
+  const [selectedFile, setSelectedFile] = useState();
 
   //   const mh = props.maxHeight;
 
@@ -47,8 +45,10 @@ const FileList = (props) => {
 
     setFiles(transformedData);
     // setSelectedFile(transformedData[0].id);
-    props.sf(transformedData[0].id);
-    dispatch(chatAction.setCode(transformedData[0].code));
+    if (transformedData.length > 0) {
+      props.sf(transformedData[0].id);
+      dispatch(chatAction.setCode(transformedData[0].code));
+    }
     // }
   }, [data.filter((sub) => sub.course === subjectId)[0].files]);
 
@@ -102,7 +102,7 @@ const FileList = (props) => {
         {/* <FileCard selected name="Untitled-1" />
         <FileCard name="Untitled-2" />
         <FileCard name="Untitled-3" /> */}
-        {files.map((file) => {
+        {files.length > 0 ? files.map((file) => {
           return (
             <FileCard
               onSelect={fileSelectHandler}
@@ -112,7 +112,7 @@ const FileList = (props) => {
               selected={selectedFile === file.id}
             />
           );
-        })}
+        }) : "Please upload a file"}
       </section>
     </>
   );

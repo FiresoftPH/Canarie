@@ -141,6 +141,19 @@ const bigDataSlice = createSlice({
       });
 
       return transformedData;
+    },
+    setHistory: (state, action) => {
+      const courses = action.payload;
+
+      const transformedData = courses.map(course => {
+        return {
+          course: course,
+          assignments: [],
+          files: []
+        }
+      })
+
+      return transformedData;
     }
   },
 });
