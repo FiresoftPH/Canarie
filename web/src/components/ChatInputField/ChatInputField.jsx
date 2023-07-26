@@ -59,33 +59,41 @@ const ChatInputField = (props) => {
       })
     );
 
-    props.onUploadFile([{
-      subjectId,
-      assignmentId,
-      name: fname,
-      code: fr.result,
-    }])
+    props.onUploadFile([
+      {
+        subjectId,
+        assignmentId,
+        name: fname,
+        code: fr.result,
+      },
+    ]);
 
     console.log("COMPLETED DISPATCH");
     console.log(bigD);
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} ${
+      props.typing ? styles.lower : ""
+    }`}>
       <div
         // onClick={() => {
         //   if (props.lock === false) props.onFileAttach();
         // }}
         className={`${styles.attachment} ${props.lock ? styles.locked : ""}`}
       >
-        {!props.lock ? <label>
-          <input
-            onChange={(e) => {
-              fileUploadHandler(e);
-            }}
-            type="file"
-          />
-        </label> : ""}
+        {!props.lock ? (
+          <label>
+            <input
+              onChange={(e) => {
+                fileUploadHandler(e);
+              }}
+              type="file"
+            />
+          </label>
+        ) : (
+          ""
+        )}
         <img
           // onClick={() => {
           //   props.onFileAttach();
@@ -115,6 +123,16 @@ const ChatInputField = (props) => {
         <img onClick={askHandler} className={styles.send} src={SendIcon} />
         <div className={styles.bottomBlur} />
       </div>
+      {props.typing ? (
+        <div className={styles.typing}>
+          <div className={styles.typing1}></div>
+          <div className={styles.typing2}></div>
+          <div className={styles.typing3}></div>
+          <p>Parrot is typing</p>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

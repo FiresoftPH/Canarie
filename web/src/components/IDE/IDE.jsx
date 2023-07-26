@@ -12,6 +12,11 @@ import { bigDataAction } from "../../store/bigDataSlice";
 
 import interact from "interactjs";
 import * as alls from "@uiw/codemirror-themes-all";
+import axios from "axios";
+
+import ReactMarkdown from "react-markdown";
+
+import DownV from "../../assets/DownV.svg";
 
 const IDE = (props) => {
   const ideRef = useRef(null);
@@ -22,24 +27,24 @@ const IDE = (props) => {
     setLanguage(lang);
   }
 
-  const [saveStatus, setSaveStatus] = useState(styles.save_icon)
-  
+  const [saveStatus, setSaveStatus] = useState(styles.save_icon);
+
   const fileSaveHandler = () => {
     dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
-    console.log('ehe')
+    console.log("ehe");
     // if code changed the save icon color changed
-    if (code !== prevCode.current){
+    if (code !== prevCode.current) {
       setSaveStatus(styles.save_icon_green);
-      console.log('aroi changed');
-    // if code doesn't change the save icon is the same
-    } else if (code === prevCode.current){
+      console.log("aroi changed");
+      // if code doesn't change the save icon is the same
+    } else if (code === prevCode.current) {
       setSaveStatus(styles.save_icon);
     }
     // save the new code
     prevCode.current = code;
   };
 
-  const [language, setLanguage] = useState("javascript");
+  const [language, setLanguage] = useState("PROGRAMMING LANGULAGE");
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [y, setY] = useState("");
@@ -62,117 +67,112 @@ const IDE = (props) => {
   //   setCode(value);
   // }, []);
   const keystroke = useCallback((value) => {
-    setSaveStatus(styles.save_icon_yellow)
-  }, [])
+    setSaveStatus(styles.save_icon_yellow);
+  }, []);
 
-  const onChange1 = event => {
+  const onChange1 = (event) => {
     setCode(event);
-    keystroke(event)
+    keystroke(event);
   };
 
   const executeCode = () => {
     try {
       let result;
       switch (language) {
-        case "c":
-          result = excuteJavascriptCode(code);
-          console.log("1");
+        case "c++":
+          result = exeCode(code, ".cpp");
+          // console.log("1");
           break;
         case "csharp":
-          result = excutePythonCode(code);
-          console.log("2");
-          break;
-        case "css":
-          result = excuteJavascriptCode(code);
-          console.log("3");
-          break;
-        case "docker":
-          result = excutePythonCode(code);
-          console.log("4");
-          break;
-        case "go":
-          result = excuteJavascriptCode(code);
-          console.log("5");
-          break;
-        case "java":
-          result = excutePythonCode(code);
-          console.log("6");
-          break;
-        case "javascript":
-          result = excuteJavascriptCode(code);
-          console.log("7");
-          break;
-        case "php":
-          result = excutePythonCode(code);
-          console.log("8");
+          result = exeCode(code, ".cs");
+          // console.log("2");
           break;
         case "python":
-          result = excutePythonCode(code);
-          console.log("9");
-          break;
-        case "typescript":
-          result = excutePythonCode(code);
-          console.log("10");
+          result = exeCode(code, ".py");
+          // console.log("9");
           break;
         default:
           throw new Error(`Language mode "${language}" is not supported.`);
       }
       // Set the output with the result of code execution
-      setOutput(result);
+      // setOutput(result);
     } catch (error) {
       // Set the output with the error message if any
       setOutput(error.toString());
     }
   };
 
-  const excutePythonCode = (code) => {
-    const cacheName = "file.py";
-    const fileContent = code;
+  const usrData = JSON.parse(localStorage.getItem("data"));
 
-    const blob = new Blob([fileContent], { type: "text/plain" });
+  const exeCode = async (code, fType) => {
+    const res = await axios.post("https://api.parrot.cmkl.ai/compileCode", {
+      username: usrData.username,
+      email: usrData.email,
+      code: code,
+      api_key: usrData.api_key,
+      file_extension: fType,
+    });
 
-    const cachePromise = caches.open(cacheName).then((cache) => {
-      const request = new Request(cacheName);
-      const response = new Response(blob);
-      return cache.put(request, response);
-    });
-    cachePromise.catch((error) => {
-      console.error("Error saving code to cache:", error);
-    });
+    console.log(res);
+
+    setOutput(
+      res.data.Error !== ""
+        ? "An error has occured, please check if your file type is correct or your code is free of error"
+        : res.data.Output
+    );
   };
 
-  const excuteJavascriptCode = (code) => {
-    const cacheName = "file.js";
-    const fileContent = code;
+  // const excutePythonCode = (code) => {
+  //   const cacheName = "file.py";
+  //   const fileContent = code;
 
-    // const blob = new Blob([fileContent], { type: 'text/plain' });
+  //   const blob = new Blob([fileContent], { type: "text/plain" });
 
-    const cachePromise = caches.open(cacheName).then((cache) => {
-      const request = new Request(cacheName);
-      const response = new Response(fileContent);
-      return cache.put(request, response);
-    });
-    cachePromise.catch((error) => {
-      console.error("Error saving code to cache:", error);
-    });
-  };
+  //   const cachePromise = caches.open(cacheName).then((cache) => {
+  //     const request = new Request(cacheName);
+  //     const response = new Response(blob);
+  //     return cache.put(request, response);
+  //   });
+  //   cachePromise.catch((error) => {
+  //     console.error("Error saving code to cache:", error);
+  //   });
+  // };
+
+  // const excuteJavascriptCode = (code) => {
+  //   const cacheName = "file.js";
+  //   const fileContent = code;
+
+  //   // const blob = new Blob([fileContent], { type: 'text/plain' });
+
+  //   const cachePromise = caches.open(cacheName).then((cache) => {
+  //     const request = new Request(cacheName);
+  //     const response = new Response(fileContent);
+  //     return cache.put(request, response);
+  //   });
+  //   cachePromise.catch((error) => {
+  //     console.error("Error saving code to cache:", error);
+  //   });
+  // };
 
   const fixedHeightEditor = EditorView.theme({
-    "& ": { height:  -y + 200 + "px" }
+    "& ": { height: -y + 200 + "px" },
   });
 
   const langTemplate = {
     python: langs.python(),
-    java: langs.java(),
-    javascript: langs.javascript(),
-    typescript: langs.typescript(),
-    c: langs.c(),
-    css: langs.css(),
+    // java: langs.java(),
+    // javascript: langs.javascript(),
+    // typescript: langs.typescript(),
+    // c: langs.c(),
+    // css: langs.css(),
     csharp: langs.csharp(),
-    dockerfile: langs.dockerfile(),
-    go: langs.go(),
-    php: langs.php(),
+    // dockerfile: langs.dockerfile(),
+    // go: langs.go(),
+    // php: langs.php(),
+    "c++": langs.cpp(),
   };
+
+  // console.log(language)
 
   // Initializes a listener event for resizing the ide after rendering
   useEffect(() => {
@@ -192,7 +192,7 @@ const IDE = (props) => {
           });
 
           Object.assign(event.target.dataset, { x, y });
-          setY(y)
+          setY(y);
         },
       },
     });
@@ -217,27 +217,26 @@ const IDE = (props) => {
       },
     });
   });
-  
+
+  const selectRef = useRef()
+
   return (
-    <div
-      className={styles.big_ide_container}
-      ref={ideRef}
-    >
-      <div
-        className={styles.sidin}
-      >
-      
-      </div>
+    <div className={styles.big_ide_container} ref={ideRef}>
+      <div className={styles.sidin}></div>
       <div className={styles.ide_output}>
         <section ref={textEditor} className={styles.ide_container}>
           <div className={styles.ide_topbar}>
             <label>
-              Languages:
+              {/* <p>Languages:</p> */}
               <select
                 className={styles.lang_selection}
                 value={language}
+                ref={selectRef}
                 onChange={(evn) => handleLangChange(evn.target.value)}
               >
+                <option value="PROGRAMMING LANGULAGE" hidden>
+                  PROGRAMMING LANGULAGE
+                </option>
                 {Object.keys(langTemplate)
                   .sort()
                   .map((item, key) => {
@@ -248,34 +247,47 @@ const IDE = (props) => {
                     );
                   })}
               </select>
+              {/* <img onClick={() => {
+                const synteticEvent = new MouseEvent('mousedown', {
+                  view: window,
+                  bubbles: true,
+                  cancelable: true,
+                });
+                
+                selectRef.current.controlRef.dispatchEvent(synteticEvent);
+              }} src={DownV} /> */}
             </label>
-            <div className={styles.new_file_btn}>new</div>
+            {/* <div className={styles.new_file_btn}>new</div> */}
             <img
               className={styles.run_btn}
               src={runIcon}
               onClick={executeCode}
             />
-            <div className={saveStatus}/>
+            {/* <div className={saveStatus} /> */}
             {/* <img src={MinimizeIcon} /> */}
           </div>
           {/* i think we have to move the on focus and blur inside codemirror */}
-          <div className={styles.ide_bottombar} >
+          <div className={styles.ide_bottombar}>
             <CodeMirror
               className={styles.ide}
               value={code}
               theme={[alls.atomone]}
               extensions={[
-                langTemplate[language],
+                language !== "PROGRAMMING LANGULAGE"
+                  ? langTemplate[language]
+                  : null,
                 fixedHeightEditor,
                 EditorView.lineWrapping,
-              ]}
+              ].filter(exten => exten !== null)}
               onBlur={fileSaveHandler}
               onChange={onChange1}
             />
           </div>
           <div className={styles.verticalSlide}>||</div>
         </section>
-        <section className={styles.output}>{output}</section>
+        <section className={styles.output}>
+          <ReactMarkdown>{output}</ReactMarkdown>
+        </section>
       </div>
     </div>
   );

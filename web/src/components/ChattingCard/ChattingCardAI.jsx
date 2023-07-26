@@ -14,9 +14,14 @@ import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import detectLanguage from "../../utils/detectLangulage";
+
+// import { detect } from 'program-language-detector';
 
 const ChattingCardAI = memo(function ChattingCardAI(props) {
   console.log("ChattingCardAI component is called");
+
+  // var detectLang = require('lang-detector');
 
   return (
     <div className={styles.wrapper}>
@@ -35,18 +40,23 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
             children={props.message}
             components={{
               code({ node, inline, className, children, ...props }) {
-                const match = /language-(\w+)/.exec(className || "");
+                // const match = /language-(\w+)/.exec(className || "");
+                const match = detectLanguage(children[0])
+                // console.log(match)
+
+                // console.log(match)
+                // console.log(inline)
                 return !inline && match ? (
                   <SyntaxHighlighter
                     {...props}
                     children={String(children).replace(/\n$/, "")}
                     style={dark}
-                    language={match[1]}
+                    language={match}
                     PreTag="div"
                     // useInlineStyles={false}
-                    customStyle={{
-                      fontSize: "1rem"
-                    }}
+                    // customStyle={{
+                    //   fontSize: "1rem"
+                    // }}
                     // useInlineStyles={false}
                   />
                 ) : (
