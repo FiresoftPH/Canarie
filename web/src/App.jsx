@@ -1,12 +1,13 @@
 import { Routes, Route, RouterProvider } from "react-router-dom";
 import Login from "../src/pages/LoginPage/Login";
+import EnrollPage from "./pages/EnrollPage/EnrollPage";
 import Course from "../src/pages/CoursePage/Course.jsx";
 import Term from "../src/pages/TermPage/Term.jsx";
 import ChatPage from "../src/pages/ChatPage/ChatPage.jsx";
 import Admin from "../src/pages/AdminPage/Admin.jsx";
 import AdminCourse from "../src/pages/AdminCoursePage/AdminCourse.jsx";
-import { useSelector } from "react-redux";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import { useSelector } from "react-redux";
 import { createBrowserRouter } from "react-router-dom";
 import Root from "./pages/RootPage/Root";
 
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Login /> },
       { path: "/Term", element: <Term /> },
+      { path: "/Enroll", element: <EnrollPage /> },
       { path: "/Course", element: <Course /> },
       { path: "/Chat/:subjectId/:assignmentId", element: <ChatPage /> },
       { path: "/Admin", element: <Admin /> },

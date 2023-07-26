@@ -1,5 +1,4 @@
 import styles from './Coursecard.module.css'
-import { useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 export default function CourseCard({data}) {
