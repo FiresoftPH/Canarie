@@ -1,7 +1,7 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-from flask import Flask, request, jsonify, redirect, url_for
+from flask import Flask, request, jsonify, redirect, url_for, Response
 from flask_cors import CORS
 from flask_caching import Cache
 from flask_oauthlib.client import OAuth
@@ -10,8 +10,8 @@ import secrets
 import pickle
 
 import requests
-import os
-import parrot_ai
+import sys
+import FastChat.parrot_ai as parrot_ai
 import parrot_db
 
 import json
@@ -35,6 +35,7 @@ class FlaskServer(Flask):
         self.route('/ai/getFullHistory', methods = ["POST"])(self.getFullHistory)
         self.route('/compileCode', methods = ["POST"])(self.runCode)
         self.route('/auth/chatroom/fetch', methods = ["POST"])(self.getChatRoom)
+        self.route('/auth/chatroom/reset', methods = ["POST"])(self.resetChatHistory)
         self.route('/auth/enroll', methods = ["POST"])(self.enrollCourse)
         self.route('/auth/chatroom/delete', methods = ["POST"])(self.deleteChatRoom)
         self.route('/auth/unenroll', methods = ["POST"])(self.unenrollCourse)
@@ -125,9 +126,31 @@ class FlaskServer(Flask):
             print(key)
             self.db.temporaryEnroll(email, username)
             courses = self.db.getUserData(email, username)
-            return jsonify({'email': email, 'username': username, 'courses': courses, 'api_key': key})
+
+            payload = []
+            url = "https://a1ce-test.cmkl.ac.th/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+
+            for code in courses:
+                mod_url = url.format(course = code)
+                print(mod_url)
+
+                try:
+                    response = requests.get(mod_url)
+                    data = response.json()
+                    response.raise_for_status()
+                    title = data['competency']['title']
+                    pillar = data['competency']['pillar_title']
+                    # dictionary_stuff = {"compentency_code": code, "title": title, "pillar": pillar}
+                    dictionary_stuff = {"competency_code": code, "title": title, "pillar": pillar}
+                    payload.append(dictionary_stuff)
+
+                except requests.exceptions.RequestException as e:
+                    print("An error occurred or have not enrolled any courses yet:", str(e))
+            
+            return jsonify({'email': email, 'username': username, 'courses': payload, 'api_key': key})
+            
         except ValueError as e:
-            print(str(e))
+            # print(str(e))
 
             return jsonify({'error': str(e)})
     
@@ -144,8 +167,11 @@ class FlaskServer(Flask):
         else:
             pass
 
-        full_history = self.db.fetchChatHistory(email, username, course, chatroom)
-        return jsonify({"content": full_history})
+        try:
+            full_history = self.db.fetchChatHistory(email, username, course, chatroom)
+            return jsonify({"content": full_history})
+        except:
+            return jsonify({"Error": "No history found in this chatroom"})
 
     def getResponse(self):
         data = request.get_json()
@@ -162,6 +188,12 @@ class FlaskServer(Flask):
         else:
             pass
 
+        check_course = self.db.checkenrolledCourse(email, username, course)
+        if check_course[0] == False:
+            return False
+        else:
+            pass
+
         chatroom_check = self.db.checkChatRoom(email, username, course, chatroom)
         if chatroom_check == True:
             status = True
@@ -171,10 +203,10 @@ class FlaskServer(Flask):
         if code == [] or code == None or code == "":
             prompt = message
         else:
-            prompt = self.prompt_generation.codePrompt()
+            prompt = self.prompt_generation.codePrompt(message, code)
 
         history_check = self.db.loadChatHistory(username, email, course, chatroom)
-        print(history_check)
+        # print(history_check)
         if history_check != False:
             # continue_chat = self.ai.newchat(history_check)
             chat_cache, answer = self.ai.chatsession(history_check, prompt)
@@ -184,8 +216,13 @@ class FlaskServer(Flask):
             chat_cache, answer = self.ai.chatsession([], prompt)
 
         self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
- 
+
+        # return Response(self.streamer(answer), content_type='text/event-stream')
         return jsonify({"message": answer, "sender": "ai", "rating": "none", "status": status})
+    
+    def streamer(self, text):
+        for x in text:
+            yield x
     
     def enrollCourse(self):
         data = request.get_json()
@@ -203,7 +240,27 @@ class FlaskServer(Flask):
         if check_course == False:
             return jsonify({'Error': "Course already enrolled in this user"})
         else:
-            return jsonify({'course_list': check_course})
+            courses = self.db.getUserData(email, username)
+
+            payload = []
+            url = "https://a1ce-test.cmkl.ac.th/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+
+            for code in courses:
+                mod_url = url.format(course = code)
+                print(mod_url)
+
+                try:
+                    response = requests.get(mod_url)
+                    data = response.json()
+                    response.raise_for_status()
+                    title = data['competency']['title']
+                    pillar = data['competency']['pillar_title']
+                    payload.append({"compentency_code": code, "title": title, "pillar": pillar})
+
+                except requests.exceptions.RequestException as e:
+                    print("An error occurred or have not enrolled any courses yet:", str(e))
+
+            return jsonify({'course_list': payload})
         
     def unenrollCourse(self):
         data = request.get_json()
@@ -217,10 +274,30 @@ class FlaskServer(Flask):
         else:
             pass
         status = self.db.unenrollCourse(email, username, course)
+        
         if status == False:
             return jsonify({'Error': "Course does not exist or not enrolled"})
         else:
-            return jsonify({'courses_list': status})
+            payload = []
+            url = "https://a1ce-test.cmkl.ac.th/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+
+            for code in status:
+                mod_url = url.format(course = code)
+                print(mod_url)
+
+                try:
+                    response = requests.get(mod_url)
+                    data = response.json()
+                    response.raise_for_status()
+                    title = data['competency']['title']
+                    pillar = data['competency']['pillar_title']
+                    payload.append({"compentency_code": code, "title": title, "pillar": pillar})
+
+                except requests.exceptions.RequestException as e:
+                    print("An error occurred or have not enrolled any courses yet:", str(e))
+
+            return jsonify({'course_list': payload})
+            # return jsonify({'courses_list': status})
 
     def deleteChatRoom(self):
         data = request.get_json()
@@ -267,6 +344,22 @@ class FlaskServer(Flask):
         except requests.exceptions.RequestException as e:
 
             return jsonify({'Error': "An error occurred:"})
+        
+    def resetChatHistory(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        chatroom = data['chatroom_name']
+        api_key = data['api_key']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+
+        self.db.resetChatHistory(email, username, course, chatroom)
+        return jsonify({"status": "Chatroom history reset sucessfully"})
         
 if __name__ == '__main__':
     app = FlaskServer(__name__)

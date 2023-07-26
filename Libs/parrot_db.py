@@ -4,6 +4,7 @@ import json
 import pickle
 from dotenv import dotenv_values
 import secrets
+import sys
 
 class Database:
     def __init__(self):
@@ -167,7 +168,7 @@ class Database:
         )
         cursor = connection.cursor()
         command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
-        temp_course = ["Principal Of Computing Applications", "Computer Systems", "Advanced Calculus", "Database Technology", "Cloud Computing"]
+        temp_course = ["AIC-102", "AIC-108", "MAT-102"]
         course_data = self.stringFromArray(temp_course)
         cursor.execute(command, (course_data, email, username))
         connection.commit()
@@ -310,6 +311,15 @@ class Database:
         )
         cursor = connection.cursor()
         # history = pickle.dumps(history)
+        if sys.getsizeof(history) >= 62000:
+            while sys.getsizeof(history) >= 32000:
+                history = pickle.loads(history)
+                history.pop(0)
+                history = pickle.dumps(history)
+            
+        else:
+            pass
+
         cursor.execute("UPDATE chat_history SET log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
                                     (history, email, username, course, room_name))
         connection.commit()
@@ -352,6 +362,27 @@ class Database:
         temp = history[0][0]
         cursor.close()
         return pickle.loads(temp)
+    
+    def resetChatHistory(self, email, username, course, room_name):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+
+        history = pickle.dumps([])
+
+        cursor.execute("UPDATE chat_history SET log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
+                                    (history, email, username, course, room_name))
+        connection.commit()
+        cursor.close()
 
     def loadChatHistory(self, username, email, course, room_name):
         config = dotenv_values(".env")
@@ -402,6 +433,7 @@ class Database:
         load = (email, username, course)
         cursor.execute(command, load)
         result = cursor.fetchall()
+        cursor.close()
         chatroom = []
         for x in result:
             chatroom.append(x[0])
@@ -470,7 +502,6 @@ class Database:
                 return False
             else:
                 pass
-
             
             command = "DELETE FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s"
             load = (email, username, course, chatroom)
