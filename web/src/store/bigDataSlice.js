@@ -103,13 +103,37 @@ const bigDataSlice = createSlice({
     },
     deleteChat: (state, action) => {
       const subId = action.payload.subjectId;
-      const assId = action.payload.assignmentId
+      const assId = action.payload.assignmentId;
+      const name = action.payload.id;
 
       const transformedData = state.map((sub) => {
         if (sub.course === subId) {
           return {
             ...sub,
-            assignments: sub.assignments.filter(ass => ass.id !== assId)
+            assignments: sub.assignments.filter(ass => ass.name !== name)
+          };
+        } else {
+          return sub;
+        }
+      });
+
+      return transformedData;
+    },
+    setChats: (state, action) => {
+      const subId = action.payload.subjectId;
+      const chats = action.payload.chats;
+
+      const transformedData = state.map((sub) => {
+        if (sub.course === subId) {
+          return {
+            ...sub,
+            assignments: chats.map(chat => {
+              return {
+                assignmentId: chat,
+                name: chat,
+                chatHistory: []
+              }
+            })
           };
         } else {
           return sub;

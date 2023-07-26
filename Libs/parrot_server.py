@@ -1,7 +1,6 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-from Libs import parrot_ai
 from flask import Flask, request, jsonify, redirect, url_for
 from flask_cors import CORS
 from flask_caching import Cache
@@ -12,12 +11,8 @@ import pickle
 
 import requests
 import os
-try: 
-    import Libs.parrot_db as parrot_db
-    import Libs.parrot_ai as parrot_ai
-
-except:
-    from Libs import parrot_db
+import parrot_ai
+import parrot_db
 
 import json
 import subprocess
@@ -38,7 +33,7 @@ class FlaskServer(Flask):
         self.route('/auth/login', methods = ["POST"])(self.login)
         self.route('/ai/getResponse', methods = ["POST"])(self.getResponse)
         self.route('/ai/getFullHistory', methods = ["POST"])(self.getFullHistory)
-        self.route('/compileCode', methods = ["POST"])(self.compileCode)
+        self.route('/compileCode', methods = ["POST"])(self.runCode)
         self.route('/auth/chatroom/fetch', methods = ["POST"])(self.getChatRoom)
         self.route('/auth/enroll', methods = ["POST"])(self.enrollCourse)
         self.route('/auth/chatroom/delete', methods = ["POST"])(self.deleteChatRoom)
@@ -54,13 +49,13 @@ class FlaskServer(Flask):
     def checkAuthencity(self, email, username, api_key):
         check_auth = self.db.checkUserRegister(email, username)
         if check_auth is False:
-            return json.dumps({"Error": "User not registered"})
+            return jsonify({"Error": "User not registered"})
         else:
             pass
 
         check_key = self.db.checkAPIKey(email, username, api_key)
         if check_key is False:
-            return json.dumps({'Error': "Invalid API key"})
+            return jsonify({'Error': "Invalid API key"})
         else:
             return None
 
@@ -107,7 +102,7 @@ class FlaskServer(Flask):
             pass
 
         chatrooms = self.db.getChatRoom(email, username, course)
-        return json.dumps({'chatrooms': chatrooms})
+        return jsonify({'chatrooms': chatrooms})
 
     def login(self):
         try:
@@ -130,11 +125,11 @@ class FlaskServer(Flask):
             print(key)
             self.db.temporaryEnroll(email, username)
             courses = self.db.getUserData(email, username)
-            return json.dumps({'email': email, 'username': username, 'courses': courses, 'api_key': key})
+            return jsonify({'email': email, 'username': username, 'courses': courses, 'api_key': key})
         except ValueError as e:
             print(str(e))
 
-            return json.dumps({'error': str(e)})
+            return jsonify({'error': str(e)})
     
     def getFullHistory(self):
         data = request.get_json()
@@ -150,10 +145,7 @@ class FlaskServer(Flask):
             pass
 
         full_history = self.db.fetchChatHistory(email, username, course, chatroom)
-        # user_history = full_history[0]
-        # ai_history = full_history[1]
-        # return json.dumps({"user": user_history, "ai": ai_history})
-        return json.dumps({"content": full_history})
+        return jsonify({"content": full_history})
 
     def getResponse(self):
         data = request.get_json()
@@ -172,9 +164,9 @@ class FlaskServer(Flask):
 
         chatroom_check = self.db.checkChatRoom(email, username, course, chatroom)
         if chatroom_check == True:
-            return {"Error": "Chatroom already exist"}
+            status = True
         else:
-            pass
+            status = False
 
         if code == [] or code == None or code == "":
             prompt = message
@@ -193,7 +185,7 @@ class FlaskServer(Flask):
 
         self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
  
-        return json.dumps({"message": answer, "sender": "ai", "rating": "none"})
+        return jsonify({"message": answer, "sender": "ai", "rating": "none", "status": status})
     
     def enrollCourse(self):
         data = request.get_json()
@@ -209,9 +201,9 @@ class FlaskServer(Flask):
 
         check_course = self.db.enrollCourse(email, username, course)
         if check_course == False:
-            return json.dumps({'Error': "Course already enrolled in this user"})
+            return jsonify({'Error': "Course already enrolled in this user"})
         else:
-            return json.dumps({'course_list': check_course})
+            return jsonify({'course_list': check_course})
         
     def unenrollCourse(self):
         data = request.get_json()
@@ -226,9 +218,9 @@ class FlaskServer(Flask):
             pass
         status = self.db.unenrollCourse(email, username, course)
         if status == False:
-            return json.dumps({'Error': "Course does not exist or not enrolled"})
+            return jsonify({'Error': "Course does not exist or not enrolled"})
         else:
-            return json.dumps({'courses_list': status})
+            return jsonify({'courses_list': status})
 
     def deleteChatRoom(self):
         data = request.get_json()
@@ -245,58 +237,36 @@ class FlaskServer(Flask):
         
         status = self.db.deleteChatRoom(email, username, course, chatroom)
         if status == False:
-            return json.dumps({'Error': "Chatroom does not exist or not created"})
+            return jsonify({'Error': "Chatroom does not exist or not created"})
         else:
-            return json.dumps({'status': 'Deleted Successfully'})
-    
-    def compileCode(self):
-        # recieved_file = Cache(self, config={'CACHE_TYPE': 'simple'})
-        # recieved_file = recieved_file.get("file.js")
-        # print(recieved_file)
-        # print(type(recieved_file))
-        return jsonify({"cache": "disshpilt"})
-        # # received_file = request.files['file']
-        # filename = recieved_file.filename
-        # file_extension = os.path.splitext(filename)[1]
-        # cached_files = os.listdir("cache")
-        # output_filename = str(random.randint(1, 1000000))
-        # while output_filename in cached_files:
-        #     output_filename = str(random.randint(1, 1000000))
-
-        # filename = "cache/" + output_filename + file_extension
-        # recieved_file.save(filename)
-        # gcc_list = ['c', 'rust']
-        # lexer = guess_lexer_for_filename(filename, '')
-        # lang = lexer.name.lower()
-        # cached_files = os.listdir("cache")
-        # output_filename = str(random.randint(1, 1000000)) + ".o"
-        # while output_filename in cached_files:
-        #     output_filename = str(random.randint(1, 1000000)) + ".o"
-
-        # output_filename = "cache/" + output_filename
-
-        # if lang in gcc_list:
-        #     compile_process = subprocess.Popen(['gcc', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        #     compile_process.communicate()
-        #     execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        #     stdout, stderr = execute_process.communicate()
-        # elif lang == "c++":
-        #     compile_process = subprocess.Popen(['g++', filename, "-o", output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        #     compile_process.communicate()
-        #     execute_process = subprocess.Popen(['./' + output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        #     stdout, stderr = execute_process.communicate()
-        # else:
-        #     process = subprocess.Popen([lang, filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        #     stdout, stderr = process.communicate()
+            return jsonify({'status': 'Deleted Successfully'})
         
-        # if len(os.listdir("cache")) >= 20:
-        #     for x in os.listdir("cache"):
-        #         try:
-        #             os.remove("cache/" + x)
-        #         except FileNotFoundError:
-        #             print("File not found")
+    def runCode(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        code = data['code']
+        extension = data['file_extension']
+        api_key = data['api_key']
+        server_url = "http://10.233.46.196:5463/runcode"
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+        payload = {
+        'code': code,
+        'file_extension': extension
+        }
 
-        # return json.dumps({"Output": stdout.decode(), "Error": stderr.decode()})
+        try:
+            response = requests.post(server_url, json=payload)
+            response_data = response.json()  # Extract JSON data from the response
+            return jsonify(response_data)
+
+        except requests.exceptions.RequestException as e:
+
+            return jsonify({'Error': "An error occurred:"})
         
 if __name__ == '__main__':
     app = FlaskServer(__name__)
