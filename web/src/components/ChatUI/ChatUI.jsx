@@ -48,6 +48,8 @@ const ChatUI = () => {
   const location = useLocation();
   const usrData = JSON.parse(localStorage.getItem("data"));
 
+  const [typing, setTyping] = useState(false)
+
   // console.log(data.filter((sub) => sub.course === courseName)[0].assignments.filter((ass) => ass.assignmentId === chatName)[0])
 
   const [history, setHistory] = useState(
@@ -77,9 +79,9 @@ const ChatUI = () => {
         .then((res) => res.data.content)
         .catch((err) => console.log(err));
 
-      console.log(history);
+      // console.log(history);
 
-      console.log(fetchedHistory);
+      // console.log(fetchedHistory);
       // setHistory(fetchedHistory.map(chat => {
       //   return {
       //     chatId: nanoid(),
@@ -113,19 +115,16 @@ const ChatUI = () => {
           })
         );
       }
-
-
-      // } else {
-      //   setHistory([])
-      // }
     };
 
     cleanUp();
-  }, [subjectId, assignmentId]);
+  }, [subjectId, assignmentId, data.filter((sub) => sub.course === courseName)[0].assignments]);
 
   // useEffect(() => {
   //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
   // });
+
+  console.log("REFRESHED")
 
   // console.log(history);
 
@@ -177,22 +176,26 @@ const ChatUI = () => {
       // For any assignment chat
 
       console.log(question);
+      // console.log(fileAttached[0].code)
       addChatToAssignment(question, "user", fileAttached);
       // addChatToAssignment("No. You do it yourself.", "ai");
       // const usrData = JSON.parse(localStorage.getItem("data"))[0];
 
+      let codee = ""
+
+      if (fileAttached !== null) codee = fileAttached[0].code
+
       console.log(usrData);
 
       setLock(true);
+      setTyping(true)
       try {
         const res = await axios
-          .post(
-            "https://corsproxy.io/?" +
-              encodeURIComponent("https://api.parrot.cmkl.ai/ai/getResponse"),
+          .post(("https://api.parrot.cmkl.ai/ai/getResponse"),
             {
               username: usrData.username,
               email: usrData.email,
-              code: [],
+              code: codee,
               course: subjectId,
               chatroom_name: assignmentId,
               api_key: usrData.api_key,
@@ -203,8 +206,10 @@ const ChatUI = () => {
         console.log(res);
         addChatToAssignment(res.message, "ai", []);
         setLock(false);
+        setTyping(false)
       } catch {
         setLock(false);
+        setTyping(false)
       }
 
       // console.log(res)
@@ -273,13 +278,16 @@ const ChatUI = () => {
   useEffect(() => {
     if (chatName !== "General") {
       // ScrollBar related code
+      setLock(false)
       if (shouldUpdate === false) {
         const scrollBar = document.getElementById("chatScroll");
         scrollBar.scrollTop = scrollBar.scrollHeight;
       } else {
         shouldUpdate = false;
       }
-      setTopName(history.filter((ass) => ass.name === chatName)[0].name);
+      setTopName(assignmentId);
+    } else {
+      setLock(true)
     }
   }, [assignmentId]);
 
@@ -356,8 +364,8 @@ const ChatUI = () => {
   };
 
   // console.log("ChatUI refreshed");
-  console.log(history);
-  console.log(history.filter((ass) => ass.name === chatName)[0]);
+  // console.log(history);
+  // console.log(history.filter((ass) => ass.name === chatName)[0]);
 
   return (
     <>
@@ -381,9 +389,9 @@ const ChatUI = () => {
         <div className={styles.content}>
           <div className={styles.header}>
             <img src={ChatIconNoBG} />
-            <p>{topName}</p>
-            {/* <img src={RenameIcon} /> */}
-            <div />
+            <p>{assignmentId === "General" ? "-" : assignmentId}</p>
+            <img src={RenameIcon} />
+            {/* <div /> */}
             <img src={ClearChatHistoryIcon} />
             <div className={styles.sepLine} />
             <div className={styles.topBlur}></div>
@@ -410,6 +418,7 @@ const ChatUI = () => {
             onUploadFile={fileAddHandler}
             onSend={askAIHandler}
             lock={lock}
+            typing={typing}
           />
         </div>
         <div className={styles.backdrops}>

@@ -5,6 +5,8 @@
   overflow-y: scroll;
   flex: 1;
   margin-bottom: .5rem;
+
+  /* transition: all 200ms; */
 }
 
 /* Make chat list scrollable */

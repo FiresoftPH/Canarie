@@ -19,13 +19,14 @@ const ChatCard = (props) => {
           {/* <br />
           <span className={styles.assignment}># {props.assignment}</span> */}
         </p>
-        <img
-          onClick={() => {
-            props.delete(props.id);
-          }}
-          src={Close}
-          className={styles.delete}
-        />
+        <div className={styles.delete}>
+          <img
+            onClick={() => {
+              props.delete(props.id);
+            }}
+            src={Close}
+          />
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,24 @@
 .wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 1rem;
   padding: .4rem;
+
+  transition: all 300ms;
+  height: 3rem;
+}
+
+.wrapper:hover {
+  cursor: pointer;
+}
+
+.wrapper p {
+  /* align-self: center; */
+  /* justify-self: center; */
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+  margin-right: .2rem;
+  margin-bottom: .2rem;
 }
 
 .wrapper > :nth-child(2) {
@@ -26,8 +44,13 @@
 
 .chatIcon {
   width: 2.5rem;
+  align-self: center;
+  justify-self: center;
 }
 
 .delete {
   margin-left: auto;
+  display: grid;
+  align-items: center;
+  justify-content: center;
 }
