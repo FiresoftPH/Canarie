@@ -17,34 +17,17 @@ import axios from "axios";
 import ReactMarkdown from "react-markdown";
 
 import DownV from "../../assets/DownV.svg";
+import { chatAction } from "../../store/chatSlice";
 
+const defaultSelect = "PROGRAMMING LANGUAGE";
+
+let codeee = "";
 const IDE = (props) => {
   const ideRef = useRef(null);
   const textEditor = useRef(null);
-  const prevCode = useRef();
+  const codeMirror_ref = useRef(null);
 
-  function handleLangChange(lang) {
-    setLanguage(lang);
-  }
-
-  const [saveStatus, setSaveStatus] = useState(styles.save_icon);
-
-  const fileSaveHandler = () => {
-    dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
-    console.log("ehe");
-    // if code changed the save icon color changed
-    if (code !== prevCode.current) {
-      setSaveStatus(styles.save_icon_green);
-      console.log("aroi changed");
-      // if code doesn't change the save icon is the same
-    } else if (code === prevCode.current) {
-      setSaveStatus(styles.save_icon);
-    }
-    // save the new code
-    prevCode.current = code;
-  };
-
-  const [language, setLanguage] = useState("PROGRAMMING LANGULAGE");
+  const [language, setLanguage] = useState(defaultSelect);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [y, setY] = useState("");
@@ -55,25 +38,39 @@ const IDE = (props) => {
   // const codeData = useSelector(state => state.chat.code)
 
   const codeData = useSelector((state) => state.chat.code);
+
+  // console.log(codeData);
   const fid = useSelector((state) => state.chat.fid);
+
+  // console.log(fid)
 
   // Set code in the IDE everytime the code for ide or the file id is changed
   useEffect(() => {
+    // console.log(codeData)
     setCode(codeData);
+    // codeee = codeData;
   }, [codeData, fid]);
 
   // IDE stuff //
   // const onChange = useCallback((value) => {
   //   setCode(value);
   // }, []);
-  const keystroke = useCallback((value) => {
-    setSaveStatus(styles.save_icon_yellow);
-  }, []);
 
   const onChange1 = (event) => {
     setCode(event);
-    keystroke(event);
   };
+
+  function handleLangChange(lang) {
+    setLanguage(lang);
+  }
+
+  const fileSaveHandler = useCallback(() => {
+    console.log("Saving file")
+
+    dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
+    dispatch(chatAction.setCode(code))
+    console.log("ehe");
+  }, []);
 
   const executeCode = () => {
     try {
@@ -218,7 +215,7 @@ const IDE = (props) => {
     });
   });
 
-  const selectRef = useRef()
+  const selectRef = useRef();
 
   return (
     <div className={styles.big_ide_container} ref={ideRef}>
@@ -234,8 +231,8 @@ const IDE = (props) => {
                 ref={selectRef}
                 onChange={(evn) => handleLangChange(evn.target.value)}
               >
-                <option value="PROGRAMMING LANGULAGE" hidden>
-                  PROGRAMMING LANGULAGE
+                <option value={defaultSelect} hidden>
+                  {defaultSelect}
                 </option>
                 {Object.keys(langTemplate)
                   .sort()
@@ -271,14 +268,13 @@ const IDE = (props) => {
             <CodeMirror
               className={styles.ide}
               value={code}
+              ref={codeMirror_ref}
               theme={[alls.atomone]}
               extensions={[
-                language !== "PROGRAMMING LANGULAGE"
-                  ? langTemplate[language]
-                  : null,
+                language !== defaultSelect ? langTemplate[language] : null,
                 fixedHeightEditor,
                 EditorView.lineWrapping,
-              ].filter(exten => exten !== null)}
+              ].filter((exten) => exten !== null)}
               onBlur={fileSaveHandler}
               onChange={onChange1}
             />

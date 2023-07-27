@@ -13,6 +13,7 @@ const chatSlice = createSlice({
     setCode: (state, action) => {
     //   console.log(action.payload)
     //   state.code = ""
+      // Object.assign(state.data,data)
       state.code = action.payload;
     },
     setFileId: (state, action) => {

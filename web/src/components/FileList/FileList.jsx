@@ -34,10 +34,19 @@ const FileList = (props) => {
 
   //   const mh = props.maxHeight;
 
+  // console.log("re rendered");
+
+  // console.log(data
+  //   .filter((sub) => sub.course === subjectId)[0]
+  //   .files.map((file) => {
+  //     return { id: file.id, name: file.name };
+  //   }))
+
   useEffect(() => {
     // if (assignmentId !== "General") {
 
     // console.log(data)
+    console.log("when file upload")
 
     const transformedData = data.filter((sub) => sub.course === subjectId)[0]
       .files;
@@ -50,7 +59,13 @@ const FileList = (props) => {
       dispatch(chatAction.setCode(transformedData[0].code));
     }
     // }
-  }, [data.filter((sub) => sub.course === subjectId)[0].files]);
+  }, [
+    data
+      .filter((sub) => sub.course === subjectId)[0]
+      .files.map((file) => {
+        return { id: file.id, name: file.name };
+      }),
+  ]);
 
   // When a file card is deleted, trigger this event
   const fileDeleteHandler = (id) => {
@@ -102,17 +117,19 @@ const FileList = (props) => {
         {/* <FileCard selected name="Untitled-1" />
         <FileCard name="Untitled-2" />
         <FileCard name="Untitled-3" /> */}
-        {files.length > 0 ? files.map((file) => {
-          return (
-            <FileCard
-              onSelect={fileSelectHandler}
-              onDelete={fileDeleteHandler}
-              name={file.name}
-              id={file.id}
-              selected={selectedFile === file.id}
-            />
-          );
-        }) : "Please upload a file"}
+        {files.length > 0
+          ? files.map((file) => {
+              return (
+                <FileCard
+                  onSelect={fileSelectHandler}
+                  onDelete={fileDeleteHandler}
+                  name={file.name}
+                  id={file.id}
+                  selected={selectedFile === file.id}
+                />
+              );
+            })
+          : "Please upload a file"}
       </section>
     </>
   );
