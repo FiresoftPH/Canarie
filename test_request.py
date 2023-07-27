@@ -159,16 +159,17 @@ def deleteChatRoom():
 def runPythonCode():
     url = 'https://api.parrot.cmkl.ai/compileCode' 
 
-#     code = '''
-# def factorial(n):
-#     if n == 0:
-#         return 1
-#     else:
-#         return n * factorial(n - 1)
+    code = '''
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
 
-# result = factorial(5)
-# print("Factorial of 5:", result)
+result = factorial(5)
+print("Factorial of 5:", result)
 # '''
+
 #     code = '''
 # #include <stdio.h>
 
@@ -187,31 +188,31 @@ def runPythonCode():
 #     return 0;
 # }
 # '''
-    code = '''
-#include <iostream>
+#     code = '''
+# #include <iostream>
 
-int factorial(int n) {
-    if (n == 0) {
-        return 1;
-    } else {
-        return n * factorial(n - 1);
-    }
-}
+# int factorial(int n) {
+#     if (n == 0) {
+#         return 1;
+#     } else {
+#         return n * factorial(n - 1);
+#     }
+# }
 
-int main() {
-    int number = 5;
-    int result = factorial(number);
-    std::cout << "Factorial of " << number << ": " << result << std::endl;
-    return 0;
-}
-'''
+# int main() {
+#     int number = 5;
+#     int result = factorial(number);
+#     std::cout << "Factorial of " << number << ": " << result << std::endl;
+#     return 0;
+# }
+# '''
 
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
         'code' : code,
         "api_key" : config['TEST_API_KEY'],
-        "file_extension": ".cpp"
+        "file_extension": ".py"
     }
 
     try:
@@ -261,4 +262,4 @@ def resetChatRoom():
 # enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()
-# runPythonCode()
+runPythonCode()

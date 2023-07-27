@@ -19,11 +19,17 @@ RUN apt-get update && apt-get install -y \
 # Install Flask and other Python libraries
 RUN pip3 install Flask flask-cors pygments
 
-# Create a directory for the Flask app
+# Create a non-root user
+RUN useradd -ms /bin/bash appuser
+
+# Create a directory for the Flask app and set the ownership to the non-root user
 WORKDIR /app
+RUN chown appuser:appuser /app
 
 # Copy the Flask app files into the container
 COPY . .
+
+RUN rm Dockerfile
 
 # Expose the port on which the Flask app will run
 EXPOSE 5463
