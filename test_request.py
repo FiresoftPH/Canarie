@@ -1,8 +1,8 @@
 import requests
-from dotenv import dotenv_values
+# from dotenv import dotenv_values
 from time import sleep
 
-config = dotenv_values("Libs/.env")
+# config = dotenv_values("Libs/.env")
 
 # Checked
 
@@ -89,11 +89,18 @@ def enrollCourse():
     url = 'https://api.parrot.cmkl.ai/auth/enroll'  # Repla
         # print(response_data)ce with your server's URL
 
+    # payload = {
+    #     'username': config["TEST_USERNAME"],
+    #     'email': config["TEST_EMAIL"],
+    #     "course": "Computer Systems",
+    #     "api_key" : config['TEST_API_KEY']
+    # }
+
     payload = {
-        'username': config["TEST_USERNAME"],
-        'email': config["TEST_EMAIL"],
-        "course": "Computer Systems",
-        "api_key" : config['TEST_API_KEY']
+        'username': "Kittikhom Kriamorn",
+        'email': "kittikhom.k@cmkl.ac.th",
+        "course": "AIC02",
+        "api_key" : "ef61e664ed8c1549afeb4856e71524d21ced78d2615be541c5398476bb25e0047dfa576462969b78213baf2f605262c647f1fb3ac6d70e195c09c2ef93a55eec"
     }
 
     try:
@@ -112,11 +119,18 @@ def enrollCourse():
 def unenrollCourse():
     url = 'https://api.parrot.cmkl.ai/auth/unenroll'  # Replace with your server's URL
 
+    # payload = {
+    #     'username': config["TEST_USERNAME"],
+    #     'email': config["TEST_EMAIL"],
+    #     "course": "Computer Systems",
+    #     "api_key" : config['TEST_API_KEY']
+    # }
+
     payload = {
-        'username': config["TEST_USERNAME"],
-        'email': config["TEST_EMAIL"],
+        'username': "Kittikhom Kriamorn",
+        'email': "kittikhom.k@cmkl.ac.th",
         "course": "Computer Systems",
-        "api_key" : config['TEST_API_KEY']
+        "api_key" : "ef61e664ed8c1549afeb4856e71524d21ced78d2615be541c5398476bb25e0047dfa576462969b78213baf2f605262c647f1fb3ac6d70e195c09c2ef93a55eec"
     }
 
     try:
@@ -259,7 +273,7 @@ def resetChatRoom():
 # resetChatRoom()
 # getHistory()
 # getChatRoom()
-# enrollCourse()
+enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()
-runPythonCode()
+# runPythonCode()

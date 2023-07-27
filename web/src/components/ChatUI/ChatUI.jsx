@@ -66,10 +66,17 @@ const ChatUI = () => {
     // console.log(usrData)
 
     const cleanUp = async () => {
-      // console.log(usrData)
+      // console.log({
+      //   username: usrData.username,
+      //   email: usrData.email,
+      //   course: subjectId,
+      //   chatroom_name: assignmentId,
+      //   api_key: usrData.api_key,
+      // })
+      // const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api.parrot.cmkl.ai/ai/getFullHistory');
 
       const fetchedHistory = await axios
-        .post("https://api.parrot.cmkl.ai/ai/getFullHistory", {
+        .post('https://api.parrot.cmkl.ai/ai/getFullHistory', {
           username: usrData.username,
           email: usrData.email,
           course: subjectId,
@@ -77,7 +84,7 @@ const ChatUI = () => {
           api_key: usrData.api_key,
         })
         .then((res) => res.data.content)
-        .catch((err) => console.log(err));
+        // .catch((err) => console.log(err));
 
       // console.log(history);
 
@@ -185,7 +192,15 @@ const ChatUI = () => {
 
       if (fileAttached !== null) codee = fileAttached[0].code
 
-      console.log(usrData);
+      console.log(            {
+        username: usrData.username,
+        email: usrData.email,
+        code: codee,
+        course: subjectId,
+        chatroom_name: assignmentId,
+        api_key: usrData.api_key,
+        question: question,
+      });
 
       setLock(true);
       setTyping(true)

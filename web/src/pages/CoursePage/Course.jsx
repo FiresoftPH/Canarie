@@ -52,8 +52,8 @@ function Course() {
   }, [])
 
   useEffect(() => {
-    console.log("CLEANUP ONCE")
-    dispatch(bigDataAction.setHistory(courses))
+    console.log(courses)
+    dispatch(bigDataAction.setHistory(courses.map(course => course.competency_code)))
     console.log(history)
   }, [])
 
