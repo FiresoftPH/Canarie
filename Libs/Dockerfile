@@ -16,7 +16,7 @@ COPY requirements.txt .
 # Upgrade pip and install Python dependencies
 RUN pip3 install --upgrade pip && \
     pip3 install PyMySQL && \
-    pip3 install fschat && \
+    # pip3 install fschat && \
     pip install --no-cache-dir -r requirements.txt
 
 RUN pip3 install flask google-auth
@@ -41,6 +41,12 @@ RUN pip3 install einops
 
 # Copy the application files to the working directory
 COPY . .
+
+WORKDIR /app
+
+WORKDIR /app/FastChat
+
+RUN pip3 install -e .
 
 WORKDIR /app
 

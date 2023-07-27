@@ -6,20 +6,13 @@ from flask_cors import CORS
 from flask_caching import Cache
 from flask_oauthlib.client import OAuth
 from dotenv import dotenv_values
-import secrets
-import pickle
 
 import requests
-import sys
 import FastChat.parrot_ai as parrot_ai
 import parrot_db
 
-import json
-import subprocess
-import json
 from pygments.lexers import guess_lexer_for_filename
-import os
-import random
+import re
     
 # The actual flask server
 class FlaskServer(Flask):
@@ -28,6 +21,8 @@ class FlaskServer(Flask):
         # Flask server configurations
         config = dotenv_values(".env")
         self.secret_key = config['SECRET_KEY']
+        self.canvas_url = config['CANVAS_URL']
+        self.canvas_api_key = config['CANVAS_API_KEY']
 
         # Routing applications
         self.route('/auth/login', methods = ["POST"])(self.login)
@@ -89,6 +84,74 @@ class FlaskServer(Flask):
         except Exception as e:
             print(f'Error during Google People API request: {e}')
             raise e
+
+    def findCanvasID(self, email):
+        url = f"{self.canvas_url}/accounts/self/users"
+        headers = {"Authorization": f"Bearer {self.canvas_api_key}"}
+        users = []
+
+        while url:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                data = response.json()
+                users.extend(data)
+                for user in users:
+                    if user['login_id'] == email:
+                        return user['id']
+                # Check if there are more pages, and update the URL accordingly
+                url = response.links.get("next", {}).get("url")
+            else:
+                print(f"Failed to fetch users. Status code: {response.status_code}")
+                return None
+
+    def getCanvasComptencyCode(self, user_id):
+        url = f"{self.canvas_url}/users/{user_id}/courses"
+        headers = {"Authorization": f"Bearer {self.canvas_api_key}"}
+
+        response = requests.get(url, headers=headers)
+
+        load = []
+        while url:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                data = response.json()
+                # print(data)
+                # load.extend(data)
+                for req in data:
+                    # load.append([req['name'], req['course_code']])
+                    load.append(req['course_code'])
+                # Check if there are more pages, and update the URL accordingly
+                url = response.links.get("next", {}).get("url")
+            else:
+                print(f"Failed to fetch users. Status code: {response.status_code}")
+                # return None
+        
+        return load
+
+    def getCourseName(self, course_code):
+        payload = []
+        url = "https://a1ce-test.cmkl.ac.th:/api/competency/detail/public?university_code=CMKL&competency_code={course}"
+
+        for code in course_code:
+            mod_url = url.format(course = code)
+            # print(mod_url)
+
+            try:
+                response = requests.get(mod_url)
+                data = response.json()
+                response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+                title = data['competency']['title']
+                pillar = data['competency']['pillar_title']
+                # Wait for the response and then print it out
+                # response_data = response.json()
+                payload.append({"competency_code": code, "title": title, "pillar": pillar})
+
+            except requests.exceptions.RequestException as e:
+                print("An error occurred:", str(e))
+
+        return payload
         
     def getChatRoom(self):
         data = request.get_json()
@@ -123,29 +186,22 @@ class FlaskServer(Flask):
                 raise ValueError('Failed to retrieve user information from token.')
 
             key = self.db.userRegister(email, username)
-            print(key)
-            self.db.temporaryEnroll(email, username)
-            courses = self.db.getUserData(email, username)
+            # print(key)
+            # self.db.temporaryEnroll(email, username)
+            user_id = self.findCanvasID(email)
+            new_code = []
+            if user_id:
+                enrolled_courses = self.getCanvasComptencyCode(user_id)
+                for x in enrolled_courses:
+                    result_string = re.sub(r'-\w+$', '', x)
+                    new_code.append(result_string)
 
-            payload = []
-            url = "https://a1ce-test.cmkl.ac.th/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+            if new_code == [] or len(new_code) == 0:
+                new_code == ["AIC-102", "AIC-108", "MAT-102"]
+            else:
+                self.db.canvasEnrollCourse(email, username, new_code)
 
-            for code in courses:
-                mod_url = url.format(course = code)
-                print(mod_url)
-
-                try:
-                    response = requests.get(mod_url)
-                    data = response.json()
-                    response.raise_for_status()
-                    title = data['competency']['title']
-                    pillar = data['competency']['pillar_title']
-                    # dictionary_stuff = {"compentency_code": code, "title": title, "pillar": pillar}
-                    dictionary_stuff = {"competency_code": code, "title": title, "pillar": pillar}
-                    payload.append(dictionary_stuff)
-
-                except requests.exceptions.RequestException as e:
-                    print("An error occurred or have not enrolled any courses yet:", str(e))
+            payload = self.getCourseName(new_code)
             
             return jsonify({'email': email, 'username': username, 'courses': payload, 'api_key': key})
             
@@ -243,7 +299,7 @@ class FlaskServer(Flask):
             courses = self.db.getUserData(email, username)
 
             payload = []
-            url = "https://a1ce-test.cmkl.ac.th/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+            url = "https://a1ce-test.cmkl.ac.th/api/competency/detail/public?university_code=CMKL&competency_code={course}"
 
             for code in courses:
                 mod_url = url.format(course = code)
@@ -279,7 +335,7 @@ class FlaskServer(Flask):
             return jsonify({'Error': "Course does not exist or not enrolled"})
         else:
             payload = []
-            url = "https://a1ce-test.cmkl.ac.th/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+            url = "https://a1ce-test.cmkl.ac.th/api/competency/detail/public?university_code=CMKL&competency_code={course}"
 
             for code in status:
                 mod_url = url.format(course = code)

@@ -10,7 +10,7 @@ config = dotenv_values("Libs/.env")
 def getAnswer():
     url = 'https://api.parrot.cmkl.ai/ai/getResponse'  # Replace with your server's URL
 
-    prompt = "What is tea?"
+    prompt = "Are you Parrot?"
     # prompt = "Why is it popular?"
     # prompt = "What is a for loop and why is it considered more simple than while loops?"
 
@@ -169,6 +169,9 @@ def factorial(n):
 result = factorial(5)
 print("Factorial of 5:", result)
 # '''
+#     code = '''
+
+# # '''
 
 #     code = '''
 # #include <stdio.h>
@@ -250,7 +253,7 @@ def resetChatRoom():
         print("An error occurred:", str(e))
 
 
-# getAnswer()
+getAnswer()
 # getHistory()
 # resetChatRoom()
 # getHistory()
@@ -262,4 +265,4 @@ def resetChatRoom():
 # enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()
-runPythonCode()
+# runPythonCode()

@@ -196,6 +196,25 @@ class Database:
             return True, course_list
         else:
             return False, course_list
+        
+    def canvasEnrollCourse(self, email, username, course_list):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
+        load = (course_list, email, username)
+        cursor.execute(command, load)
+        connection.commit()
+        cursor.close()
 
     def enrollCourse(self, email, username, course):
         config = dotenv_values(".env")
