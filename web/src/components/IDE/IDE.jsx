@@ -52,10 +52,6 @@ const IDE = (props) => {
   }, [codeData, fid]);
 
   // IDE stuff //
-  // const onChange = useCallback((value) => {
-  //   setCode(value);
-  // }, []);
-
   const onChange1 = (event) => {
     setCode(event);
   };
@@ -66,9 +62,9 @@ const IDE = (props) => {
 
   const fileSaveHandler = useCallback(() => {
     console.log("Saving file")
-
+    localStorage.setItem('IDEprompt', code)
     dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
-    dispatch(chatAction.setCode(code))
+    // dispatch(chatAction.setCode(code))
     console.log("ehe");
   }, []);
 
@@ -162,7 +158,7 @@ const IDE = (props) => {
     // typescript: langs.typescript(),
     // c: langs.c(),
     // css: langs.css(),
-    csharp: langs.csharp(),
+    "c#": langs.csharp(),
     // dockerfile: langs.dockerfile(),
     // go: langs.go(),
     // php: langs.php(),
@@ -254,21 +250,18 @@ const IDE = (props) => {
                 selectRef.current.controlRef.dispatchEvent(synteticEvent);
               }} src={DownV} /> */}
             </label>
-            {/* <div className={styles.new_file_btn}>new</div> */}
             <img
               className={styles.run_btn}
               src={runIcon}
               onClick={executeCode}
             />
-            {/* <div className={saveStatus} /> */}
-            {/* <img src={MinimizeIcon} /> */}
           </div>
           {/* i think we have to move the on focus and blur inside codemirror */}
           <div className={styles.ide_bottombar}>
             <CodeMirror
               className={styles.ide}
               value={code}
-              ref={codeMirror_ref}
+              // ref={codeMirror_ref}
               theme={[alls.atomone]}
               extensions={[
                 language !== defaultSelect ? langTemplate[language] : null,

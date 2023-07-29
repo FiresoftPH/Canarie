@@ -1,6 +1,5 @@
 import { Routes, Route, RouterProvider } from "react-router-dom";
 import Login from "../src/pages/LoginPage/Login";
-import EnrollPage from "./pages/EnrollPage/EnrollPage";
 import Course from "../src/pages/CoursePage/Course.jsx";
 import Term from "../src/pages/TermPage/Term.jsx";
 import ChatPage from "../src/pages/ChatPage/ChatPage.jsx";
@@ -37,7 +36,6 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Login /> },
       { path: "/Term", element: <Term /> },
-      { path: "/Enroll", element: <EnrollPage /> },
       { path: "/Course", element: <Course /> },
       { path: "/Chat/:subjectId/:assignmentId", element: <ChatPage /> },
       { path: "/Admin", element: <Admin /> },

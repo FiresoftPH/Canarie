@@ -16,7 +16,6 @@ function Course() {
   const nav = useNavigate();
   const subjects = JSON.parse(localStorage.getItem("data")).courses
   const name = JSON.parse(localStorage.getItem("data")).username
-
   // const courses = useSelector((state) => state.user.courses);
   const courses = JSON.parse(localStorage.getItem("data")).courses
   const user = useSelector((state) => state.user);
@@ -49,14 +48,10 @@ function Course() {
   useEffect(() => {
     const hour = new Date().getHours()
     setGreet(`${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`)
-  }, [])
-
-  useEffect(() => {
     console.log(courses)
     dispatch(bigDataAction.setHistory(courses.map(course => course.competency_code)))
     console.log(history)
   }, [])
-
   return (
     <>
       <div className={styles.bg_container}>
@@ -73,16 +68,16 @@ function Course() {
             </p>
             <div className={styles.user_img}> <img src={user_with_suit} /> </div>
             {"  "}
-            <div
-              onClick={() => {
-                dispatch(userActions.logout());
-                dispatch(loginAction.setLoggedIn(false))
-                nav("/");
-              }}
-              className={styles.dropdown}
-            >
-              <box-icon color="white" size="3rem" name="log-out"></box-icon>
-            </div>
+            <box-icon color="white"
+                      size="3rem"
+                      name="log-out"
+                      onClick={() => {
+                        dispatch(userActions.logout());
+                        dispatch(loginAction.setLoggedIn(false))
+                        localStorage.clear()
+                        nav("/");
+                      }}
+                      className={styles.dropdown}></box-icon>
           </header>
           <CourseList displayData={filteredSearch}/>
         </div>
