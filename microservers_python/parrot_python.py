@@ -5,9 +5,11 @@ from pygments.lexers import guess_lexer_for_filename
 import subprocess
 import random
 import signal
+import shutil
 
 app = Flask(__name__)
 CORS(app)
+app.config["TIMEOUT"] = 300
 
 def runCode(code, file_extension):
         try:
@@ -70,12 +72,21 @@ def terminal():
 
     for x in os.listdir("/app"):
         try:
-            if x != "parrot_python.py":
-                os.remove("app/" + x)
+            if x != "parrot_python.py" and x != "cache":
+                os.remove("/app/" + x)
         except IsADirectoryError:
-            pass
-        except OSError:
-            pass
+            if x != "cache":
+                try:
+                    shutil.rmtree("/app/" + x, ignore_errors=True)
+                except:
+                    os.rmdir("/app/" + x)
+        except FileNotFoundError:
+            if x != "cache":
+                try:
+                    shutil.rmtree("/app/" + x, ignore_errors=True)
+                except:
+                    os.rmdir("/app/" + x)
+            # print("OS Error")
 
     return jsonify(response)
 

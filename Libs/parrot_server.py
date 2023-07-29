@@ -1,25 +1,25 @@
 """
 This library acts as an intermediate to between the database and the server. This also function as the main code for connecting between the server and the front end.
 """
-from flask import Flask, request, jsonify, redirect, url_for, Response
-from flask_cors import CORS
+from flask import Flask, request, jsonify, redirect, url_for, Response, g
+from flask_limiter import Limiter
+from flask_cors import CORS, cross_origin
 from flask_caching import Cache
 from flask_oauthlib.client import OAuth
 from dotenv import dotenv_values
-import secrets
-import pickle
+import time
 
 import requests
-import sys
 import FastChat.parrot_ai as parrot_ai
 import parrot_db
+import threading
 
-import json
-import subprocess
-import json
 from pygments.lexers import guess_lexer_for_filename
-import os
-import random
+import re
+
+class SequentialProcessor:
+    def __init__(self):
+        self.lock = threading.Lock()
     
 # The actual flask server
 class FlaskServer(Flask):
@@ -28,7 +28,13 @@ class FlaskServer(Flask):
         # Flask server configurations
         config = dotenv_values(".env")
         self.secret_key = config['SECRET_KEY']
+        self.canvas_url = config['CANVAS_URL']
+        self.canvas_api_key = config['CANVAS_API_KEY']
+        self.limiter = Limiter(self)
 
+        rate_limit_value = "1 per minute"
+
+        CORS(self, origins="*")
         # Routing applications
         self.route('/auth/login', methods = ["POST"])(self.login)
         self.route('/ai/getResponse', methods = ["POST"])(self.getResponse)
@@ -36,16 +42,14 @@ class FlaskServer(Flask):
         self.route('/compileCode', methods = ["POST"])(self.runCode)
         self.route('/auth/chatroom/fetch', methods = ["POST"])(self.getChatRoom)
         self.route('/auth/chatroom/reset', methods = ["POST"])(self.resetChatHistory)
-        self.route('/auth/enroll', methods = ["POST"])(self.enrollCourse)
         self.route('/auth/chatroom/delete', methods = ["POST"])(self.deleteChatRoom)
-        self.route('/auth/unenroll', methods = ["POST"])(self.unenrollCourse)
 
         # Init class
         self.db = parrot_db.Database()
         self.prompt_generation = parrot_ai.GeneratePrompt()
         self.ai = parrot_ai.Chat()
-        CORS(self)
         self.oauth = OAuth(self)
+        self.queue = SequentialProcessor()
 
     def checkAuthencity(self, email, username, api_key):
         check_auth = self.db.checkUserRegister(email, username)
@@ -89,6 +93,72 @@ class FlaskServer(Flask):
         except Exception as e:
             print(f'Error during Google People API request: {e}')
             raise e
+
+    def findCanvasID(self, email):
+        url = f"{self.canvas_url}/accounts/self/users"
+        headers = {"Authorization": f"Bearer {self.canvas_api_key}"}
+        users = []
+
+        while url:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                data = response.json()
+                users.extend(data)
+                for user in users:
+                    if user['login_id'] == email:
+                        return user['id']
+                # Check if there are more pages, and update the URL accordingly
+                url = response.links.get("next", {}).get("url")
+            else:
+                print(f"Failed to fetch users. Status code: {response.status_code}")
+                return None
+
+    def getCanvasComptencyCode(self, user_id):
+        url = f"{self.canvas_url}/users/{user_id}/courses"
+        headers = {"Authorization": f"Bearer {self.canvas_api_key}"}
+
+        response = requests.get(url, headers=headers)
+
+        load = []
+        while url:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                data = response.json()
+                # print(data)
+                # load.extend(data)
+                for req in data:
+                    # load.append([req['name'], req['course_code']])
+                    load.append(req['course_code'])
+                # Check if there are more pages, and update the URL accordingly
+                url = response.links.get("next", {}).get("url")
+            else:
+                print(f"Failed to fetch users. Status code: {response.status_code}")
+                # return None
+        
+        return load
+
+    def getCourseName(self, course_code):
+        payload = []
+        url = "https://a1ce-test.cmkl.ac.th:/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+
+        for code in course_code:
+            mod_url = url.format(course = code)
+
+            try:
+                response = requests.get(mod_url)
+                data = response.json()
+                response.raise_for_status()
+                title = data['competency']['title']
+                pillar = data['competency']['pillar_title']
+                color = data['competency']['graphics']['bordercolor']
+                payload.append({"competency_code": code, "title": title, "pillar": pillar, "card_color": color})
+
+            except requests.exceptions.RequestException as e:
+                print("An error occurred:", str(e))
+
+        return payload
         
     def getChatRoom(self):
         data = request.get_json()
@@ -109,7 +179,7 @@ class FlaskServer(Flask):
         try:
             token = request.json['token']
             token_info = self.verify_google_token(token)
-            print(token_info)
+            # print(token_info)
             email = token_info.get('email', None)
             user_info = self.get_google_user_info(token)
 
@@ -123,29 +193,23 @@ class FlaskServer(Flask):
                 raise ValueError('Failed to retrieve user information from token.')
 
             key = self.db.userRegister(email, username)
-            print(key)
-            self.db.temporaryEnroll(email, username)
-            courses = self.db.getUserData(email, username)
+            # print(key)
+            # self.db.temporaryEnroll(email, username)
+            user_id = self.findCanvasID(email)
+            new_code = []
+            if user_id:
+                enrolled_courses = self.getCanvasComptencyCode(user_id)
+                for x in enrolled_courses:
+                    result_string = re.sub(r'-\w+$', '', x)
+                    new_code.append(result_string)
 
-            payload = []
-            url = "https://a1ce-test.cmkl.ac.th/api/competency/detailpublic?university_code=CMKL&competency_code={course}"
+            if new_code == [] or len(new_code) == 0:
+                new_code = ["AIC-102", "AIC-108", "MAT-102"]
+                self.db.canvasEnrollCourse(email, username, new_code)
+            else:
+                self.db.canvasEnrollCourse(email, username, new_code)
 
-            for code in courses:
-                mod_url = url.format(course = code)
-                print(mod_url)
-
-                try:
-                    response = requests.get(mod_url)
-                    data = response.json()
-                    response.raise_for_status()
-                    title = data['competency']['title']
-                    pillar = data['competency']['pillar_title']
-                    # dictionary_stuff = {"compentency_code": code, "title": title, "pillar": pillar}
-                    dictionary_stuff = {"competency_code": code, "title": title, "pillar": pillar}
-                    payload.append(dictionary_stuff)
-
-                except requests.exceptions.RequestException as e:
-                    print("An error occurred or have not enrolled any courses yet:", str(e))
+            payload = self.getCourseName(new_code)
             
             return jsonify({'email': email, 'username': username, 'courses': payload, 'api_key': key})
             
@@ -172,6 +236,32 @@ class FlaskServer(Flask):
             return jsonify({"content": full_history})
         except:
             return jsonify({"Error": "No history found in this chatroom"})
+        
+    def processRequest(self, email, username, course, chatroom, message, code):
+        with self.queue.lock:
+            chatroom_check = self.db.checkChatRoom(email, username, course, chatroom)
+            if chatroom_check == True:
+                status = True
+            else:
+                status = False
+
+            if code == [] or code == None or code == "":
+                prompt = message
+            else:
+                prompt = self.prompt_generation.codePrompt(message, code)
+
+            history_check = self.db.loadChatHistory(username, email, course, chatroom)
+            # print(history_check)
+            if history_check != False:
+                # continue_chat = self.ai.newchat(history_check)
+                chat_cache, answer = self.ai.chatsession(history_check, prompt)
+            else:
+                self.db.createChatRoom(username, email, course, chatroom)
+                # conversation = self.ai.newchat()
+                chat_cache, answer = self.ai.chatsession([], prompt)
+
+            self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
+            return answer, status
 
     def getResponse(self):
         data = request.get_json()
@@ -194,28 +284,7 @@ class FlaskServer(Flask):
         else:
             pass
 
-        chatroom_check = self.db.checkChatRoom(email, username, course, chatroom)
-        if chatroom_check == True:
-            status = True
-        else:
-            status = False
-
-        if code == [] or code == None or code == "":
-            prompt = message
-        else:
-            prompt = self.prompt_generation.codePrompt(message, code)
-
-        history_check = self.db.loadChatHistory(username, email, course, chatroom)
-        # print(history_check)
-        if history_check != False:
-            # continue_chat = self.ai.newchat(history_check)
-            chat_cache, answer = self.ai.chatsession(history_check, prompt)
-        else:
-            self.db.createChatRoom(username, email, course, chatroom)
-            # conversation = self.ai.newchat()
-            chat_cache, answer = self.ai.chatsession([], prompt)
-
-        self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
+        answer, status = self.processRequest(email, username, course, chatroom, message, code)
 
         # return Response(self.streamer(answer), content_type='text/event-stream')
         return jsonify({"message": answer, "sender": "ai", "rating": "none", "status": status})
@@ -247,7 +316,7 @@ class FlaskServer(Flask):
 
             for code in courses:
                 mod_url = url.format(course = code)
-                print(mod_url)
+                # print(mod_url)
 
                 try:
                     response = requests.get(mod_url)
@@ -283,7 +352,7 @@ class FlaskServer(Flask):
 
             for code in status:
                 mod_url = url.format(course = code)
-                print(mod_url)
+                # print(mod_url)
 
                 try:
                     response = requests.get(mod_url)
@@ -360,6 +429,23 @@ class FlaskServer(Flask):
 
         self.db.resetChatHistory(email, username, course, chatroom)
         return jsonify({"status": "Chatroom history reset sucessfully"})
+    
+    def changeChatRoomName(self):
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        course = data['course']
+        chatroom = data['chatroom_name']
+        api_key = data['api_key']
+        new_chatroom = data['newchatroom_name']
+        check = self.checkAuthencity(email, username, api_key)
+        if check != None:
+            return check
+        else:
+            pass
+
+        self.changeChatRoomName(email, username, course, chatroom, new_chatroom)
+        return {"status": "chatroom name changed"}
         
 if __name__ == '__main__':
     app = FlaskServer(__name__)

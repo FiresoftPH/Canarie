@@ -1,8 +1,8 @@
 import requests
-# from dotenv import dotenv_values
+from dotenv import dotenv_values
 from time import sleep
 
-# config = dotenv_values("Libs/.env")
+config = dotenv_values("Libs/.env")
 
 # Checked
 
@@ -10,7 +10,7 @@ from time import sleep
 def getAnswer():
     url = 'https://api.parrot.cmkl.ai/ai/getResponse'  # Replace with your server's URL
 
-    prompt = "What is tea?"
+    prompt = "Are you Parrot?"
     # prompt = "Why is it popular?"
     # prompt = "What is a for loop and why is it considered more simple than while loops?"
 
@@ -135,9 +135,7 @@ def unenrollCourse():
 
     try:
         response = requests.post(url, json=payload)
-        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
-
-        # Wait for the response and then print it out
+        response.raise_for_status()  
         response_data = response.json()
         print(response_data)
 
@@ -146,10 +144,7 @@ def unenrollCourse():
 
 # Checked
 def deleteChatRoom():
-    url = 'https://api.parrot.cmkl.ai/auth/chatroom/delete'  # Replace with your server's URL
-# Raise an exceptiPrincipal Of Computing Applicationson for 4xx and 5xx status codes
-
-            # Wait for the response and then print it out
+    url = 'https://api.parrot.cmkl.ai/auth/chatroom/delete'
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
@@ -183,6 +178,9 @@ def factorial(n):
 result = factorial(5)
 print("Factorial of 5:", result)
 # '''
+#     code = '''
+
+# # '''
 
 #     code = '''
 # #include <stdio.h>
@@ -272,8 +270,8 @@ def resetChatRoom():
 # getHistory()
 # resetChatRoom()
 # getHistory()
-# getChatRoom()
-enrollCourse()
+getChatRoom()
+# enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()
 # runPythonCode()
