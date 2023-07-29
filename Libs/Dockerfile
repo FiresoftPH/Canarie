@@ -37,6 +37,10 @@ RUN pip3 install cryptography
 
 RUN pip3 install einops
 
+RUN pip3 install Flask-Limiter
+
+RUN apt install watch -y
+
 # Checkpoint here
 
 # Copy the application files to the working directory

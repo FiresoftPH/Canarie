@@ -211,6 +211,7 @@ class Database:
         )
         cursor = connection.cursor()
         command = "UPDATE users SET enrolled_courses = %s WHERE email = %s AND username = %s"
+        course_list = self.stringFromArray(course_list)
         load = (course_list, email, username)
         cursor.execute(command, load)
         connection.commit()
@@ -435,6 +436,24 @@ class Database:
         except pymysql.OperationalError:
             return False
         
+    def changeChatRoomName(self, email, username, course, chatroom, new_chatroom):
+        config = dotenv_values(".env")
+        connection = pymysql.connect(
+        host=config["HOST_ALT"],
+        port=int(config["PORT_ALT"]),
+        user=config["USER"],
+        password=config["PASSWORD"],
+        database=config["DATABASE"],
+        connect_timeout=60,
+        read_timeout=1800,
+        write_timeout=1800
+        )
+        cursor = connection.cursor()
+        command = "UPDATE chat_history SET room_name = %s WHERE email = %s AND username = %s AND course_name = %s AND chatroom = %s"
+        cursor.execute(command, (new_chatroom, email, username, course, chatroom))
+        connection.commit()
+        cursor.close()
+        
     def getChatRoom(self, email, username, course):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -458,7 +477,6 @@ class Database:
             chatroom.append(x[0])
 
         return chatroom
-    
 
     def checkChatRoom(self, email, username, course, chatroom):
         all_chatrooms = self.getChatRoom(email, username, course)

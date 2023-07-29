@@ -1,8 +1,8 @@
 import requests
-# from dotenv import dotenv_values
+from dotenv import dotenv_values
 from time import sleep
 
-# config = dotenv_values("Libs/.env")
+config = dotenv_values("Libs/.env")
 
 # Checked
 
@@ -135,9 +135,7 @@ def unenrollCourse():
 
     try:
         response = requests.post(url, json=payload)
-        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
-
-        # Wait for the response and then print it out
+        response.raise_for_status()  
         response_data = response.json()
         print(response_data)
 
@@ -146,10 +144,7 @@ def unenrollCourse():
 
 # Checked
 def deleteChatRoom():
-    url = 'https://api.parrot.cmkl.ai/auth/chatroom/delete'  # Replace with your server's URL
-# Raise an exceptiPrincipal Of Computing Applicationson for 4xx and 5xx status codes
-
-            # Wait for the response and then print it out
+    url = 'https://api.parrot.cmkl.ai/auth/chatroom/delete'
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
@@ -267,7 +262,7 @@ def resetChatRoom():
         print("An error occurred:", str(e))
 
 
-getAnswer()
+# getAnswer()
 # getHistory()
 # resetChatRoom()
 # getHistory()
@@ -275,8 +270,8 @@ getAnswer()
 # getHistory()
 # resetChatRoom()
 # getHistory()
-# getChatRoom()
-enrollCourse()
+getChatRoom()
+# enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()
 # runPythonCode()
