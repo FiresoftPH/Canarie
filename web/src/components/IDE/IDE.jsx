@@ -18,6 +18,7 @@ import ReactMarkdown from "react-markdown";
 
 import DownV from "../../assets/DownV.svg";
 import { chatAction } from "../../store/chatSlice";
+import { StateEffect } from "@codemirror/state";
 
 const defaultSelect = "PROGRAMMING LANGUAGE";
 
@@ -42,11 +43,13 @@ const IDE = (props) => {
   // console.log(codeData);
   const fid = useSelector((state) => state.chat.fid);
 
-  // console.log(fid)
+  const bigData = useSelector((state) => state.bigData);
+
+  console.log(bigData);
 
   // Set code in the IDE everytime the code for ide or the file id is changed
   useEffect(() => {
-    // console.log(codeData)
+    console.log(codeData);
     setCode(codeData);
     // codeee = codeData;
   }, [codeData, fid]);
@@ -57,6 +60,7 @@ const IDE = (props) => {
   // }, []);
 
   const onChange1 = (event) => {
+    // console.log(event)
     setCode(event);
   };
 
@@ -64,13 +68,24 @@ const IDE = (props) => {
     setLanguage(lang);
   }
 
-  const fileSaveHandler = useCallback(() => {
-    console.log("Saving file")
+  // console.log(code)
+
+  const fileSaveHandler = () => {
+    console.log("Saving file");
+    console.log("codeData", { subjectId, assignmentId, fileId, code });
+    console.log("code", code);
 
     dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
-    dispatch(chatAction.setCode(code))
+    dispatch(chatAction.setCode(code));
+    dispatch(chatAction.setShouldUpdate(false));
     console.log("ehe");
-  }, []);
+
+    // return () => {
+    //   dispatch(chatAction.setShouldUpdate(true))
+
+    //   console.log(code)
+    // }
+  };
 
   const executeCode = () => {
     try {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FileCard from "../FileCard/FileCard";
 
 import styles from "./FileList.module.css";
@@ -28,6 +28,7 @@ const FileList = (props) => {
   const { subjectId, assignmentId } = useParams();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.bigData);
+  const shouldUp = useSelector((state) => state.chat.shouldUpdate);
 
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
@@ -42,30 +43,48 @@ const FileList = (props) => {
   //     return { id: file.id, name: file.name };
   //   }))
 
+  // const dep = useMemo(
+  //   () => data.filter((sub) => sub.course === subjectId)[0].files,
+  //   [
+  // data
+  //   .filter((sub) => sub.course === subjectId)[0]
+  //   .files.map((f) => {
+  //     return { id: f.id, name: f.name };
+  //   }),
+  //   ]
+  // );
+
+  // console.log(dep);
+
   useEffect(() => {
     // if (assignmentId !== "General") {
 
     // console.log(data)
-    console.log("when file upload")
+    // console.log("when file upload")
 
-    const transformedData = data.filter((sub) => sub.course === subjectId)[0]
-      .files;
-    // console.log(transformedData)
+    if (shouldUp === true) {
+      // console.log("I run");
+      const transformedData = data.filter((sub) => sub.course === subjectId)[0]
+        .files;
+      // console.log(transformedData)
 
-    setFiles(transformedData);
-    // setSelectedFile(transformedData[0].id);
-    if (transformedData.length > 0) {
-      props.sf(transformedData[0].id);
-      dispatch(chatAction.setCode(transformedData[0].code));
+      setFiles(transformedData);
+      // setSelectedFile(transformedData[0].id);
+      if (transformedData.length > 0) {
+        props.sf(transformedData[0].id);
+        dispatch(chatAction.setCode(transformedData[0].code));
+      }
+    } else {
+      // console.log("Nah I ain't running");
+
+      dispatch(chatAction.setShouldUpdate(true));
     }
     // }
-  }, [
-    data
-      .filter((sub) => sub.course === subjectId)[0]
-      .files.map((file) => {
-        return { id: file.id, name: file.name };
-      }),
-  ]);
+  }, [data.filter((sub) => sub.course === subjectId)[0].files]);
+
+  // useEffect(() => {
+  //   console.log("I run v2")
+  // }, [])
 
   // When a file card is deleted, trigger this event
   const fileDeleteHandler = (id) => {
@@ -92,18 +111,32 @@ const FileList = (props) => {
   };
 
   // When a file card is clicked, trigger this event
-  const fileSelectHandler = (id) => {
+  const fileSelectHandler = (id, code) => {
     // console.log(files.filter(fie => fie.id === id)[0].code)
     if (shouldUpdateId === true) {
-      dispatch(
-        chatAction.setCode(files.filter((fie) => fie.id === id)[0].code)
-      );
-      dispatch(chatAction.setFileId(id));
+      // dispatch(
+      //   chatAction.setCode(files.filter((fie) => fie.id === id)[0].code)
+      // );
+      // console.log("Selected file")
+      // console.log(files.filter((fie) => fie.id === id)[0].code)
+      // console.log(transformedData)
+
       setSelectedFile(id);
+      // setSelectedFile(transformed
+      dispatch(
+        chatAction.setCode(
+          data
+            .filter((sub) => sub.course === subjectId)[0]
+            .files.filter((f) => f.id === id)[0].code
+        )
+      );
+      dispatch(chatAction.setShouldUpdate(false));
+      dispatch(chatAction.setFileId(id));
+      props.sf(id);
     } else {
       shouldUpdateId = true;
     }
-    props.sf(id);
+    // props.sf(id);
   };
 
   return (
@@ -125,6 +158,7 @@ const FileList = (props) => {
                   onDelete={fileDeleteHandler}
                   name={file.name}
                   id={file.id}
+                  code={file.code}
                   selected={selectedFile === file.id}
                 />
               );

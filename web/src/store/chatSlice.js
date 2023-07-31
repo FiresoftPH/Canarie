@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   code: "",
-  fid: ""
+  fid: "",
+  shouldUpdate: true
   //   assignment: "",
 };
 
@@ -18,7 +19,10 @@ const chatSlice = createSlice({
     },
     setFileId: (state, action) => {
       state.fid = action.payload
-    }
+    },
+    setShouldUpdate: (state, action) => {
+      state.shouldUpdate = action.payload
+    },
   },
 });
 

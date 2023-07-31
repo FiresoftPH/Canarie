@@ -76,6 +76,9 @@ const ChatInputField = (props) => {
     <div className={`${styles.wrapper} ${
       props.typing ? styles.lower : ""
     }`}>
+      <div>
+        SELECT FILE
+      </div>
       <div
         // onClick={() => {
         //   if (props.lock === false) props.onFileAttach();
