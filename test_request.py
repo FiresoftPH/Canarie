@@ -51,6 +51,8 @@ def getHistory():
         "api_key" : config['TEST_API_KEY']
     }
 
+    # payload = 
+
     try:
         response = requests.post(url, json=payload)
         response.raise_for_status()  # Raise an exceptiPrincipal Of Computing Applicationson for 4xx and 5xx status codes
@@ -262,7 +264,7 @@ def resetChatRoom():
         print("An error occurred:", str(e))
 
 
-# getAnswer()
+getAnswer()
 # getHistory()
 # resetChatRoom()
 # getHistory()
@@ -270,7 +272,7 @@ def resetChatRoom():
 # getHistory()
 # resetChatRoom()
 # getHistory()
-getChatRoom()
+# getChatRoom()
 # enrollCourse()
 # unenrollCourse()
 # deleteChatRoom()
