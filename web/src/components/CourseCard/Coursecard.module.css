@@ -1,15 +1,12 @@
 .card_container{
   display: grid;
   grid-template: 1fr 2fr/ 1fr;
-  background: linear-gradient(90deg, rgb(47, 255, 57) -10%, rgb(113, 255, 132) 50%, rgb(207, 255, 129) 110%);
-  background-size: 400% 400%;
   border-radius: 25px;
   border: 2px solid black;
-  width: 15rem;
+  width: 90%;
   height: 16rem;
-  transition: transform 0.6s ease;
-  animation: gradient 10s ease infinite;
-  box-shadow: 0 0 black;
+  transition: transform 1s ease, filter 1s ease;
+  filter: drop-shadow(0 0 0 rgb(190, 190, 190));
 }
 @keyframes gradient {
   0% {
@@ -22,9 +19,11 @@
     background-position: 0% 50%;
   }
 }
+
 .card_container:hover{
   transform: scale(1.02);
-  box-shadow: 5px 10px black;
+  animation: gradient 4s ease infinite;
+  filter: drop-shadow(0 0 0.25rem rgb(197, 197, 197));
 }
 .scaleUp{
   animation: scale(1.03);
@@ -48,16 +47,20 @@
 .text_code{
   grid-area: code;
   font-weight: 600;
+  font-size: 14px;
   color: black;
   justify-self: center;
 }
 .text_pillar{
   grid-area: pillar;
   font-weight: 600;
+  font-size: 14px;
   color: black;
+  justify-self: center;
 }
 
 .text{
+  font-size: 14px;
   grid-area: title;
   color: black;
 }
