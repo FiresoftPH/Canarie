@@ -3,9 +3,9 @@ import styles from './SearchBox.module.css';
 function SearchBox(props) {
   return (
     <div  className={styles.wrapper}>
-      <input  className={`${props.dark ? styles.searchbox_dark : styles.searchbox}`}
+      <input  className={styles.searchbox}
               type='text' 
-              placeholder={props.holder ? props.holder : 'Search up course'}
+              placeholder={'Search up course'}
               onChange={props.onInputChange}
               />
     </div>
