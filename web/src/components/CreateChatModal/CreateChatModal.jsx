@@ -3,6 +3,7 @@ import styles from "./CreateChatModal.module.css";
 
 const CreateChatModal = (props) => {
   const inputRef = useRef();
+  
   const [cla, setCla] = useState()
 
   return (

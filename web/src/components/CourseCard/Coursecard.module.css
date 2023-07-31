@@ -3,9 +3,10 @@
   grid-template: 1fr 2fr/ 1fr;
   border-radius: 25px;
   border: 2px solid black;
-  width: 90%;
+  width: 15rem;
   height: 16rem;
   transition: transform 1s ease, filter 1s ease;
+  animation: gradient 6s ease infinite;
   filter: drop-shadow(0 0 0 rgb(190, 190, 190));
 }
 @keyframes gradient {
@@ -22,11 +23,7 @@
 
 .card_container:hover{
   transform: scale(1.02);
-  animation: gradient 4s ease infinite;
   filter: drop-shadow(0 0 0.25rem rgb(197, 197, 197));
-}
-.scaleUp{
-  animation: scale(1.03);
 }
 
 .competency_name{

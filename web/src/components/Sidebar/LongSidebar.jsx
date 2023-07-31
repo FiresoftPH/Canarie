@@ -128,27 +128,17 @@ function LongSidebar(props) {
         />
         <div className={styles.sepLine} />
       </div>
-      {/* <div className={styles.sidebar_top}> */}
       <ChatList />
-      {/* </div> */}
       <section id="file-upload" className={styles.file_uploaded}>
         <p>File Uploaded</p>
         <img onClick={fileDownloadHandler} src={Upload} />
       </section>
-      {/* <div className={styles.fileThing}> */}
       <FileList
         sf={(f) => {
           setFile(f);
         }}
         // mh={cHeight}
       />
-      {/* </div> */}
-
-      {/* <CourseSlideUp
-        // mh={cHeight}
-        onSelectMode={selectModeHandler}
-        re_render={onReRender}
-      /> */}
     </div>
   );
 }

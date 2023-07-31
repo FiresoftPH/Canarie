@@ -14,8 +14,8 @@ const ChatCard = (props) => {
         }}
       >
         <img src={ChatIconNoBG} className={styles.chatIcon} />
-        <p>
-          <span className={styles.sessionName}>{props.sessionName}</span>
+        <p className={styles.sessionName}>
+          {props.sessionName}
           {/* <br />
           <span className={styles.assignment}># {props.assignment}</span> */}
         </p>

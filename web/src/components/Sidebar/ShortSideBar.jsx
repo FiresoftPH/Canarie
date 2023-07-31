@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const ShortSideBar = (props) => {
   const nav = useNavigate();
-
+  const courseID = JSON.parse(localStorage.getItem('course_code')).data
   const cssClasses = [
     styles.container,
     props.show === "entering"
@@ -39,7 +39,9 @@ const ShortSideBar = (props) => {
         >
           Courses
         </p>
-        <p>AIC-207</p>
+        <p>
+          { courseID }
+        </p>
       </div>
     </div>
   );
