@@ -3,19 +3,19 @@ import styles from "./CreateChatModal.module.css";
 
 const CreateChatModal = (props) => {
   const inputRef = useRef();
-  
-  const [cla, setCla] = useState()
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <div className={styles.header}>What's going to be the chat name?</div>
+        <div className={styles.header}></div>
         <div className={styles.middle}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               if (inputRef.current.value !== "") {
-                props.onSubmit(inputRef.current.value);
+                props.onSubit(inputRef.current.value);
+              }
+              else {
+                console.log('errrrrrrrrrrr')
               }
             }}
           >
@@ -28,17 +28,19 @@ const CreateChatModal = (props) => {
               props.toggle();
             }}
           >
-            Cancel
+            &#128473; 
           </button>
           <button
             onClick={() => {
               if (inputRef.current.value !== "") {
                 props.onSubmit(inputRef.current.value);
               }
-              // console.log(inputRef.current.value)
+              else {
+                console.log('errrrrrrrrrrr')
+              }
             }}
           >
-            Create chat
+            &#10003;
           </button>
         </div>
       </div>
@@ -47,7 +49,7 @@ const CreateChatModal = (props) => {
           props.toggle();
         }}
         className={styles.backdrop}
-      ></div>
+      />
     </div>
   );
 };
