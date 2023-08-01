@@ -19,14 +19,18 @@ const ChatCard = (props) => {
           {/* <br />
           <span className={styles.assignment}># {props.assignment}</span> */}
         </p>
-        <div className={styles.delete}>
-          <img
-            onClick={() => {
-              props.delete(props.id);
-            }}
-            src={Close}
-          />
-        </div>
+        {props.sessionName !== "General" ? (
+          <div className={styles.delete}>
+            <img
+              onClick={() => {
+                props.delete(props.id);
+              }}
+              src={Close}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );
