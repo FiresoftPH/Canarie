@@ -4,11 +4,9 @@
   position: fixed;
   top: 0;
   left: 0;
-
   background-color: rgba(128, 128, 128, 0.254);
   z-index: 1000;
   backdrop-filter: blur(5px);
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,7 +25,6 @@
     rgba(255, 255, 255, 0.1);
   padding: 1rem;
   border-radius: 0.5rem;
-
   width: 30vw;
   z-index: 1;
 }
@@ -68,32 +65,29 @@
 
 .middle input {
   all: unset;
-
   width: 100%;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-
   border-radius: 0.3rem;
   background: white;
   box-shadow: 2px 1px 6px 0px rgba(0, 0, 0, 0.25) inset;
   color: black;
-
   padding-left: 0.5rem;
 }
 
 .footer {
   margin-top: 0.5rem;
-
   width: 100%;
+  display: flex;
+  justify-content: space-around;
 }
 
 .footer button:first-child {
   border: none;
-
-  padding: 0.4rem;
+  padding: 0.5rem 1rem;
   background-color: red;
-  border-radius: 0.3rem;
+  border-radius: 25%;
 }
 
 .footer button:first-child:hover {
@@ -102,14 +96,9 @@
 
 .footer button:last-child {
   border: none;
-
-  padding: 0.4rem;
+  padding: 0.5rem 1rem;
   background-color: green;
-  border-radius: 0.3rem;
-
-  /* position: relative;
-    right: 0; */
-  float: right;
+  border-radius: 25%;
 }
 
 .footer button:last-child:hover {

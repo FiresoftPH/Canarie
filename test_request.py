@@ -1,12 +1,14 @@
 import requests
-from dotenv import dotenv_values
+# from dotenv import dotenv_values
 from time import sleep
 
-config = dotenv_values("Libs/.env")
+# config = dotenv_values("Libs/.env")
 
 # Checked
 
 # Basiclly ask ai for answer to your question
+
+
 def getAnswer():
     url = 'https://api.parrot.cmkl.ai/ai/getResponse'  # Replace with your server's URL
 
@@ -21,7 +23,7 @@ def getAnswer():
         "course": "AIC-102",
         "chatroom_name": "Python",
         "question": prompt,
-        "api_key" : config['TEST_API_KEY']
+        "api_key": config['TEST_API_KEY']
     }
 
     try:
@@ -40,22 +42,34 @@ def getAnswer():
         print("An error occurred:", str(e))
 
 # Checked
+
+
 def getHistory():
-    url = 'https://api.parrot.cmkl.ai/ai/getFullHistory'  # Replace with your server's URL
+    # Replace with your server's URL
+    url = 'https://api.canarie.cmkl.ai/ai/getFullHistory'
+
+    # payload = {
+    #     'username': config["TEST_USERNAME"],
+    #     'email': config["TEST_EMAIL"],
+    #     "course": "AIC-102",
+    #     "chatroom_name": "Python",
+    #     "api_key" : config['TEST_API_KEY']
+    # }
 
     payload = {
-        'username': config["TEST_USERNAME"],
-        'email': config["TEST_EMAIL"],
+        'username': "Kittikhom Kriamorn",
+        'email': "kittikhom.k@cmkl.ac.th",
         "course": "AIC-102",
-        "chatroom_name": "Python",
-        "api_key" : config['TEST_API_KEY']
+        "chatroom_name": "New",
+        "api_key": "d12de08e860339dc064c8504b0bead17fc3d8f4263423702792b5c68c17c3e55f2bc6c994cece4897c1d329e008a050324eb2a23c5273d915a92201a4a220f50"
     }
 
-    # payload = 
+    # payload =
 
     try:
         response = requests.post(url, json=payload)
-        response.raise_for_status()  # Raise an exceptiPrincipal Of Computing Applicationson for 4xx and 5xx status codes
+        # Raise an exceptiPrincipal Of Computing Applicationson for 4xx and 5xx status codes
+        response.raise_for_status()
 
         # Wait for the response and then print it out
         response_data = response.json()
@@ -65,14 +79,17 @@ def getHistory():
         print("An error occurred:", str(e))
 
 # Checked
+
+
 def getChatRoom():
-    url = 'https://api.parrot.cmkl.ai/auth/chatroom/fetch'  # Replace with your server's URL
+    # Replace with your server's URL
+    url = 'https://api.parrot.cmkl.ai/auth/chatroom/fetch'
 
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
         "course": "AIC-102",
-        "api_key" : config['TEST_API_KEY']
+        "api_key": config['TEST_API_KEY']
     }
 
     try:
@@ -87,9 +104,11 @@ def getChatRoom():
         print("An error occurred:", str(e))
 
 # Checked
+
+
 def enrollCourse():
     url = 'https://api.parrot.cmkl.ai/auth/enroll'  # Repla
-        # print(response_data)ce with your server's URL
+    # print(response_data)ce with your server's URL
 
     # payload = {
     #     'username': config["TEST_USERNAME"],
@@ -102,7 +121,7 @@ def enrollCourse():
         'username': "Kittikhom Kriamorn",
         'email': "kittikhom.k@cmkl.ac.th",
         "course": "AIC02",
-        "api_key" : "ef61e664ed8c1549afeb4856e71524d21ced78d2615be541c5398476bb25e0047dfa576462969b78213baf2f605262c647f1fb3ac6d70e195c09c2ef93a55eec"
+        "api_key": "ef61e664ed8c1549afeb4856e71524d21ced78d2615be541c5398476bb25e0047dfa576462969b78213baf2f605262c647f1fb3ac6d70e195c09c2ef93a55eec"
     }
 
     try:
@@ -118,6 +137,8 @@ def enrollCourse():
         print("An error occurred:", str(e))
 
 # Checked
+
+
 def unenrollCourse():
     url = 'https://api.parrot.cmkl.ai/auth/unenroll'  # Replace with your server's URL
 
@@ -132,12 +153,12 @@ def unenrollCourse():
         'username': "Kittikhom Kriamorn",
         'email': "kittikhom.k@cmkl.ac.th",
         "course": "Computer Systems",
-        "api_key" : "ef61e664ed8c1549afeb4856e71524d21ced78d2615be541c5398476bb25e0047dfa576462969b78213baf2f605262c647f1fb3ac6d70e195c09c2ef93a55eec"
+        "api_key": "ef61e664ed8c1549afeb4856e71524d21ced78d2615be541c5398476bb25e0047dfa576462969b78213baf2f605262c647f1fb3ac6d70e195c09c2ef93a55eec"
     }
 
     try:
         response = requests.post(url, json=payload)
-        response.raise_for_status()  
+        response.raise_for_status()
         response_data = response.json()
         print(response_data)
 
@@ -145,6 +166,8 @@ def unenrollCourse():
         print("An error occurred:", str(e))
 
 # Checked
+
+
 def deleteChatRoom():
     url = 'https://api.parrot.cmkl.ai/auth/chatroom/delete'
     payload = {
@@ -152,7 +175,7 @@ def deleteChatRoom():
         'email': config["TEST_EMAIL"],
         "course": "Cloud Computing",
         "chatroom_name": "Python",
-        "api_key" : config['TEST_API_KEY']
+        "api_key": config['TEST_API_KEY']
     }
 
     try:
@@ -167,8 +190,10 @@ def deleteChatRoom():
         print("An error occurred:", str(e))
 
 # Checked
+
+
 def runPythonCode():
-    url = 'https://api.parrot.cmkl.ai/compileCode' 
+    url = 'https://api.parrot.cmkl.ai/compileCode'
 
     code = '''
 def factorial(n):
@@ -224,8 +249,8 @@ print("Factorial of 5:", result)
     payload = {
         'username': config["TEST_USERNAME"],
         'email': config["TEST_EMAIL"],
-        'code' : code,
-        "api_key" : config['TEST_API_KEY'],
+        'code': code,
+        "api_key": config['TEST_API_KEY'],
         "file_extension": ".py"
     }
 
@@ -241,6 +266,8 @@ print("Factorial of 5:", result)
         print("An error occurred:", str(e))
 
 # Checked
+
+
 def resetChatRoom():
     url = 'https://api.parrot.cmkl.ai/auth/chatroom/reset'
 
@@ -249,7 +276,7 @@ def resetChatRoom():
         'email': config["TEST_EMAIL"],
         "course": "AIC-102",
         "chatroom_name": "Python",
-        "api_key" : config['TEST_API_KEY']
+        "api_key": config['TEST_API_KEY']
     }
 
     try:
@@ -264,8 +291,8 @@ def resetChatRoom():
         print("An error occurred:", str(e))
 
 
-getAnswer()
-# getHistory()
+# getAnswer()
+getHistory()
 # resetChatRoom()
 # getHistory()
 # getAnswer()

@@ -9,6 +9,7 @@ import styles from "./ChatScreenInitialized.module.css";
 
 const ChatScreenInitialized = ({ history, onRate }) => {
   // console.log("I run brfore");
+  let temp = false;
 
   const ratingHandler = useCallback((rate, id) => {
     onRate(rate, id);
@@ -17,25 +18,29 @@ const ChatScreenInitialized = ({ history, onRate }) => {
   const { subjectId, assignmentId } = useParams();
 
   // console.log(history);
-  
-  if (history === undefined) {
-    // console.log("Abording")
 
-    return <div id="chatScroll" className={styles.wrapper}></div>;
-  }
-  
+  console.log(history);
+
   const optimizedData = useMemo(() => {
     // console.log(history)
-    return history.chatHistory;
+    if (history === undefined) {
+      temp = true;
+    } else {
+      return history.chatHistory;
+    }
   }, [history]);
-  
+
+  if (temp == true) {
+    console.log("QUIT")
+    return <div id="chatScroll" className={styles.wrapper}></div>;
+  }
 
   // console.log("Expensive component re rendered")
 
   return (
     <>
       <div id="chatScroll" className={styles.wrapper}>
-        {optimizedData.map((message) => {
+        {optimizedData !== undefined ? optimizedData.map((message) => {
           if (message.sender === "ai") {
             return (
               <ChattingCardAI
@@ -55,7 +60,7 @@ const ChatScreenInitialized = ({ history, onRate }) => {
               file_attachment={message.file_attachments}
             />
           );
-        })}
+        }) : ""}
       </div>
     </>
   );

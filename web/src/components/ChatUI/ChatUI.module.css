@@ -106,6 +106,7 @@
 
 .header img:not(:first-child) {
   justify-self: center;
+  cursor: pointer;
 }
 
 .sepLine {

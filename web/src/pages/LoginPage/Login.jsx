@@ -1,23 +1,21 @@
 import styles from "./Login.module.css";
 import { useEffect, useState } from "react";
-import Term from "../TermPage/Term";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/userSlice";
+import Term from "../TermPage/Term";
 import Transition from "react-transition-group/Transition";
 import logo from "../../assets/Logo.svg";
 import cmkllogo from "../../assets/CMKL logo.svg";
 import axios from "axios";
-
 import Cookies from "js-cookie";
-
 import CourseNames from "./CourseNames.json";
-// import { loginAction } from "../../store/loginSlice";
 
 function Login() {
   const [show, setShow] = useState(false);
   const [agree, setAgree] = useState(false);
   const [touched, setTouched] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,7 +24,7 @@ function Login() {
   const handleGoogleLogin = async () => {
     try {
       const googleAuthUrl = "https://accounts.google.com/o/oauth2/auth";
-      const redirectUri = "https://parrot.cmkl.ai"; // Replace with your frontend redirect URL
+      const redirectUri = "https://canarie.cmkl.ai"; // Replace with your frontend redirect URL
       const clientId =
         "479838750655-1r50o7kf756vv7s0tpbco8uh25g143mr.apps.googleusercontent.com"; // Replace with your actual client ID
       const scope =
@@ -56,14 +54,14 @@ function Login() {
     if (accessToken) {
       try {
         // Send the access token to the backend for verification and JWT generation
-        const res = await axios.post("https://api.parrot.cmkl.ai/auth/login", {
+        const res = await axios.post("https://api.canarie.cmkl.ai/auth/login", {
           token: accessToken,
         });
-
         localStorage.setItem("LOGGED IN", "I TTINK")
-
         // Store the JWT token in local storage or cookies for subsequent API requests.
+        setLoading(true);
         localStorage.setItem("data", JSON.stringify(res.data))
+        console.log('worked')
         navigate("/Course");
       } catch (error) {
         console.error("Error during login:", error);
@@ -136,7 +134,7 @@ function Login() {
     <div className={styles.background}>
       <div className={styles.content}>
         <img className={styles.logo} src={logo} />
-        <p className={styles.app_name}>Parrot</p>
+        <p className={styles.app_name}>Canarie</p>
         <div className={styles.quote}>
           <section className={styles.left_text}>
             Let us <br />
