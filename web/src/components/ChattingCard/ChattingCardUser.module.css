@@ -26,6 +26,14 @@
   justify-content: center;
   align-items: center;
   max-width: 65%;
+
+  /* overflow-x: new; */
+
+  word-wrap: break-word;
+}
+
+.message p {
+  width: 100%;
 }
 
 .message img {

@@ -2,7 +2,7 @@ import styles from "./ChatInputField.module.css";
 
 import FileAttachmentIcon from "src/assets/FileAttachmentIcon.svg";
 import SendIcon from "src/assets/SendIcon.svg";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bigDataAction } from "../../store/bigDataSlice";
 import { useParams } from "react-router-dom";
@@ -29,56 +29,79 @@ const ChatInputField = (props) => {
   };
 
   let fr;
-  let fd;
   let fname = "Unnamed";
-  const fileUploadHandler = (e) => {
-    // console.log(e.target.files)
+  const fileUploadHandler = async (e) => {
+    console.log(e.target.files);
     if (!e.target.files[0]) {
       return;
     }
 
-    fd = new FormData();
-    fd.append("file", e.target.files[0]);
+    let uploadedFiles = [];
+    
+    const allFilesRead = () => {
+      if (e.target.files.length === uploadedFiles.length) {
+        console.log("COMPLETED UPLOAD")
+        props.onUploadFile(uploadedFiles);
+      }
+      // console.log("Been executed")
+      // console.log(uploadedFiles)
+    }
 
-    fr = new FileReader();
-    fr.onloadend = fileReaderHandler;
-    fr.readAsText(e.target.files[0]);
-    // console.log(e.target.files[0])
-    fname = e.target.files[0].name;
-    // console.log(fr.readAsText(e.target.files[0]))
-    // console.log(fd.readAsText())
+    // fd = new FormData();
+    for (let f = 0; f < e.target.files.length; f++) {
+      const fileName = e.target.files[f]["name"];
+
+      console.log(fileName);
+
+      // fname = e.target.files[f].name;
+
+      fr = new FileReader();
+      fr.onload = (f) => {
+        // fileReaderHandler(e, fname);
+        dispatch(
+          bigDataAction.addFiles({
+            subjectId,
+            assignmentId,
+            name: fileName,
+            code: f.target.result,
+          })
+        );
+
+        uploadedFiles.push(
+          {
+            subjectId,
+            assignmentId,
+            name: fileName,
+            code: f.target.result,
+          },
+        )
+
+        allFilesRead()
+      };
+
+      fr.readAsText(e.target.files[f]);
+
+      // fd.append("file", e.target.files[f]);
+    }
+
+    // console.log(uploadedFiles.length)
+
+    // console.log(uploadedFiles)
+    // while (true) {
+    //   if (e.target.files.length === fliesUploaded) {
+    //     console.log(uploadedFiles)
+    //     break
+    //   } else {
+    //     console.log(e.target.files.length, fliesUploaded)
+    //     continue
+    //   }
+    // }
   };
 
-  const fileReaderHandler = (f) => {
-    dispatch(
-      bigDataAction.addFiles({
-        subjectId,
-        assignmentId,
-        name: fname,
-        code: fr.result,
-      })
-    );
-
-    props.onUploadFile([
-      {
-        subjectId,
-        assignmentId,
-        name: fname,
-        code: fr.result,
-      },
-    ]);
-
-    console.log("COMPLETED DISPATCH");
-    console.log(bigD);
-  };
+  const textareaRef = useRef(null);
 
   return (
-    <div className={`${styles.wrapper} ${
-      props.typing ? styles.lower : ""
-    }`}>
-      <div>
-        SELECT FILE
-      </div>
+    <div className={`${styles.wrapper} ${props.typing ? styles.lower : ""}`}>
       <div
         // onClick={() => {
         //   if (props.lock === false) props.onFileAttach();
@@ -91,6 +114,7 @@ const ChatInputField = (props) => {
               onChange={(e) => {
                 fileUploadHandler(e);
               }}
+              multiple
               type="file"
             />
           </label>
@@ -114,18 +138,27 @@ const ChatInputField = (props) => {
           {props.lock ? (
             ""
           ) : (
-            <input
+            <textarea
               onChange={(e) => {
                 setQuestion(e.target.value);
+                console.log(e.target.rows);
+
+                if (textareaRef.current) {
+                  textareaRef.current.style.height = "auto";
+                  textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+                }
               }}
+              ref={textareaRef}
               value={question}
               className={styles.inputField}
+              // rows={question.length === 0 ? 1 : null}
+              rows={1}
             />
           )}
         </form>
         <img onClick={askHandler} className={styles.send} src={SendIcon} />
-        <div className={styles.bottomBlur} />
       </div>
+      <div className={styles.bottomBlur} />
       {props.typing ? (
         <div className={styles.typing}>
           <div className={styles.typing1}></div>

@@ -26,10 +26,11 @@ import userSlice from "../../store/userSlice";
 
 import ChatScreenNotInit from "../ChatScreen/ChatScreenNotInit";
 import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
 import axios from "axios";
 import { nanoid } from "@reduxjs/toolkit";
+import { bigDataAction } from "../../store/bigDataSlice";
 
 let shouldUpdate = false;
 const ChatUI = () => {
@@ -48,7 +49,9 @@ const ChatUI = () => {
   const location = useLocation();
   const usrData = JSON.parse(localStorage.getItem("data"));
 
-  const [typing, setTyping] = useState(false)
+  const [typing, setTyping] = useState(false);
+
+  const dispatch = useDispatch();
 
   // console.log(data.filter((sub) => sub.course === courseName)[0].assignments.filter((ass) => ass.assignmentId === chatName)[0])
 
@@ -76,15 +79,19 @@ const ChatUI = () => {
       // const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api.canarie.cmkl.ai/ai/getFullHistory');
 
       const fetchedHistory = await axios
-        .post('https://api.canarie.cmkl.ai/ai/getFullHistory', {
-          username: usrData.username,
-          email: usrData.email,
-          course: subjectId,
-          chatroom_name: assignmentId,
-          api_key: usrData.api_key,
-        })
-        .then((res) => res.data.content)
-        // .catch((err) => console.log(err));
+        .post(
+          "https://api.canarie.cmkl.ai/ai/getFullHistory",
+          {
+            username: usrData.username,
+            email: usrData.email,
+            course: subjectId,
+            chatroom_name: assignmentId,
+            api_key: usrData.api_key,
+          },
+          { headers: { "Access-Control-Allow-Origin": "*" } }
+        )
+        .then((res) => res.data.content);
+      // .catch((err) => console.log(err));
 
       // console.log(history);
 
@@ -101,6 +108,8 @@ const ChatUI = () => {
       // if (fetchedHistory !== undefined) {
 
       if (fetchedHistory != undefined) {
+        console.log(fetchedHistory);
+
         setHistory((prev) =>
           prev.map((ass) => {
             if (ass.name === assignmentId) {
@@ -125,13 +134,17 @@ const ChatUI = () => {
     };
 
     cleanUp();
-  }, [subjectId, assignmentId, data.filter((sub) => sub.course === courseName)[0].assignments]);
+  }, [
+    subjectId,
+    assignmentId,
+    data.filter((sub) => sub.course === courseName)[0].assignments,
+  ]);
 
   // useEffect(() => {
   //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
   // });
 
-  console.log("REFRESHED")
+  console.log("REFRESHED");
 
   // console.log(history);
 
@@ -141,7 +154,7 @@ const ChatUI = () => {
   const [lock, setLock] = useState(false);
   const [openFiles, setOpenFiles] = useState(false);
 
-  const [fileAttached, setFileAttached] = useState(null);
+  const [fileAttached, setFileAttached] = useState([]);
 
   const addChatToAssignment = (chatMessage, sender, fileAttach) => {
     // console.log(fileAttached)
@@ -175,7 +188,7 @@ const ChatUI = () => {
       })
     );
 
-    setFileAttached(null);
+    setFileAttached([]);
   };
 
   const askAIHandler = async (question) => {
@@ -183,16 +196,17 @@ const ChatUI = () => {
       // For any assignment chat
 
       console.log(question);
-      // console.log(fileAttached[0].code)
+      console.log(fileAttached[0]);
       addChatToAssignment(question, "user", fileAttached);
       // addChatToAssignment("No. You do it yourself.", "ai");
       // const usrData = JSON.parse(localStorage.getItem("data"))[0];
 
-      let codee = ""
+      let codee = "";
 
-      if (fileAttached !== null) codee = fileAttached[0].code
+      if (fileAttached.length !== 0)
+        codee = fileAttached[0].map((f) => [f.name, f.code]);
 
-      console.log(            {
+      console.log({
         username: usrData.username,
         email: usrData.email,
         code: codee,
@@ -203,28 +217,26 @@ const ChatUI = () => {
       });
 
       setLock(true);
-      setTyping(true)
+      setTyping(true);
       try {
         const res = await axios
-          .post(("https://api.canarie.cmkl.ai/ai/getResponse"),
-            {
-              username: usrData.username,
-              email: usrData.email,
-              code: codee,
-              course: subjectId,
-              chatroom_name: assignmentId,
-              api_key: usrData.api_key,
-              question: question,
-            }
-          )
+          .post("https://api.canarie.cmkl.ai/ai/getResponse", {
+            username: usrData.username,
+            email: usrData.email,
+            code: codee,
+            course: subjectId,
+            chatroom_name: assignmentId,
+            api_key: usrData.api_key,
+            question: question,
+          })
           .then((res) => res.data);
         console.log(res);
         addChatToAssignment(res.message, "ai", []);
         setLock(false);
-        setTyping(false)
+        setTyping(false);
       } catch {
         setLock(false);
-        setTyping(false)
+        setTyping(false);
       }
 
       // console.log(res)
@@ -293,7 +305,7 @@ const ChatUI = () => {
   useEffect(() => {
     if (chatName !== "General") {
       // ScrollBar related code
-      setLock(false)
+      setLock(false);
       if (shouldUpdate === false) {
         const scrollBar = document.getElementById("chatScroll");
         scrollBar.scrollTop = scrollBar.scrollHeight;
@@ -302,7 +314,7 @@ const ChatUI = () => {
       }
       setTopName(assignmentId);
     } else {
-      setLock(true)
+      setLock(true);
     }
   }, [assignmentId]);
 
@@ -328,59 +340,27 @@ const ChatUI = () => {
     // console.log(history)
   };
 
-  // For general to actual chat transition
-
-  // useEffect(() => {
-  //   if (location.state !== null) {
-  //     console.log("Adding chat");
-  //     // console.log(location);
-  //     setHistory((prevState) =>
-  //       prevState.map((assignment) => {
-  //         if (assignment.name === chatName) {
-  //           return {
-  //             ...assignment,
-  //             chatHistory: [...assignment["chatHistory"], location.state],
-  //           };
-  //         } else {
-  //           return assignment;
-  //         }
-  //       })
-  //     );
-
-  //     setHistory((prevState) =>
-  //       prevState.map((assignment) => {
-  //         if (assignment.name === chatName) {
-  //           return {
-  //             ...assignment,
-  //             chatHistory: [
-  //               ...assignment["chatHistory"],
-  //               {
-  //                 chatId: Math.random(),
-  //                 message: "No. Do it yourself.",
-  //                 sender: "ai",
-  //                 rating: "none",
-  //                 assignment: history.map((ass) => {
-  //                   if (ass.name !== "General")
-  //                     return { name: ass.name, id: ass.assignmentId };
-  //                 }),
-  //               },
-  //             ],
-  //           };
-  //         } else {
-  //           return assignment;
-  //         }
-  //       })
-  //     );
-  //   }
-  // }, [chatName]);
-
   const fileAddHandler = (files) => {
-    setFileAttached(files);
+    console.log(files);
+
+    setFileAttached((prevState) => [...prevState, files]);
   };
 
   // console.log("ChatUI refreshed");
   // console.log(history);
   // console.log(history.filter((ass) => ass.name === chatName)[0]);
+
+  const historyDeleteHandler = async () => {
+    axios.post("https://api.canarie.cmkl.ai/auth/chatroom/reset", {
+      username: usrData.username,
+      email: usrData.email,
+      course: subjectId,
+      chatroom_name: assignmentId,
+      api_key: usrData.api_key,
+    });
+
+    dispatch(bigDataAction.clearChat({ subjectId, assignmentId }));
+  };
 
   return (
     <>
@@ -407,7 +387,7 @@ const ChatUI = () => {
             <p>{assignmentId === "General" ? "-" : assignmentId}</p>
             <img src={RenameIcon} />
             {/* <div /> */}
-            <img src={ClearChatHistoryIcon} />
+            <img onClick={historyDeleteHandler} src={ClearChatHistoryIcon} />
             <div className={styles.sepLine} />
             <div className={styles.topBlur}></div>
           </div>

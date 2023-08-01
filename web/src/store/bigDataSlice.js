@@ -142,6 +142,42 @@ const bigDataSlice = createSlice({
 
       return transformedData;
     },
+    clearChat: (state, action) => {
+      const subId = action.payload.subjectId;
+      const chatName = action.payload.assignmentId;
+
+      const transformedData = state.map(sub => {
+        if (subId === sub.course) {
+          // return sub.map(c => {
+          //   if (c.name === chatName) {
+          //     return {
+          //       ...c,
+          //       chatHistory: []
+          //     }
+          //   } else {
+          //     return c
+          //   }
+          // })
+          return {
+            ...sub,
+            assignments: sub["assignments"].map(c => {
+              if (c.name === chatName) {
+                return {
+                  ...c,
+                  chatHistory: []
+                }
+              } else {
+                return c
+              }
+            })
+          }
+        } else {
+          return sub
+        }
+      })
+
+      return transformedData
+    },
     setHistory: (state, action) => {
       const courses = action.payload;
 
