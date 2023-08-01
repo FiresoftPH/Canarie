@@ -73,10 +73,10 @@ const ChatUI = () => {
       //   chatroom_name: assignmentId,
       //   api_key: usrData.api_key,
       // })
-      // const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api.parrot.cmkl.ai/ai/getFullHistory');
+      // const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api.canarie.cmkl.ai/ai/getFullHistory');
 
       const fetchedHistory = await axios
-        .post('https://api.parrot.cmkl.ai/ai/getFullHistory', {
+        .post('https://api.canarie.cmkl.ai/ai/getFullHistory', {
           username: usrData.username,
           email: usrData.email,
           course: subjectId,
@@ -206,7 +206,7 @@ const ChatUI = () => {
       setTyping(true)
       try {
         const res = await axios
-          .post(("https://api.parrot.cmkl.ai/ai/getResponse"),
+          .post(("https://api.canarie.cmkl.ai/ai/getResponse"),
             {
               username: usrData.username,
               email: usrData.email,

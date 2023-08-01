@@ -21,8 +21,6 @@ import { chatAction } from "../../store/chatSlice";
 import { StateEffect } from "@codemirror/state";
 
 const defaultSelect = "PROGRAMMING LANGUAGE";
-
-let codeee = "";
 const IDE = (props) => {
   const ideRef = useRef(null);
   const textEditor = useRef(null);
@@ -108,7 +106,7 @@ const IDE = (props) => {
   const usrData = JSON.parse(localStorage.getItem("data"));
 
   const exeCode = async (code, fType) => {
-    const res = await axios.post("https://api.parrot.cmkl.ai/compileCode", {
+    const res = await axios.post("https://api.canarie.cmkl.ai/compileCode", {
       username: usrData.username,
       email: usrData.email,
       code: code,

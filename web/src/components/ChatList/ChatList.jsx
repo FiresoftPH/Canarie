@@ -22,7 +22,6 @@ const ChatList = (props) => {
 
   const [chats, setChats] = useState(transformedData);
   const [selectedChat, setSelectedChat] = useState();
-
   const [toggle, setToggle] = useState(false);
 
   // console.log(data.filter((sub) => sub.course === subjectId)[0].assignments);
@@ -42,22 +41,18 @@ const ChatList = (props) => {
   useEffect(() => {
     const cleanUp = async () => {
       // console.log(usrData)
-
-
       const chatRooms = await axios
-        .post("https://api.parrot.cmkl.ai/auth/chatroom/fetch", {
+        .post("https://api.canarie.cmkl.ai/auth/chatroom/fetch", {
           username: usrData.username,
           email: usrData.email,
           course: subjectId,
           api_key: usrData.api_key,
         })
         .then((res) => res.data.chatrooms);
-
       console.log(chatRooms);
       dispatch(bigDataAction.setChats({ subjectId, chats: chatRooms }));
       setChats(chatRooms);
     };
-
     cleanUp();
   }, [subjectId]);
 
@@ -65,21 +60,17 @@ const ChatList = (props) => {
 
   const chatDeleteHandler = (id) => {
     shouldUpdate = false;
-
     console.log(chats.filter((chat) => {
       return chat.name !== id;
     }))
-
     setChats(
       chats.filter((chat) => {
         return chat.name !== id;
       })
     );
-
     dispatch(bigDataAction.deleteChat({ id, subjectId, assignmentId }));
     nav(`/Chat/${subjectId}/General`)
-
-    axios.post("https://api.parrot.cmkl.ai/auth/chatroom/delete", {
+    axios.post("https://api.canarie.cmkl.ai/auth/chatroom/delete", {
       username: usrData.username,
       email: usrData.email,
       course: subjectId,
@@ -87,8 +78,6 @@ const ChatList = (props) => {
       api_key: usrData.api_key,
     });
   };
-
-  // console.log("I updated")
 
   const selectHandler = (id) => {
     if (shouldUpdate === true) {
@@ -104,6 +93,7 @@ const ChatList = (props) => {
     setToggle(!toggle);
   };
 
+  const [testName, setTestName] = useState('')
   const addChatHandler = async (name) => {
     // const fetchedHistory = await axios.post(
     //   "https://api.parrot.cmkl.ai/ai/getFullHistory",
@@ -115,19 +105,24 @@ const ChatList = (props) => {
     //     api_key: usrData.api_key,
     //   }
     // ).catch(err => console.log(err));
-
-    // // console.log(history)
-
+    // console.log('history')
     // console.log(fetchedHistory)
     dispatch(bigDataAction.addChat({ name, subjectId }));
+    setTestName(name)
     // console.log(data.filter((sub) => sub.course === subjectId)[0].assignments)
     setToggle(!toggle);
     // nav(`/Chat/${subjectId}/${name}`);
-
     // axios.post('')
   };
-
-  // console.log(chats)
+  const getChatnameHandler = async () => {
+    const testData = await axios.post("https://api.canarie.cmkl.ai/auth/chatroom/fetch", {
+      username: usrData.username,
+      email: usrData.email,
+      course: subjectId,
+      api_key: usrData.api_key,
+    }).catch(err => console.log(err))
+    console.log(testData)
+  }
 
   return (
     <>
@@ -148,11 +143,12 @@ const ChatList = (props) => {
           <img src={New_Button} />
           <p>New Chat</p>
         </div>
-        {toggle ? (
+        <button onClick={getChatnameHandler}>test</button>
+        {toggle ? 
           <CreateChatModal onSubmit={addChatHandler} toggle={modalToggle} />
-        ) : (
+        : 
           ""
-        )}
+        }
       </section>
     </>
   );
