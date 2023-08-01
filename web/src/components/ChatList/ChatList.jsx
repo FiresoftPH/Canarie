@@ -143,7 +143,7 @@ const ChatList = (props) => {
           <img src={New_Button} />
           <p>New Chat</p>
         </div>
-        <button onClick={getChatnameHandler}>test</button>
+        {/* <button onClick={getChatnameHandler}>test</button> */}
         {toggle ? 
           <CreateChatModal onSubmit={addChatHandler} toggle={modalToggle} />
         : 

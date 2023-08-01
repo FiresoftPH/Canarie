@@ -12,7 +12,7 @@
 }
 
 .wrapper p {
-  overflow-x: hidden;
+  overflow: hidden;
   /* margin-right: .2rem;
   margin-bottom: .2rem; */
 }

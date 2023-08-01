@@ -10,6 +10,7 @@ import cmkllogo from "../../assets/CMKL logo.svg";
 import axios from "axios";
 import Cookies from "js-cookie";
 import CourseNames from "./CourseNames.json";
+import Lottie from "lottie-react"
 
 function Login() {
   const [show, setShow] = useState(false);
@@ -131,71 +132,75 @@ function Login() {
   };
 
   return (
-    <div className={styles.background}>
-      <div className={styles.content}>
-        <img className={styles.logo} src={logo} />
-        <p className={styles.app_name}>Canarie</p>
-        <div className={styles.quote}>
-          <section className={styles.left_text}>
-            Let us <br />
-            be your
-            <br />
-            coach.
-          </section>
-        </div>
-        <div className={styles.group}>
-          <div onClick={loginHandler} className={styles.api_button}>
-            <div className={styles.api}>
-              <img src={cmkllogo} />
-              <p>Sign in with CMKL account</p>
+    <>
+      { loading ? null :
+      <div className={styles.background}>
+        <div className={styles.content}>
+          <img className={styles.logo} src={logo} />
+          <p className={styles.app_name}>Canarie</p>
+          <div className={styles.quote}>
+            <section className={styles.left_text}>
+              Let us <br />
+              be your
+              <br />
+              coach.
+            </section>
+          </div>
+          <div className={styles.group}>
+            <div onClick={loginHandler} className={styles.api_button}>
+              <div className={styles.api}>
+                <img src={cmkllogo} />
+                <p>Sign in with CMKL account</p>
+              </div>
             </div>
-          </div>
-          <div className={styles.Term}>
-            <form className={styles.agree_term}>
-              {/* <p
-                onClick={() => {
-                  navigate("/Course");
-                }}
-              >
-                I agree with
-              </p> */}
-              <a onClick={modalToggle}>Terms and Conditions</a>
-            </form>
-            {/* <div className={styles.accept_button}></div> */}
-          </div>
-          {touched && !agree && (
-            <div className={styles.warning}>
-              <p>
-                *Please{" "}
-                <span
+            <div className={styles.Term}>
+              <form className={styles.agree_term}>
+                {/* <p
                   onClick={() => {
-                    setShow(!show);
+                    navigate("/Course");
                   }}
                 >
-                  agree
-                </span>{" "}
-                to terms and conditions{" "}
-              </p>
+                  I agree with
+                </p> */}
+                <a onClick={modalToggle}>Terms and Conditions</a>
+              </form>
+              {/* <div className={styles.accept_button}></div> */}
             </div>
-          )}
+            {touched && !agree && (
+              <div className={styles.warning}>
+                <p>
+                  *Please{" "}
+                  <span
+                    onClick={() => {
+                      setShow(!show);
+                    }}
+                  >
+                    agree
+                  </span>{" "}
+                  to terms and conditions{" "}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <div className={styles.mask}>
-        <div className={styles.red_circle}></div>
-        <div className={styles.yellow_circle}></div>
-      </div>
-      <Transition in={show} timeout={300} mountOnEnter unmountOnExit>
-        {(state) => (
-          <Term
-            show={state}
-            agree={agree}
-            onAgree={agreeHandler}
-            toggle={modalToggle}
-          />
-        )}
-      </Transition>
-      {/* {show ? <Term agree={agree} onAgree={agreeHandler} toggle={modalToggle} /> : <></>} */}
-    </div>
+        <div className={styles.mask}>
+          <div className={styles.red_circle}></div>
+          <div className={styles.yellow_circle}></div>
+        </div>
+        <Transition in={show} timeout={300} mountOnEnter unmountOnExit>
+          {(state) => (
+            <Term
+              show={state}
+              agree={agree}
+              onAgree={agreeHandler}
+              toggle={modalToggle}
+            />
+          )}
+        </Transition>
+        {/* {show ? <Term agree={agree} onAgree={agreeHandler} toggle={modalToggle} /> : <></>} */}
+      </div> 
+    }
+    </>
   );
 }
 
