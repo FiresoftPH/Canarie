@@ -319,7 +319,7 @@ const ChatUI = () => {
 
     chatRef.current.textContent = assignmentId;
 
-    dispatch(bigDataAction.cleanChats({ subjectId, omit: assignmentId }))
+    // dispatch(bigDataAction.cleanChats({ subjectId, omit: assignmentId }));
   }, [assignmentId]);
 
   // useEffect(() => {
@@ -405,18 +405,31 @@ const ChatUI = () => {
     }
 
     chatRef.current.contentEditable = false;
-    axios
-      .post("https://api.canarie.cmkl.ai/auth/chatroom/rename", {
-        username: usrData.username,
-        email: usrData.email,
-        course: subjectId,
-        chatroom: assignmentId,
-        api_key: usrData.api_key,
-        new_chatroom: chatRef.current.textContent,
-      })
-      .then(() => {
-        nav(`/Chat/${subjectId}/${chatRef.current.textContent}`);
-      });
+
+    const newName = chatRef.current.textContent;
+
+    // await axios
+    //   .post("https://api.canarie.cmkl.ai/auth/chatroom/rename", {
+    //     username: usrData.username,
+    //     email: usrData.email,
+    //     course: subjectId,
+    //     chatroom: assignmentId,
+    //     api_key: usrData.api_key,
+    //     new_chatroom: newName,
+    //   })
+      // .then(() => {
+      //   dispatch(
+      //     bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
+      //   );
+      // })
+      // .then(() => {
+      //   nav(`/Chat/${subjectId}/${newName}`);
+      // });
+
+    dispatch(
+      bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
+    );
+    nav(`/Chat/${subjectId}/${newName}`);
   };
 
   const changeRenameHandler = (e) => {
@@ -436,7 +449,7 @@ const ChatUI = () => {
     event.preventDefault();
 
     // Get pasted text from clipboard
-    const pastedText = event.clipboardData.getData('text/plain');
+    const pastedText = event.clipboardData.getData("text/plain");
 
     // Insert the pasted text into the contentEditable div as raw string
     const selection = window.getSelection();
@@ -446,8 +459,8 @@ const ChatUI = () => {
   };
 
   useEffect(() => {
-    dispatch(bigDataAction.addChat({ subjectId, name: assignmentId }))
-  }, [])
+    dispatch(bigDataAction.addChat({ subjectId, name: assignmentId }));
+  }, []);
 
   return (
     <>
@@ -493,10 +506,10 @@ const ChatUI = () => {
           </div>
           <div className={styles.chatting}></div>
           {/* {chatName !== "General" ? ( */}
-            <ChatScreenInitalized
-              onRate={ratingHandler}
-              history={history.filter((ass) => ass.name === chatName)[0]}
-            />
+          <ChatScreenInitalized
+            onRate={ratingHandler}
+            history={history.filter((ass) => ass.name === chatName)[0]}
+          />
           {/* ) : (
             <ChatScreenNotInit
             // onRate={ratingHandler}

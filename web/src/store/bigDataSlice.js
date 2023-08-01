@@ -178,6 +178,24 @@ const bigDataSlice = createSlice({
 
       return transformedData;
     },
+    setChatName: (state, action) => {
+      const subId = action.payload.subjectId;
+      const oldId = action.payload.assignmentId;
+      const newId = action.payload.newName;
+
+      const transformedData = state.map((sub) =>
+        sub.course === subId
+          ? {
+              ...sub,
+              assignments: sub["assignments"].map((c) =>
+                c.name === oldId ? { ...c, name: newId } : c
+              ),
+            }
+          : sub
+      );
+
+      return transformedData;
+    },
     cleanChats: (state, action) => {
       const subId = action.payload.subjectId;
       const omited = action.payload.omit;
@@ -187,7 +205,10 @@ const bigDataSlice = createSlice({
           ? {
               ...sub,
               assignments: sub.assignments.filter(
-                (c) => c.chatHistory.length !== 0 || c.name == "General" || c.name == omited
+                (c) =>
+                  c.chatHistory.length !== 0 ||
+                  c.name == "General" ||
+                  c.name == omited
               ),
             }
           : sub

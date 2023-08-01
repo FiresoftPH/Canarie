@@ -12,7 +12,7 @@ const CreateChatModal = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
               if (inputRef.current.value !== "") {
-                props.onSubit(inputRef.current.value);
+                props.onSubmit(inputRef.current.value);
               }
               else {
                 console.log('errrrrrrrrrrr')
