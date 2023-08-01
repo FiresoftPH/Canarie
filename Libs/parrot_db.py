@@ -47,7 +47,7 @@ class Database:
             pass
 
         try:
-            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), course_name VARCHAR(255), room_name VARCHAR(255), log BLOB)"
+            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), course_name VARCHAR(255), room_name VARCHAR(255), log LONGBLOB, ai_log LONGBLOB)"
             cursor.execute(command_3)
         except pymysql.err.OperationalError:
             print("Already initialized")
@@ -317,7 +317,7 @@ class Database:
             return False
 
     # Update chat history in the database. This will be updated when the session ends.
-    def storeChatHistory(self, username, email, course, room_name, history):
+    def storeChatHistory(self, username, email, course, room_name, history, old_history):
         config = dotenv_values(".env")
         connection = pymysql.connect(
         host=config["HOST_ALT"],
@@ -329,18 +329,27 @@ class Database:
         read_timeout=1800,
         write_timeout=1800
         )
+        history = pickle.loads(history)
+        old_history.append(history[-2])
+        old_history.append(history[-1])
+        full_history = pickle.dumps(old_history)
+        history = pickle.dumps(history)
+
         cursor = connection.cursor()
-        # history = pickle.dumps(history)
-        if sys.getsizeof(history) >= 62000:
-            while sys.getsizeof(history) >= 32000:
-                history = pickle.loads(history)
-                history.pop(0)
-                history = pickle.dumps(history)
+        if sys.getsizeof(full_history) >= 1000000000:
+            while sys.getsizeof(full_history) >= 500000000:
+                full_history = pickle.loads(full_history)
+                full_history.pop(0)
+                full_history = pickle.dumps(full_history)
             
         else:
             pass
 
         cursor.execute("UPDATE chat_history SET log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
+                                    (full_history, email, username, course, room_name))
+        connection.commit()
+
+        cursor.execute("UPDATE chat_history SET ai_log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
                                     (history, email, username, course, room_name))
         connection.commit()
         cursor.close()
@@ -378,10 +387,11 @@ class Database:
         )
         cursor = connection.cursor()
         cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))        
-        history = cursor.fetchall()
-        temp = history[0][0]
+        result = cursor.fetchall()
+        full_history = result[0][0]
+        # history = result[0][1]
         cursor.close()
-        return pickle.loads(temp)
+        return pickle.loads(full_history)
     
     def resetChatHistory(self, email, username, course, room_name):
         config = dotenv_values(".env")
@@ -418,14 +428,15 @@ class Database:
         )
         cursor = connection.cursor()
         try:
-            cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))
+            cursor.execute("SELECT ai_log, log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))
             result = cursor.fetchall()
-            temp = result[0][0]
+            history = result[0][0]
+            full_history = result[0][0]
             cursor.close()
-            if temp == "" or temp == None:
+            if history == "" or history == None or full_history  == "" or full_history == None:
                 return False
             else:
-                return pickle.loads(temp)
+                return pickle.loads(history), pickle.loads(full_history)
         
         except IndexError:
             return False

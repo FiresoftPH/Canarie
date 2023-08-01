@@ -34,7 +34,7 @@ class FlaskServer(Flask):
 
         rate_limit_value = "1 per minute"
 
-        CORS(self, origins="*")
+        # CORS(self, origins="*")
         # Routing applications
         self.route('/auth/login', methods = ["POST"])(self.login)
         self.route('/ai/getResponse', methods = ["POST"])(self.getResponse)
@@ -204,7 +204,7 @@ class FlaskServer(Flask):
                     new_code.append(result_string)
 
             if new_code == [] or len(new_code) == 0:
-                new_code = ["AIC-102", "AIC-108", "MAT-102"]
+                new_code = ["AIC-102", "AIC-108", "MAT-101", "MAT-102", "HCD-201", "SYS-101", "URD-101", "SCI-105", "HAS-101", "COM-101"]
                 self.db.canvasEnrollCourse(email, username, new_code)
             else:
                 self.db.canvasEnrollCourse(email, username, new_code)
@@ -254,13 +254,14 @@ class FlaskServer(Flask):
             # print(history_check)
             if history_check != False:
                 # continue_chat = self.ai.newchat(history_check)
-                chat_cache, answer = self.ai.chatsession(history_check, prompt)
+                chat_cache, answer = self.ai.chatsession(history_check[0], prompt)
+                self.db.storeChatHistory(username, email, course, chatroom, chat_cache, history_check[1])
             else:
                 self.db.createChatRoom(username, email, course, chatroom)
                 # conversation = self.ai.newchat()
                 chat_cache, answer = self.ai.chatsession([], prompt)
 
-            self.db.storeChatHistory(username, email, course, chatroom, chat_cache)
+                self.db.storeChatHistory(username, email, course, chatroom, chat_cache, [])
             return answer, status
 
     def getResponse(self):
@@ -288,10 +289,6 @@ class FlaskServer(Flask):
 
         # return Response(self.streamer(answer), content_type='text/event-stream')
         return jsonify({"message": answer, "sender": "ai", "rating": "none", "status": status})
-    
-    def streamer(self, text):
-        for x in text:
-            yield x
     
     def enrollCourse(self):
         data = request.get_json()
@@ -449,5 +446,6 @@ class FlaskServer(Flask):
         
 if __name__ == '__main__':
     app = FlaskServer(__name__)
+    CORS(app, supports_credentials=True)
     app.run(host = '0.0.0.0', port=2424)
     # app.run(host = "localhost", port=2424)
