@@ -12,7 +12,9 @@
 }
 
 .wrapper p {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+  overflow-y: hidden;
   /* margin-right: .2rem;
   margin-bottom: .2rem; */
 }

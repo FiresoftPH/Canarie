@@ -78,7 +78,7 @@ const bigDataSlice = createSlice({
       return transformedData;
     },
     addChat: (state, action) => {
-      const chatName = action.payload.name
+      const chatName = action.payload.name;
       const subId = action.payload.subjectId;
 
       const transformedData = state.map((sub) => {
@@ -89,10 +89,10 @@ const bigDataSlice = createSlice({
               {
                 assignmentId: nanoid(),
                 name: chatName,
-                chatHistory: []
+                chatHistory: [],
               },
               ...sub["assignments"],
-            ]
+            ],
           };
         } else {
           return sub;
@@ -110,7 +110,7 @@ const bigDataSlice = createSlice({
         if (sub.course === subId) {
           return {
             ...sub,
-            assignments: sub.assignments.filter(ass => ass.name !== name)
+            assignments: sub.assignments.filter((ass) => ass.name !== name),
           };
         } else {
           return sub;
@@ -127,13 +127,13 @@ const bigDataSlice = createSlice({
         if (sub.course === subId) {
           return {
             ...sub,
-            assignments: chats.map(chat => {
+            assignments: chats.map((chat) => {
               return {
                 assignmentId: chat,
                 name: chat,
-                chatHistory: []
-              }
-            })
+                chatHistory: [],
+              };
+            }),
           };
         } else {
           return sub;
@@ -146,7 +146,7 @@ const bigDataSlice = createSlice({
       const subId = action.payload.subjectId;
       const chatName = action.payload.assignmentId;
 
-      const transformedData = state.map(sub => {
+      const transformedData = state.map((sub) => {
         if (subId === sub.course) {
           // return sub.map(c => {
           //   if (c.name === chatName) {
@@ -160,37 +160,75 @@ const bigDataSlice = createSlice({
           // })
           return {
             ...sub,
-            assignments: sub["assignments"].map(c => {
+            assignments: sub["assignments"].map((c) => {
               if (c.name === chatName) {
                 return {
                   ...c,
-                  chatHistory: []
-                }
+                  chatHistory: [],
+                };
               } else {
-                return c
+                return c;
               }
-            })
-          }
+            }),
+          };
         } else {
-          return sub
+          return sub;
         }
-      })
+      });
 
-      return transformedData
+      return transformedData;
+    },
+    setChatName: (state, action) => {
+      const subId = action.payload.subjectId;
+      const oldId = action.payload.assignmentId;
+      const newId = action.payload.newName;
+
+      const transformedData = state.map((sub) =>
+        sub.course === subId
+          ? {
+              ...sub,
+              assignments: sub["assignments"].map((c) =>
+                c.name === oldId ? { ...c, name: newId } : c
+              ),
+            }
+          : sub
+      );
+
+      return transformedData;
+    },
+    cleanChats: (state, action) => {
+      const subId = action.payload.subjectId;
+      const omited = action.payload.omit;
+
+      const transformedData = state.map((sub) =>
+        sub.course === subId
+          ? {
+              ...sub,
+              assignments: sub.assignments.filter(
+                (c) =>
+                  c.chatHistory.length !== 0 ||
+                  c.name == "General" ||
+                  c.name == omited
+              ),
+            }
+          : sub
+      );
+
+      return transformedData;
     },
     setHistory: (state, action) => {
       const courses = action.payload;
 
-      const transformedData = courses.map(course => {
+      const transformedData = courses.map((course) => {
         return {
           course: course,
           assignments: [],
-          files: []
-        }
-      })
+          files: [],
+        };
+      });
 
       return transformedData;
-    }
+    },
   },
 });
 

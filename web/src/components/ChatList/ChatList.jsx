@@ -70,6 +70,7 @@ const ChatList = (props) => {
     );
     dispatch(bigDataAction.deleteChat({ id, subjectId, assignmentId }));
     nav(`/Chat/${subjectId}/General`)
+
     axios.post("https://api.canarie.cmkl.ai/auth/chatroom/delete", {
       username: usrData.username,
       email: usrData.email,
@@ -96,7 +97,7 @@ const ChatList = (props) => {
   const [testName, setTestName] = useState('')
   const addChatHandler = async (name) => {
     // const fetchedHistory = await axios.post(
-    //   "https://api.parrot.cmkl.ai/ai/getFullHistory",
+    //   "https://api.canarie.cmkl.ai/ai/getFullHistory",
     //   {
     //     username: usrData.username,
     //     email: usrData.email,
