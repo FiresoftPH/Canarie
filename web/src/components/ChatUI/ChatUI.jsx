@@ -119,7 +119,7 @@ const ChatUI = () => {
                   return {
                     chatId: nanoid(),
                     message: chat[1],
-                    sender: chat[0] === "<|im_start|>user" ? "user" : "ai",
+                    sender: chat[0] === "USER" ? "user" : "ai",
                     rating: "none",
                     file_attachments: [],
                   };
@@ -192,85 +192,85 @@ const ChatUI = () => {
   };
 
   const askAIHandler = async (question) => {
-    if (topName !== "-") {
-      // For any assignment chat
+    // if (topName !== "-") {
+    // For any assignment chat
 
-      console.log(question);
-      console.log(fileAttached[0]);
-      addChatToAssignment(question, "user", fileAttached);
-      // addChatToAssignment("No. You do it yourself.", "ai");
-      // const usrData = JSON.parse(localStorage.getItem("data"))[0];
+    console.log(question);
+    console.log(fileAttached[0]);
+    addChatToAssignment(question, "user", fileAttached);
+    // addChatToAssignment("No. You do it yourself.", "ai");
+    // const usrData = JSON.parse(localStorage.getItem("data"))[0];
 
-      let codee = "";
+    let codee = "";
 
-      if (fileAttached.length !== 0)
-        codee = fileAttached[0].map((f) => [f.name, f.code]);
+    if (fileAttached.length !== 0)
+      codee = fileAttached[0].map((f) => [f.name, f.code]);
 
-      console.log({
-        username: usrData.username,
-        email: usrData.email,
-        code: codee,
-        course: subjectId,
-        chatroom_name: assignmentId,
-        api_key: usrData.api_key,
-        question: question,
-      });
+    console.log({
+      username: usrData.username,
+      email: usrData.email,
+      code: codee,
+      course: subjectId,
+      chatroom_name: assignmentId,
+      api_key: usrData.api_key,
+      question: question,
+    });
 
-      setLock(true);
-      setTyping(true);
-      try {
-        const res = await axios
-          .post("https://api.canarie.cmkl.ai/ai/getResponse", {
-            username: usrData.username,
-            email: usrData.email,
-            code: codee,
-            course: subjectId,
-            chatroom_name: assignmentId,
-            api_key: usrData.api_key,
-            question: question,
-          })
-          .then((res) => res.data);
-        console.log(res);
-        addChatToAssignment(res.message, "ai", []);
-        setLock(false);
-        setTyping(false);
-      } catch {
-        setLock(false);
-        setTyping(false);
-      }
-
-      // console.log(res)
-    } else {
-      // For general chat
-      addChatToAssignment(question, "user");
-
-      setHistory((prevState) =>
-        prevState.map((assignment) => {
-          if (assignment.name === chatName) {
-            return {
-              ...assignment,
-              chatHistory: [
-                ...assignment["chatHistory"],
-                {
-                  chatId: Math.random(),
-                  message: "Which assignment is your question referencing",
-                  sender: "ai",
-                  rating: "none",
-                  assignment: history.map((ass) => {
-                    if (ass.name !== "General")
-                      return { name: ass.name, id: ass.assignmentId };
-                  }),
-                },
-              ],
-            };
-          } else {
-            return assignment;
-          }
+    setLock(true);
+    setTyping(true);
+    try {
+      const res = await axios
+        .post("https://api.canarie.cmkl.ai/ai/getResponse", {
+          username: usrData.username,
+          email: usrData.email,
+          code: codee,
+          course: subjectId,
+          chatroom_name: assignmentId,
+          api_key: usrData.api_key,
+          question: question,
         })
-      );
-
-      setLock(true);
+        .then((res) => res.data);
+      console.log(res);
+      addChatToAssignment(res.message, "ai", []);
+      setLock(false);
+      setTyping(false);
+    } catch {
+      setLock(false);
+      setTyping(false);
     }
+
+    // console.log(res)
+    // } else {
+    //   // For general chat
+    //   addChatToAssignment(question, "user");
+
+    //   setHistory((prevState) =>
+    //     prevState.map((assignment) => {
+    //       if (assignment.name === chatName) {
+    //         return {
+    //           ...assignment,
+    //           chatHistory: [
+    //             ...assignment["chatHistory"],
+    //             {
+    //               chatId: Math.random(),
+    //               message: "Which assignment is your question referencing",
+    //               sender: "ai",
+    //               rating: "none",
+    //               assignment: history.map((ass) => {
+    //                 if (ass.name !== "General")
+    //                   return { name: ass.name, id: ass.assignmentId };
+    //               }),
+    //             },
+    //           ],
+    //         };
+    //       } else {
+    //         return assignment;
+    //       }
+    //     })
+    //   );
+
+    //   setLock(true);
+    // }
   };
 
   const ratingHandler = (rating, id) => {
@@ -303,19 +303,23 @@ const ChatUI = () => {
 
   // Check if the selected subject is null or not, if it is not, set the subject name to the selected subject
   useEffect(() => {
-    if (chatName !== "General") {
-      // ScrollBar related code
-      setLock(false);
-      if (shouldUpdate === false) {
-        const scrollBar = document.getElementById("chatScroll");
-        scrollBar.scrollTop = scrollBar.scrollHeight;
-      } else {
-        shouldUpdate = false;
-      }
-      setTopName(assignmentId);
+    // if (chatName !== "General") {
+    // ScrollBar related code
+    setLock(false);
+    if (shouldUpdate === false) {
+      const scrollBar = document.getElementById("chatScroll");
+      scrollBar.scrollTop = scrollBar.scrollHeight;
     } else {
-      setLock(true);
+      shouldUpdate = false;
     }
+    setTopName(assignmentId);
+    // } else {
+    //   setLock(true);
+    // }
+
+    chatRef.current.textContent = assignmentId;
+
+    // dispatch(bigDataAction.cleanChats({ subjectId, omit: assignmentId }));
   }, [assignmentId]);
 
   // useEffect(() => {
@@ -362,6 +366,102 @@ const ChatUI = () => {
     dispatch(bigDataAction.clearChat({ subjectId, assignmentId }));
   };
 
+  // const [editable, setEditable] = useState(false);
+  const chatRef = useRef(null);
+
+  const selectTarget = (el) => {
+    el.focus();
+
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  };
+
+  const renameHandler = async () => {
+    // setEditable(true);
+    if (assignmentId === "General") {
+      return;
+    }
+
+    chatRef.current.contentEditable = true;
+
+    if (chatRef.current) {
+      selectTarget(chatRef.current);
+    }
+  };
+
+  const stopRenameHandler = async (e) => {
+    // console.log(e.target.textContent)
+
+    // console.log('thing blured bro')
+    if (e.target.textContent == "") {
+      console.log("no.");
+      e.preventDefault();
+
+      selectTarget(e.target);
+      return;
+    }
+
+    chatRef.current.contentEditable = false;
+
+    const newName = chatRef.current.textContent;
+
+    // await axios
+    //   .post("https://api.canarie.cmkl.ai/auth/chatroom/rename", {
+    //     username: usrData.username,
+    //     email: usrData.email,
+    //     course: subjectId,
+    //     chatroom: assignmentId,
+    //     api_key: usrData.api_key,
+    //     new_chatroom: newName,
+    //   })
+      // .then(() => {
+      //   dispatch(
+      //     bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
+      //   );
+      // })
+      // .then(() => {
+      //   nav(`/Chat/${subjectId}/${newName}`);
+      // });
+
+    dispatch(
+      bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
+    );
+    nav(`/Chat/${subjectId}/${newName}`);
+  };
+
+  const changeRenameHandler = (e) => {
+    console.log(e);
+
+    if (
+      e.key === "Enter" &&
+      e.target.textContent != "" &&
+      e.shiftKey == false
+    ) {
+      e.target.blur();
+    }
+  };
+
+  const handlePaste = (event) => {
+    // Prevent default paste behavior to handle pasted content manually
+    event.preventDefault();
+
+    // Get pasted text from clipboard
+    const pastedText = event.clipboardData.getData("text/plain");
+
+    // Insert the pasted text into the contentEditable div as raw string
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(pastedText));
+  };
+
+  useEffect(() => {
+    dispatch(bigDataAction.addChat({ subjectId, name: assignmentId }));
+  }, []);
+
   return (
     <>
       {/* {openFiles ? (
@@ -384,20 +484,33 @@ const ChatUI = () => {
         <div className={styles.content}>
           <div className={styles.header}>
             <img src={ChatIconNoBG} />
-            <p>{assignmentId === "General" ? "-" : assignmentId}</p>
-            <img src={RenameIcon} />
+            <p
+              onBlur={stopRenameHandler}
+              ref={chatRef}
+              onPaste={handlePaste}
+              onKeyDown={changeRenameHandler}
+              // role="textbox"
+              // contentEditable={editable}
+            ></p>
+            <img
+              onClick={renameHandler}
+              src={RenameIcon}
+              style={{
+                cursor: assignmentId === "General" ? "not-allowed" : "pointer",
+              }}
+            />
             {/* <div /> */}
             <img onClick={historyDeleteHandler} src={ClearChatHistoryIcon} />
             <div className={styles.sepLine} />
             <div className={styles.topBlur}></div>
           </div>
           <div className={styles.chatting}></div>
-          {chatName !== "General" ? (
-            <ChatScreenInitalized
-              onRate={ratingHandler}
-              history={history.filter((ass) => ass.name === chatName)[0]}
-            />
-          ) : (
+          {/* {chatName !== "General" ? ( */}
+          <ChatScreenInitalized
+            onRate={ratingHandler}
+            history={history.filter((ass) => ass.name === chatName)[0]}
+          />
+          {/* ) : (
             <ChatScreenNotInit
             // onRate={ratingHandler}
             // history={
@@ -407,7 +520,7 @@ const ChatUI = () => {
             //   setLock(false);
             // }}
             />
-          )}
+          )} */}
           <ChatInputField
             onFileAttach={fileAttachHandler}
             onUploadFile={fileAddHandler}

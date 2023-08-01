@@ -96,6 +96,8 @@
   margin-left: 0.5rem;
 
   overflow-x: hidden;
+  overflow-wrap: break-word;
+  max-height: 3rem;
   margin-right: .5rem;
 }
 
