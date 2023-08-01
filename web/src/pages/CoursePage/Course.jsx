@@ -14,9 +14,7 @@ function Course() {
   // Demo data set to user store (Logic will be added at login page)
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const subjects = JSON.parse(localStorage.getItem("data")).courses
   const name = JSON.parse(localStorage.getItem("data")).username
-  // const courses = useSelector((state) => state.user.courses);
   const courses = JSON.parse(localStorage.getItem("data")).courses
   const user = useSelector((state) => state.user);
   const history = useSelector(state => state.bigData)
@@ -79,7 +77,7 @@ function Course() {
                       }}
                       className={styles.dropdown}></box-icon>
           </header>
-          <CourseList displayData={filteredSearch}/>
+          <CourseList displayData={filteredSearch} />
         </div>
         <div className={styles.mask}>
           <div className={styles.red_circle_course}></div>

@@ -26,7 +26,6 @@ let codeee = "";
 const IDE = (props) => {
   const ideRef = useRef(null);
   const textEditor = useRef(null);
-  const codeMirror_ref = useRef(null);
 
   const [language, setLanguage] = useState(defaultSelect);
   const [code, setCode] = useState("");
@@ -39,12 +38,8 @@ const IDE = (props) => {
   // const codeData = useSelector(state => state.chat.code)
 
   const codeData = useSelector((state) => state.chat.code);
-
-  // console.log(codeData);
   const fid = useSelector((state) => state.chat.fid);
-
   const bigData = useSelector((state) => state.bigData);
-
   console.log(bigData);
 
   // Set code in the IDE everytime the code for ide or the file id is changed
@@ -87,17 +82,17 @@ const IDE = (props) => {
     try {
       let result;
       switch (language) {
+        case "c":
+          result = exeCode(code, ".c");
+          break;
         case "c++":
           result = exeCode(code, ".cpp");
-          // console.log("1");
           break;
         case "csharp":
           result = exeCode(code, ".cs");
-          // console.log("2");
           break;
         case "python":
           result = exeCode(code, ".py");
-          // console.log("9");
           break;
         default:
           throw new Error(`Language mode "${language}" is not supported.`);
@@ -171,7 +166,7 @@ const IDE = (props) => {
     // java: langs.java(),
     // javascript: langs.javascript(),
     // typescript: langs.typescript(),
-    // c: langs.c(),
+    c: langs.c(),
     // css: langs.css(),
     "c#": langs.csharp(),
     // dockerfile: langs.dockerfile(),
@@ -235,7 +230,6 @@ const IDE = (props) => {
         <section ref={textEditor} className={styles.ide_container}>
           <div className={styles.ide_topbar}>
             <label>
-              {/* <p>Languages:</p> */}
               <select
                 className={styles.lang_selection}
                 value={language}
@@ -271,12 +265,10 @@ const IDE = (props) => {
               onClick={executeCode}
             />
           </div>
-          {/* i think we have to move the on focus and blur inside codemirror */}
           <div className={styles.ide_bottombar}>
             <CodeMirror
               className={styles.ide}
               value={code}
-              // ref={codeMirror_ref}
               theme={[alls.atomone]}
               extensions={[
                 language !== defaultSelect ? langTemplate[language] : null,
@@ -290,6 +282,7 @@ const IDE = (props) => {
           <div className={styles.verticalSlide}>||</div>
         </section>
         <section className={styles.output}>
+          <h1>Output</h1>
           <ReactMarkdown>{output}</ReactMarkdown>
         </section>
       </div>
