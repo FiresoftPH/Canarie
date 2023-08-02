@@ -50,6 +50,9 @@
 
   width: 100% !important;
   min-height: 10px;
+
+  /* border-top-style: solid;
+  border-top-width: 1px; */
   /* grid-template-columns: 1fr 1fr; */
 }
 

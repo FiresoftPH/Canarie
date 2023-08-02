@@ -21,7 +21,7 @@ const ChatList = (props) => {
     .assignments;
 
   const [chats, setChats] = useState(transformedData);
-  const [selectedChat, setSelectedChat] = useState();
+  const [selectedChat, setSelectedChat] = useState(null);
   const [toggle, setToggle] = useState(false);
 
   // console.log(data.filter((sub) => sub.course === subjectId)[0].assignments);
@@ -60,16 +60,19 @@ const ChatList = (props) => {
 
   const chatDeleteHandler = (id) => {
     shouldUpdate = false;
-    console.log(chats.filter((chat) => {
-      return chat.name !== id;
-    }))
+    console.log(
+      chats.filter((chat) => {
+        return chat.name !== id;
+      })
+    );
     setChats(
       chats.filter((chat) => {
         return chat.name !== id;
       })
     );
     dispatch(bigDataAction.deleteChat({ id, subjectId, assignmentId }));
-    nav(`/Chat/${subjectId}/General`)
+    nav(`/Chat/${subjectId}/General`);
+    setSelectedChat(null);
 
     axios.post("https://api.canarie.cmkl.ai/auth/chatroom/delete", {
       username: usrData.username,
@@ -94,7 +97,7 @@ const ChatList = (props) => {
     setToggle(!toggle);
   };
 
-  const [testName, setTestName] = useState('')
+  const [testName, setTestName] = useState("");
   const addChatHandler = async (name) => {
     // const fetchedHistory = await axios.post(
     //   "https://api.canarie.cmkl.ai/ai/getFullHistory",
@@ -109,47 +112,71 @@ const ChatList = (props) => {
     // console.log('history')
     // console.log(fetchedHistory)
     dispatch(bigDataAction.addChat({ name, subjectId }));
-    setTestName(name)
+    setTestName(name);
     // console.log(data.filter((sub) => sub.course === subjectId)[0].assignments)
     setToggle(!toggle);
+    setSelectedChat(name);
+    nav(`/Chat/${subjectId}/${name}`);
     // nav(`/Chat/${subjectId}/${name}`);
     // axios.post('')
   };
+
   const getChatnameHandler = async () => {
-    const testData = await axios.post("https://api.canarie.cmkl.ai/auth/chatroom/fetch", {
-      username: usrData.username,
-      email: usrData.email,
-      course: subjectId,
-      api_key: usrData.api_key,
-    }).catch(err => console.log(err))
-    console.log(testData)
-  }
+    const testData = await axios
+      .post("https://api.canarie.cmkl.ai/auth/chatroom/fetch", {
+        username: usrData.username,
+        email: usrData.email,
+        course: subjectId,
+        api_key: usrData.api_key,
+      })
+      .catch((err) => console.log(err));
+    console.log(testData);
+  };
+
+  useEffect(() => {
+    if (chats.length !== 0 && selectedChat == null) {
+      setSelectedChat("General");
+    }
+  });
 
   return (
     <>
       <section className={styles.chatList}>
         {chats.length !== 0
-          ? chats.map((chat) => (
-              <ChatCard
-                // assignment={chat.assignment}
-                sessionName={chat.name}
-                id={chat.name}
-                delete={chatDeleteHandler}
-                onSelect={selectHandler}
-                selected={chat.name === selectedChat}
-              />
-            ))
+          ? chats
+              .filter((chat) => chat.name === "General")
+              .map((chat) => (
+                <ChatCard
+                  // assignment={chat.assignment}
+                  sessionName={chat.name}
+                  id={chat.name}
+                  onSelect={selectHandler}
+                  selected={chat.name === selectedChat}
+                />
+              ))
+          : ""}
+        {chats.length !== 0
+          ? chats
+              .filter((chat) => chat.name !== "General")
+              .map((chat) => (
+                <ChatCard
+                  // assignment={chat.assignment}
+                  sessionName={chat.name}
+                  id={chat.name}
+                  delete={chatDeleteHandler}
+                  onSelect={selectHandler}
+                  selected={chat.name === selectedChat}
+                />
+              ))
           : "Please create a chat to proceed"}
         <div onClick={modalToggle} className={styles.new_chat}>
           <img src={New_Button} />
           <p>New Chat</p>
         </div>
         {/* <button onClick={getChatnameHandler}>test</button> */}
-        {toggle ? 
+        {toggle && (
           <CreateChatModal onSubmit={addChatHandler} toggle={modalToggle} />
-        : 
-          ""
-        }
+        )}
       </section>
     </>
   );
