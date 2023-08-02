@@ -25,6 +25,7 @@ npm install axios
 npm install react-syntax-highlighter --save
 npm install highlight.js
 npm i --save react-select
+npm i lottie-react
 
 */
 

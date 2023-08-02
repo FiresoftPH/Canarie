@@ -36,6 +36,9 @@ const userSlice = createSlice({
       // state.courses = action.payload.courses
       state.courses = action.payload.courses
     },
+    setUsername: (state, action) => {
+      state.username = action.payload
+    },
     addCourse: (state, action) => {
       state.courses.push(action.payload)
     },

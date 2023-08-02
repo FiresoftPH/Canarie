@@ -15,17 +15,70 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import detectLanguage from "../../utils/detectLangulage";
+import { useRef } from "react";
+import CopySuccessfulPopup from "../CopySuccessfulPopup/CopySuccessfulPopup";
+import axios from "axios";
 
 // import { detect } from 'program-language-detector';
 
 const ChattingCardAI = memo(function ChattingCardAI(props) {
   console.log("ChattingCardAI component is called");
 
+  const wholeDiv = useRef(null);
+
   // var detectLang = require('lang-detector');
 
+  const [copy, setCopy] = useState(false);
+
+  // const usrData = localStorage.getItem("data")
+
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={styles.wrapper}
+      ref={wholeDiv}
+      onCopy={async (e) => {
+        e.preventDefault();
+        const usrData = JSON.parse(localStorage.getItem("data"));
+
+        // setCopy("COPYING")
+        // const shakeSpear = await axios
+        //   .post("https://api.canarie.cmkl.ai/ai/shakespeare", {
+        //     username: usrData.username,
+        //     email: usrData.email,
+        //     api_key: usrData.api_key,
+        //   })
+        //   .then((res) => res.data.message)
+        //   .then((res) => {
+        //     console.log(res);
+        //     return res;
+        //   });
+        // // .then((res) => {
+        // //   console.log(res)
+        // //   // e.clipboardData.setData("text/plain", res);
+        // // });
+        // // setCopy("ENDED")
+
+        // console.log(shakeSpear);
+        // navigator.clipboard.writeText(shakeSpear);
+
+        // e.clipboardData.setData("text/plain", shakeSpear)
+
+        e.clipboardData.setData(
+          "text/plain",
+          `Hello ${usrData.username}.\nFirst of all, nice try bro.\nSecondly, this act will be notified to the supervisor for this course.\nTry negotiating with them and see how it goes.\n-Sincerely, Canarie`
+        );
+        // setCopy(true);
+      }}
+    >
       <img src={ParrotIcon} />
+      {/* {copy && ( */}
+      {/* <CopySuccessfulPopup
+        close={() => {
+          setCopy(false);
+        }}
+        copyStatus={copy}
+      /> */}
+      {/* )} */}
       {/* {props.assignments
         ? props.assignments.map((assignment) => {
 
@@ -41,7 +94,7 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
             components={{
               code({ node, inline, className, children, ...props }) {
                 // const match = /language-(\w+)/.exec(className || "");
-                const match = detectLanguage(children[0])
+                const match = detectLanguage(children[0]);
                 // console.log(match)
 
                 // console.log(match)
@@ -88,8 +141,8 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
               : ""}
           </div>
         </div>
-        {/* <div className={styles.preference}> */}
-        {props.rating === "none" ? (
+        {/* DON'T DELETE THIS */}
+        {/* {props.rating === "none" ? (
           <div className={styles.preference}>
             <img
               onClick={() => {
@@ -113,8 +166,7 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
           <div className={styles.preference}>
             <img src={DislikeIcon} />
           </div>
-        )}
-        {/* </div> */}
+        )} */}
       </div>
     </div>
   );

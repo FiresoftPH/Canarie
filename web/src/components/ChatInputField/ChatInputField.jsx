@@ -6,11 +6,12 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bigDataAction } from "../../store/bigDataSlice";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const ChatInputField = (props) => {
   const [question, setQuestion] = useState("");
 
-  const [] = useState();
+  const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { subjectId, assignmentId } = useParams();
 
@@ -24,6 +25,11 @@ const ChatInputField = (props) => {
     if (question === "") {
       return;
     }
+
+    if (question.length > 500) {
+      return;
+    }
+    setFiles([]);
     props.onSend(question);
     setQuestion("");
   };
@@ -31,21 +37,21 @@ const ChatInputField = (props) => {
   let fr;
   let fname = "Unnamed";
   const fileUploadHandler = async (e) => {
+    let uploadedFiles = [];
     console.log(e.target.files);
     if (!e.target.files[0]) {
       return;
     }
 
-    let uploadedFiles = [];
-    
     const allFilesRead = () => {
       if (e.target.files.length === uploadedFiles.length) {
-        console.log("COMPLETED UPLOAD")
+        console.log("COMPLETED UPLOAD");
+        console.log(uploadedFiles);
         props.onUploadFile(uploadedFiles);
       }
       // console.log("Been executed")
       // console.log(uploadedFiles)
-    }
+    };
 
     // fd = new FormData();
     for (let f = 0; f < e.target.files.length; f++) {
@@ -67,16 +73,24 @@ const ChatInputField = (props) => {
           })
         );
 
-        uploadedFiles.push(
+        uploadedFiles.push({
+          subjectId,
+          assignmentId,
+          name: fileName,
+          code: f.target.result,
+        });
+
+        setFiles((prevState) => [
+          ...prevState,
           {
             subjectId,
             assignmentId,
             name: fileName,
             code: f.target.result,
           },
-        )
+        ]);
 
-        allFilesRead()
+        allFilesRead();
       };
 
       fr.readAsText(e.target.files[f]);
@@ -98,17 +112,24 @@ const ChatInputField = (props) => {
     // }
   };
 
-  const textareaRef = useRef(null);
+  // const textareaRef = useRef(null);
+  const textareaRef = props.inputRef;
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [props.lock]);
 
   return (
-    <div className={`${styles.wrapper} ${props.typing ? styles.lower : ""}`}>
+    <div className={`${styles.wrapper} ${props.typing && styles.lower}`}>
       <div
         // onClick={() => {
         //   if (props.lock === false) props.onFileAttach();
         // }}
-        className={`${styles.attachment} ${props.lock ? styles.locked : ""}`}
+        className={`${styles.attachment} ${props.lock && styles.locked}`}
       >
-        {!props.lock ? (
+        {!props.lock && (
           <label>
             <input
               onChange={(e) => {
@@ -118,8 +139,6 @@ const ChatInputField = (props) => {
               type="file"
             />
           </label>
-        ) : (
-          ""
         )}
         <img
           // onClick={() => {
@@ -127,25 +146,37 @@ const ChatInputField = (props) => {
           // }}
           src={FileAttachmentIcon}
         />
+        {files.length !== 0 && (
+          <div className={styles.fileAmount}>
+            <p>{files.length}</p>
+          </div>
+        )}
       </div>
-      <div className={`${styles.searchBar} ${props.lock ? styles.locked : ""}`}>
+      <div className={`${styles.searchBar} ${props.lock && styles.locked}`}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             askHandler(e.target.files);
           }}
         >
-          {props.lock ? (
-            ""
-          ) : (
+          {!props.lock && (
             <textarea
               onChange={(e) => {
                 setQuestion(e.target.value);
-                console.log(e.target.rows);
+                // console.log(e.target.value);
 
                 if (textareaRef.current) {
                   textareaRef.current.style.height = "auto";
                   textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+                }
+              }}
+              onKeyDown={(e) => {
+                // console.log(e)
+                if (e.key === "Enter" && e.shiftKey == false) {
+                  // console.log(e.target.value.replace(/\s/g, ""))
+                  if (e.target.value.replace(/\s/g, "") !== "" && e.target.value.length < 500) {
+                    askHandler();
+                  }
                 }
               }}
               ref={textareaRef}
@@ -156,18 +187,19 @@ const ChatInputField = (props) => {
             />
           )}
         </form>
-        <img onClick={askHandler} className={styles.send} src={SendIcon} />
+        <div>
+          <img onClick={askHandler} className={styles.send} src={SendIcon} />
+          {question.length > 500 && <p>{500 - question.length}</p>}
+        </div>
       </div>
       <div className={styles.bottomBlur} />
-      {props.typing ? (
+      {props.typing && (
         <div className={styles.typing}>
           <div className={styles.typing1}></div>
           <div className={styles.typing2}></div>
           <div className={styles.typing3}></div>
           <p>Parrot is typing</p>
         </div>
-      ) : (
-        ""
       )}
     </div>
   );
