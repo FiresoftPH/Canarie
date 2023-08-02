@@ -11,13 +11,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CourseNames from "./CourseNames.json";
 import Lottie from "lottie-react"
+import CanarieLoading from "../../assets/canarie_lottie1.json"
 
 function Login() {
   const [show, setShow] = useState(false);
   const [agree, setAgree] = useState(false);
   const [touched, setTouched] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -27,12 +27,15 @@ function Login() {
       const googleAuthUrl = "https://accounts.google.com/o/oauth2/auth";
       const redirectUri = "https://canarie.cmkl.ai"; // Replace with your frontend redirect URL
       const clientId =
-        "479838750655-1r50o7kf756vv7s0tpbco8uh25g143mr.apps.googleusercontent.com"; // Replace with your actual client ID
+        // Replace with your actual client ID
+        "479838750655-1r50o7kf756vv7s0tpbco8uh25g143mr.apps.googleusercontent.com";
       const scope =
-        "openid email profile https://www.googleapis.com/auth/contacts.readonly"; // Specify the scopes you need
+        // Specify the scopes you need
+        "openid email profile https://www.googleapis.com/auth/contacts.readonly";
 
       // Construct the URL for Google Sign-In
-      const authUrl = `${googleAuthUrl}?response_type=token&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${encodeURIComponent(
+      const authUrl = 
+      `${googleAuthUrl}?response_type=token&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${encodeURIComponent(
         scope
       )}`;
 
@@ -51,7 +54,6 @@ function Login() {
 
   const handleLoginFlow = async () => {
     const accessToken = getAccessTokenFromUrl();
-
     if (accessToken) {
       try {
         // Send the access token to the backend for verification and JWT generation
@@ -60,9 +62,7 @@ function Login() {
         });
         localStorage.setItem("LOGGED IN", "I TTINK")
         // Store the JWT token in local storage or cookies for subsequent API requests.
-        setLoading(true);
         localStorage.setItem("data", JSON.stringify(res.data))
-        console.log('worked')
         navigate("/Course");
       } catch (error) {
         console.error("Error during login:", error);
@@ -106,10 +106,10 @@ function Login() {
         status: "user",
       })
     );
-
     Cookies.set("Screen_Width", window.innerWidth);
     Cookies.set("Screen_Height", window.innerHeight);
     if (window.location.hash.includes("access_token")) {
+      setLoading(true)
       handleLoginFlow();
     }
   }, []);
@@ -117,23 +117,23 @@ function Login() {
   const modalToggle = () => {
     setShow(!show);
   };
-
   const loginHandler = () => {
     setTouched(true);
-
     if (agree === true) {
       handleGoogleLogin();
     }
   };
-
   const agreeHandler = () => {
     setAgree(true);
     setShow(!show);
   };
-
   return (
     <>
-      { loading ? null :
+      { loading ?
+      <Lottie animationData={CanarieLoading}
+      style={{backgroundColor: "#2f325a",
+              width:"auto", height: "100vh", overflow: "hidden"}}/>
+      :
       <div className={styles.background}>
         <div className={styles.content}>
           <img className={styles.logo} src={logo} />
@@ -198,7 +198,9 @@ function Login() {
           )}
         </Transition>
         {/* {show ? <Term agree={agree} onAgree={agreeHandler} toggle={modalToggle} /> : <></>} */}
-      </div> 
+      </div>
+      
+
     }
     </>
   );
