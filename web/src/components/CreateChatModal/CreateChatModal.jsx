@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import styles from "./CreateChatModal.module.css";
 import Icon from "../../assets/ParrotIcon.svg";
 import UserIcon from "../../assets/UserImage.svg"
@@ -20,12 +20,14 @@ const CreateChatModal = (props) => {
       <div className={styles.container}>
         <div className={styles.header}>
           <img src={Icon} alt="AI" />
-          <p>
-          What name would you like to set?
+          {/* <img src={ChatboxUwU} alt="chatbox" /> */}
+          <p className={styles.chat_ai}>
+            What name would you like to set?
           </p>
         </div>
         <div className={styles.middle}>
           <form
+            className={styles.user_chat}
             onSubmit={(e) => {
               e.preventDefault();
               if (inputRef.current.value !== "") {
@@ -36,7 +38,7 @@ const CreateChatModal = (props) => {
               }
             }}
           >
-            <input ref={inputRef} placeholder="Enter chat name here" />
+            <input ref={inputRef} placeholder="Enter chat name here" autoFocus />
           </form>
           <img src={UserIcon} alt="User" />
         </div>
@@ -51,7 +53,7 @@ const CreateChatModal = (props) => {
               }
             }}
           >
-            &#10003;
+            Create
           </button>
         </div>
       </div>
