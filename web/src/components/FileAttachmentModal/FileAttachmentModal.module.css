@@ -1,16 +1,16 @@
 .total {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
 
-  /* background-color: yellow; */
-  left: 0;
-  top: 0;
-  z-index: 600;
+    /* background-color: yellow; */
+    left: 0;
+    top: 0;
+    z-index: 600;
 }
 
 .static {
-  width: 15vw;
+    width: 15vw;
 }
 
 .backdrop {
@@ -38,10 +38,6 @@
 
 .files > * {
     margin-top: .15rem;
-    /* height: 80%;
-    overflow-y: scroll;
-
-    background-color: black; */
 }
 
 .submit {

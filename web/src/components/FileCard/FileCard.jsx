@@ -3,15 +3,12 @@ import styles from "./FileCard.module.css";
 import Close from "../../assets/CloseIcon.svg";
 import { useDispatch } from "react-redux";
 import { chatAction } from "../../store/chatSlice";
-import { useState } from "react";
 
 const FileCard = (props) => {
   let fname = props.name;
   const dispatch = useDispatch();
-
   // const [trigger, setTrigger] = useState(false)
   let del = false;
-
   try {
     if (fname.split(".")[0].length > 10) {
       fname = props.name.split(".")[0].slice(0, 9) + "... " + props.name.split(".")[1]

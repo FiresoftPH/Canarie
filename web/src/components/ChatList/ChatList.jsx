@@ -10,21 +10,16 @@ import { bigDataAction } from "../../store/bigDataSlice";
 import axios from "axios";
 
 let shouldUpdate = true;
-const ChatList = (props) => {
+const ChatList = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.bigData);
-
   const { subjectId, assignmentId } = useParams();
   const nav = useNavigate();
-
-  const transformedData = data.filter((sub) => sub.course === subjectId)[0]
-    .assignments;
-
+  const transformedData = data.filter((sub) => sub.course === subjectId)[0].assignments;
   const [chats, setChats] = useState(transformedData);
   const [selectedChat, setSelectedChat] = useState(null);
   const [toggle, setToggle] = useState(false);
 
-  // console.log(data.filter((sub) => sub.course === subjectId)[0].assignments);
   useEffect(() => {
     setChats(data.filter((sub) => sub.course === subjectId)[0].assignments);
   }, [data.filter((sub) => sub.course === subjectId)[0].assignments]);
@@ -37,7 +32,6 @@ const ChatList = (props) => {
   });
 
   const usrData = JSON.parse(localStorage.getItem("data"));
-
   useEffect(() => {
     const cleanUp = async () => {
       // console.log(usrData)
@@ -49,7 +43,7 @@ const ChatList = (props) => {
           api_key: usrData.api_key,
         })
         .then((res) => res.data.chatrooms);
-      console.log(chatRooms);
+      // console.log(chatRooms);
       dispatch(bigDataAction.setChats({ subjectId, chats: chatRooms }));
       setChats(chatRooms);
     };

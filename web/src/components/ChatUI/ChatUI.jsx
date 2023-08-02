@@ -5,9 +5,8 @@ import RenameIcon from "src/assets/RenameIcon.svg";
 import ClearChatHistoryIcon from "src/assets/ClearChatHistoryIcon.svg";
 import ChatInputField from "../ChatInputField/ChatInputField";
 import ChatScreenInitalized from "../ChatScreen/ChatScreenInitialized";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import userSlice, { userActions } from "../../store/userSlice";
 
 // const DUMMY_TEXT_DATA = [
 //   {
@@ -24,8 +23,7 @@ import userSlice, { userActions } from "../../store/userSlice";
 //   },
 // ];
 
-import ChatScreenNotInit from "../ChatScreen/ChatScreenNotInit";
-import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
+// import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
 import axios from "axios";
@@ -36,7 +34,6 @@ let shouldUpdate = false;
 let shouldFetchData = true
 const ChatUI = () => {
   // let chatName = props.mode;
-
   // Fetch data only once
   let data = useSelector((state) => state.bigData);
 
@@ -45,25 +42,19 @@ const ChatUI = () => {
   const { subjectId, assignmentId } = useParams();
   let chatName = assignmentId;
   const courseName = subjectId;
-
   const nav = useNavigate();
   const location = useLocation();
   const usrData = JSON.parse(localStorage.getItem("data"));
-
   const [typing, setTyping] = useState(false);
-
   const inputRef = useRef();
-
   const dispatch = useDispatch();
-
   // console.log(data.filter((sub) => sub.course === courseName)[0].assignments.filter((ass) => ass.assignmentId === chatName)[0])
-
   const [history, setHistory] = useState(
     data.filter((sub) => sub.course === courseName)[0].assignments
   );
 
   useEffect(() => {
-    console.log(data.filter((sub) => sub.course === courseName)[0].assignments)
+    // console.log(data.filter((sub) => sub.course === courseName)[0].assignments)
 
     setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
   }, [data.filter((sub) => sub.course === courseName)[0].assignments]);
@@ -71,14 +62,14 @@ const ChatUI = () => {
   // Fetch recent history data
   useEffect(() => {
     if (shouldFetchData == true) {
-      console.log("FETCHING HISTORY");
-      console.log({
-        username: usrData.username,
-        email: usrData.email,
-        course: subjectId,
-        chatroom_name: assignmentId,
-        api_key: usrData.api_key,
-      },)
+      // console.log("FETCHING HISTORY");
+      // console.log({
+      //   username: usrData.username,
+      //   email: usrData.email,
+      //   course: subjectId,
+      //   chatroom_name: assignmentId,
+      //   api_key: usrData.api_key,
+      // },)
       // console.log(usrData)
   
       const cleanUp = async () => {
@@ -95,10 +86,8 @@ const ChatUI = () => {
             { headers: { "Access-Control-Allow-Origin": "*" } }
           )
           .then((res) => res.data.content);
-  
         if (fetchedHistory != undefined) {
-          console.log(fetchedHistory);
-
+          // console.log(fetchedHistory);
           setHistory((prev) =>
             prev.map((ass) => {
               if (ass.name === assignmentId) {
@@ -121,7 +110,6 @@ const ChatUI = () => {
           );
         }
       };
-  
       cleanUp();
     } else {
       shouldFetchData = true
@@ -132,32 +120,17 @@ const ChatUI = () => {
     data.filter((sub) => sub.course === courseName)[0].assignments,
   ]);
 
-  // useEffect(() => {
-  //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
-  // });
-
-  // console.log("REFRESHED");
-
-  // console.log(history);
-
   const [topName, setTopName] = useState("-");
-  // const topNameRef = useRef()
-
   const [lock, setLock] = useState(false);
   const [openFiles, setOpenFiles] = useState(false);
-
   const [fileAttached, setFileAttached] = useState([]);
-
   const addChatToAssignment = (chatMessage, sender, fileAttach) => {
-    // console.log(fileAttached)
-
     let attachment;
     if (fileAttach === null || fileAttach === undefined) {
       attachment = [];
     } else {
       attachment = fileAttach;
     }
-
     setHistory((prevState) =>
       prevState.map((assignment) => {
         if (assignment.name === chatName) {
@@ -179,7 +152,6 @@ const ChatUI = () => {
         }
       })
     );
-
     setFileAttached([]);
   };
 
@@ -187,27 +159,23 @@ const ChatUI = () => {
     // if (topName !== "-") {
     // For any assignment chat
 
-    console.log(question);
-    console.log(fileAttached[0]);
+    // console.log(question);
+    // console.log(fileAttached[0]);
     addChatToAssignment(question, "user", fileAttached);
     // addChatToAssignment("No. You do it yourself.", "ai");
     // const usrData = JSON.parse(localStorage.getItem("data"))[0];
-
     let codee = "";
-
     if (fileAttached.length !== 0)
       codee = fileAttached[0].map((f) => [f.name, f.code]);
-
-    console.log({
-      username: usrData.username,
-      email: usrData.email,
-      code: codee,
-      course: subjectId,
-      chatroom_name: assignmentId,
-      api_key: usrData.api_key,
-      question: question,
-    });
-
+    // console.log({
+    //   username: usrData.username,
+    //   email: usrData.email,
+    //   code: codee,
+    //   course: subjectId,
+    //   chatroom_name: assignmentId,
+    //   api_key: usrData.api_key,
+    //   question: question,
+    // });
     setLock(true);
     setTyping(true);
     try {
@@ -222,7 +190,7 @@ const ChatUI = () => {
           question: question,
         })
         .then((res) => res.data);
-      console.log(res);
+      // console.log(res);
       addChatToAssignment(res.message, "ai", []);
       setLock(false);
       setTyping(false);
@@ -304,8 +272,7 @@ const ChatUI = () => {
   };
 
   const fileAddHandler = (files) => {
-    console.log(files);
-
+    // console.log(files);
     setFileAttached((prevState) => [...prevState, files]);
   };
 
@@ -328,7 +295,6 @@ const ChatUI = () => {
 
   // const [editable, setEditable] = useState(false);
   const chatRef = useRef(null);
-
   const selectTarget = (el) => {
     el.focus();
 
@@ -367,18 +333,14 @@ const ChatUI = () => {
       // console.log(assignmentId)
       // console.log(e.target.textContent !== assignmentId)
       if (e.target.textContent !== assignmentId) {
-        console.log("no.");
+        // console.log("no.");
         e.preventDefault();
   
         selectTarget(e.target.focus());
         return;
       }
     }
-
-    // return;
-
     chatRef.current.contentEditable = false;
-
     const newName = chatRef.current.textContent;
 
     await axios
@@ -398,7 +360,7 @@ const ChatUI = () => {
           },
         }
       )
-      .then((res) => console.log(res.data));
+      // .then((res) => console.log(res.data));
     // .then(() => {
     //   dispatch(
     //     bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
@@ -429,10 +391,8 @@ const ChatUI = () => {
   const handlePaste = (event) => {
     // Prevent default paste behavior to handle pasted content manually
     event.preventDefault();
-
     // Get pasted text from clipboard
     const pastedText = event.clipboardData.getData("text/plain");
-
     // Insert the pasted text into the contentEditable div as raw string
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
@@ -476,8 +436,6 @@ const ChatUI = () => {
               ref={chatRef}
               onPaste={handlePaste}
               onKeyDown={changeRenameHandler}
-              // role="textbox"
-              // contentEditable={editable}
             ></p>
             <img
               onClick={renameHandler}
@@ -486,28 +444,15 @@ const ChatUI = () => {
                 cursor: assignmentId === "General" ? "not-allowed" : "pointer",
               }}
             />
-            {/* <div /> */}
             <img onClick={historyDeleteHandler} src={ClearChatHistoryIcon} />
             <div className={styles.sepLine} />
             <div className={styles.topBlur}></div>
           </div>
           <div className={styles.chatting}></div>
-          {/* {chatName !== "General" ? ( */}
           <ChatScreenInitalized
             onRate={ratingHandler}
             history={history.filter((ass) => ass.name === chatName)[0]}
           />
-          {/* ) : (
-            <ChatScreenNotInit
-            // onRate={ratingHandler}
-            // history={
-            //   history.filter((ass) => ass.assignmentId === chatName)[0]
-            // }
-            // onChose={() => {
-            //   setLock(false);
-            // }}
-            />
-          )} */}
           <ChatInputField
             onFileAttach={fileAttachHandler}
             onUploadFile={fileAddHandler}

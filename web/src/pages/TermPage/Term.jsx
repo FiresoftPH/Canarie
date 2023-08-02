@@ -1,11 +1,7 @@
-import { useState } from "react";
 import "./Term.css";
 
 function Term(props) {
-  // const [agreed, setAgreed] = useState(false)
-
   const agreeHandler = () => {
-    // setAgreed(true)
     props.onAgree();
   };
 
@@ -24,7 +20,6 @@ function Term(props) {
     <>
       <div className="bg-container">
         <div style={{
-          // opacity: props.show === "entering" ? 1 : 0,
         }} className={cssClasses.join(' ')}>
           <div className="top-bar">
             <h1 className="termandcondition">

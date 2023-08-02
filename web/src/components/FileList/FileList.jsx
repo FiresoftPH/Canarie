@@ -1,28 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import FileCard from "../FileCard/FileCard";
-
 import styles from "./FileList.module.css";
-
-// const DUMMY_DATA = [
-// { id: 1, name: "Untitled-1" },
-// { id: 2, name: "Untitled-2" },
-// { id: 3, name: "Untitled-3" },
-// { id: 4, name: "Untitled-4" },
-// { id: 5, name: "Untitled-5" },
-// { id: 6, name: "Untitled-6" },
-// ];
-
-// import DUMMY_DATA from './FileNames.json'
-import BigData from "../ChatUI/BigData.json";
+// import BigData from "../ChatUI/BigData.json";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { chatAction } from "../../store/chatSlice";
 import { bigDataAction } from "../../store/bigDataSlice";
-import Transition from "react-transition-group/Transition";
+// import Transition from "react-transition-group/Transition";
 
 let shouldUpdateId = true;
-let hadRendered = false;
+// let hadRendered = false;
 
 const FileList = (props) => {
   const { subjectId, assignmentId } = useParams();
@@ -55,13 +42,10 @@ const FileList = (props) => {
   // );
 
   // console.log(dep);
-
   useEffect(() => {
     // if (assignmentId !== "General") {
-
     // console.log(data)
     // console.log("when file upload")
-
     if (shouldUp === true) {
       // console.log("I run");
       const transformedData = data.filter((sub) => sub.course === subjectId)[0]
@@ -98,14 +82,11 @@ const FileList = (props) => {
 
     if (files.length !== 0) {
       const transformedData = filteredData[0];
-
-      console.log(transformedData);
-
+      // console.log(transformedData);
       setSelectedFile(transformedData.id);
       dispatch(chatAction.setCode(transformedData.code));
       dispatch(chatAction.setFileId(transformedData.id));
       props.sf(transformedData.id);
-
       // console.log(transformedData)
     }
   };
@@ -120,7 +101,6 @@ const FileList = (props) => {
       // console.log("Selected file")
       // console.log(files.filter((fie) => fie.id === id)[0].code)
       // console.log(transformedData)
-
       setSelectedFile(id);
       // setSelectedFile(transformed
       dispatch(

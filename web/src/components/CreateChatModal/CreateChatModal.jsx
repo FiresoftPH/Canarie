@@ -15,12 +15,10 @@ const CreateChatModal = (props) => {
     if (inputRef.current.value !== "") {
       const intances = props.chats.filter(c => c.name.toLowerCase() === inputRef.current.value.toLowerCase())
       // const intances = props.chats.filter(c => c.name === inputRef.current.value)
-
       if (intances.length !== 0) {
         setAnim(true)
         return;
       }
-
       props.onSubmit(inputRef.current.value);
     } else {
       console.log("errrrrrrrrrrr");

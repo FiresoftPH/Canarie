@@ -1,38 +1,29 @@
 import styles from "./ChattingCardAI.module.css";
 
 import ParrotIcon from "src/assets/ParrotIcon.svg";
-import UserImage from "src/assets/UserImage.svg";
-import LikeIcon from "src/assets/LikeIcon.svg";
-import DislikeIcon from "src/assets/DislikeIcon.svg";
-import FileIcon from "src/assets/FileIcon.svg";
-import LikeIconFilled from "src/assets/LikeIconFilled.svg";
-
+// import UserImage from "src/assets/UserImage.svg";
+// import LikeIcon from "src/assets/LikeIcon.svg";
+// import DislikeIcon from "src/assets/DislikeIcon.svg";
+// import FileIcon from "src/assets/FileIcon.svg";
+// import LikeIconFilled from "src/assets/LikeIconFilled.svg";
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { memo } from "react";
-import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import detectLanguage from "../../utils/detectLangulage";
 import { useRef, useEffect } from "react";
-import CopySuccessfulPopup from "../CopySuccessfulPopup/CopySuccessfulPopup";
+// import CopySuccessfulPopup from "../CopySuccessfulPopup/CopySuccessfulPopup";
 import axios from "axios";
-
 // import { detect } from 'program-language-detector';
 
 let poem = "";
 const ChattingCardAI = memo(function ChattingCardAI(props) {
-  console.log("ChattingCardAI component is called");
-
+  // console.log("ChattingCardAI component is called");
   const wholeDiv = useRef(null);
-
   // var detectLang = require('lang-detector');
-
   const [copy, setCopy] = useState("");
-
   // const usrData = localStorage.getItem("data")
-
   const usrData = JSON.parse(localStorage.getItem("data"));
 
   useEffect(() => {
@@ -44,10 +35,8 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
             api_key: usrData.api_key,
           })
           .then((res) => res.data.message)
-
       setCopy(shakeSpear)
     }
-
     cleanUp()
   }, [])
 

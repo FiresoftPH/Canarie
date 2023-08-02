@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* transition: all 300ms ease-out; */
 }
 
 @keyframes openSideBar {
@@ -38,9 +37,9 @@
   }
 }
 
-.open {
-  /* animation: openSideBar 250ms linear forwards; */
-}
+/* .open {
+  animation: openSideBar 250ms linear forwards;
+} */
 
 .close {
   display: none;

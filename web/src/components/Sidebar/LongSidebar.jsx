@@ -75,9 +75,6 @@ function LongSidebar(props) {
   // };
 
   const fileDownloadHandler = (f) => {
-    // console.log(file);
-    // console.log(data);
-
     const transformedData = data
       .filter((sub) => sub.course === subjectId)[0]
       .files.filter((f) => f.id === file)[0];

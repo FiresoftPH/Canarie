@@ -164,7 +164,6 @@ function Login() {
                 </p> */}
                 <a onClick={modalToggle}>Terms and Conditions</a>
               </form>
-              {/* <div className={styles.accept_button}></div> */}
             </div>
             {touched && !agree && (
               <div className={styles.warning}>

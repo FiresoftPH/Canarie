@@ -1,8 +1,5 @@
 import styles from "./ShortSideBar.module.css";
 import Enlarge from "../../assets/Enlarge.svg";
-// import SearchIcon from "../../assets/Search bar.svg";
-// import ChatIcon from "../../assets/ChatIcon.svg";
-// import New_Button from "../../assets/New Button.svg";
 import { useNavigate } from "react-router-dom";
 
 const ShortSideBar = (props) => {

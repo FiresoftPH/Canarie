@@ -8,12 +8,9 @@ import { useState } from "react";
 const FileCard = (props) => {
   let fname = props.name;
   const dispatch = useDispatch();
-
   // const [trigger, setTrigger] = useState(false)
   let del = false;
-
   const length = 20;
-
   try {
     if (fname.split(".")[0].length > length) {
       fname =

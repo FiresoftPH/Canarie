@@ -9,7 +9,7 @@ const FileAttachmentModal = (props) => {
     if (!selectedFiles.includes(id)) {
       setSelectFiles([...selectedFiles, id]);
     } else {
-      console.log("not here");
+      // console.log("not here");
       setSelectFiles(selectedFiles.filter((file) => file !== id));
     }
   };
@@ -38,7 +38,7 @@ const FileAttachmentModal = (props) => {
         </p>
         <div className={`${styles.files} ${props.static ? styles.static : ""}`}>
           {props.files.map((file) => {
-            console.log(file)
+            // console.log(file)
 
             return (
               <FileCard

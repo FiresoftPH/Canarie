@@ -1,12 +1,12 @@
-import ParrotIcon from "src/assets/ParrotIcon.svg";
+// import ParrotIcon from "src/assets/ParrotIcon.svg";
 import UserImage from "src/assets/UserImage.svg";
-import LikeIcon from "src/assets/LikeIcon.svg";
-import DislikeIcon from "src/assets/DislikeIcon.svg";
+// import LikeIcon from "src/assets/LikeIcon.svg";
+// import DislikeIcon from "src/assets/DislikeIcon.svg";
 import FileIcon from "src/assets/FileIcon.svg";
 
 import styles from "./ChattingCardUser.module.css";
 import { useState } from "react";
-import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
+// import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
 import { memo } from "react";
 import StaticFileAttachmentModal from '../FileAttachmentModal/StaticFileAttachmentModal.jsx';
 import ReactMarkdown from "react-markdown";
@@ -14,21 +14,16 @@ import ReactMarkdown from "react-markdown";
 const ChattingCardUser = memo(function ChattingCardUser(props) {
   // console.log(props.file_attachment);
   const [toggle, setToggle] = useState(false);
-
-  console.log("USER CARD RE-RENDER");
-
+  // console.log("USER CARD RE-RENDER");
   // Make deep copy for file attachments
   let files = JSON.parse(JSON.stringify(props.file_attachment));
 
   // Lists all files attached
   if (props.message.split("$^$Reference files$^$:\n").length > 1) {
     const filesStr = props.message.split("$^$Reference files$^$:\n")[1];
-
     // console.log(filesStr)
-
     const files_code = filesStr.split("\n");
     // console.log(files_code)
-
     const fileList = [];
     for (const i in files_code) {
       // console.log(i + 1)
@@ -40,12 +35,10 @@ const ChattingCardUser = memo(function ChattingCardUser(props) {
         files_code[parseInt(i)].split(".").length >= 2
       ) {
         const fName = files_code[i].split(": ")[0];
-        
         console.log(fName);
         fileList.push(fName)
       }
     }
-
     if (fileList.length !== 0) {
       files = fileList
     }
@@ -62,7 +55,6 @@ const ChattingCardUser = memo(function ChattingCardUser(props) {
             src={FileIcon}
           />
         ) : (
-          // props.message
           ""
         )}
         <ReactMarkdown>{props.message.split("$^$Reference files$^$:\n")[0]}</ReactMarkdown>

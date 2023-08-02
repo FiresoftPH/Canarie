@@ -22,6 +22,7 @@ import { StateEffect } from "@codemirror/state";
 
 const defaultSelect = "PROGRAMMING LANGUAGE";
 const IDE = (props) => {
+  const selectRef = useRef();
   const ideRef = useRef(null);
   const textEditor = useRef(null);
 
@@ -37,12 +38,9 @@ const IDE = (props) => {
 
   const codeData = useSelector((state) => state.chat.code);
   const fid = useSelector((state) => state.chat.fid);
-  const bigData = useSelector((state) => state.bigData);
-  console.log(bigData);
 
   // Set code in the IDE everytime the code for ide or the file id is changed
   useEffect(() => {
-    console.log(codeData);
     setCode(codeData);
   }, [codeData, fid]);
 
@@ -56,18 +54,14 @@ const IDE = (props) => {
   }
 
   const fileSaveHandler = () => {
-    console.log("Saving file");
-    console.log("codeData", { subjectId, assignmentId, fileId, code });
-    console.log("code", code);
-
+    // console.log("Saving file");
+    // console.log("codeData", { subjectId, assignmentId, fileId, code });
+    // console.log("code", code);
     dispatch(bigDataAction.editFile({ subjectId, assignmentId, fileId, code }));
     dispatch(chatAction.setCode(code));
     dispatch(chatAction.setShouldUpdate(false));
-    console.log("ehe");
-
     // return () => {
     //   dispatch(chatAction.setShouldUpdate(true))
-
     //   console.log(code)
     // }
   };
@@ -92,14 +86,12 @@ const IDE = (props) => {
           throw new Error(`Language mode "${language}" is not supported.`);
       }
       // Set the output with the result of code execution
-      // setOutput(result);
     } catch (error) {
       // Set the output with the error message if any
       setOutput(error.toString());
     }
   };
   const usrData = JSON.parse(localStorage.getItem("data"));
-
   const exeCode = async (code, fType) => {
     const res = await axios.post("https://api.canarie.cmkl.ai/compileCode", {
       username: usrData.username,
@@ -108,7 +100,7 @@ const IDE = (props) => {
       api_key: usrData.api_key,
       file_extension: fType,
     });
-    console.log(res);
+    // console.log(res);
     setOutput(
       res.data.Error !== ""
         ? "An error has occured, please check if your file type is correct or your code is free of error"
@@ -134,9 +126,6 @@ const IDE = (props) => {
     // php: langs.php(),
     "c++": langs.cpp(),
   };
-
-  // console.log(language)
-
   // Initializes a listener event for resizing the ide after rendering
   useEffect(() => {
     interact(ideRef.current).resizable({
@@ -144,10 +133,8 @@ const IDE = (props) => {
       listeners: {
         move: function (event) {
           let { x, y } = event.target.dataset;
-
           x = (parseFloat(x) || 0) + event.deltaRect.left;
           y = (parseFloat(y) || 0) + event.deltaRect.top;
-
           Object.assign(event.target.style, {
             width: `${event.rect.width}px`,
             height: `${event.rect.height}px`,
@@ -159,29 +146,23 @@ const IDE = (props) => {
         },
       },
     });
-
     interact(textEditor.current).resizable({
       edges: { top: false, left: false, bottom: false, right: true },
       listeners: {
         move: function (event) {
           let { x, y } = event.target.dataset;
-
           x = (parseFloat(x) || 0) + event.deltaRect.left;
           y = (parseFloat(y) || 0) + event.deltaRect.top;
-
           Object.assign(event.target.style, {
             width: `${event.rect.width}px`,
             height: `${event.rect.height}px`,
             transform: `translate3D(${x}px, ${y}px)`,
           });
-
           Object.assign(event.target.dataset, { x, y });
         },
       },
     });
   });
-
-  const selectRef = useRef();
 
   return (
     <div className={styles.big_ide_container} ref={ideRef}>
@@ -209,15 +190,6 @@ const IDE = (props) => {
                     );
                   })}
               </select>
-              {/* <img onClick={() => {
-                const synteticEvent = new MouseEvent('mousedown', {
-                  view: window,
-                  bubbles: true,
-                  cancelable: true,
-                });
-                
-                selectRef.current.controlRef.dispatchEvent(synteticEvent);
-              }} src={DownV} /> */}
             </label>
             <img
               className={styles.run_btn}

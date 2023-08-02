@@ -177,15 +177,6 @@
   padding-top: 1rem;
 }
 
-.accept_button {
-  height: 24px;
-  width: 24px;
-  border-radius: 1.5rem;
-  border-style: solid;
-  border-color: #c0c0c0;
-  margin-left: 1rem;
-}
-
 .agree_term a {
   text-decoration: underline;
   color: #C0C0C0;

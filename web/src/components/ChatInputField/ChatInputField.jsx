@@ -10,13 +10,10 @@ import { useEffect } from "react";
 
 const ChatInputField = (props) => {
   const [question, setQuestion] = useState("");
-
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { subjectId, assignmentId } = useParams();
-
   const bigD = useSelector((state) => state.bigData);
-
   const askHandler = (e) => {
     if (e) {
       e.preventDefault();
@@ -35,18 +32,18 @@ const ChatInputField = (props) => {
   };
 
   let fr;
-  let fname = "Unnamed";
+  // let fname = "Unnamed";
   const fileUploadHandler = async (e) => {
     let uploadedFiles = [];
-    console.log(e.target.files);
+    // console.log(e.target.files);
     if (!e.target.files[0]) {
       return;
     }
 
     const allFilesRead = () => {
       if (e.target.files.length === uploadedFiles.length) {
-        console.log("COMPLETED UPLOAD");
-        console.log(uploadedFiles);
+        // console.log("COMPLETED UPLOAD");
+        // console.log(uploadedFiles);
         props.onUploadFile(uploadedFiles);
       }
       // console.log("Been executed")
@@ -56,11 +53,8 @@ const ChatInputField = (props) => {
     // fd = new FormData();
     for (let f = 0; f < e.target.files.length; f++) {
       const fileName = e.target.files[f]["name"];
-
-      console.log(fileName);
-
+      // console.log(fileName);
       // fname = e.target.files[f].name;
-
       fr = new FileReader();
       fr.onload = (f) => {
         // fileReaderHandler(e, fname);
@@ -72,14 +66,12 @@ const ChatInputField = (props) => {
             code: f.target.result,
           })
         );
-
         uploadedFiles.push({
           subjectId,
           assignmentId,
           name: fileName,
           code: f.target.result,
         });
-
         setFiles((prevState) => [
           ...prevState,
           {
@@ -89,12 +81,9 @@ const ChatInputField = (props) => {
             code: f.target.result,
           },
         ]);
-
         allFilesRead();
       };
-
       fr.readAsText(e.target.files[f]);
-
       // fd.append("file", e.target.files[f]);
     }
 
@@ -164,7 +153,6 @@ const ChatInputField = (props) => {
               onChange={(e) => {
                 setQuestion(e.target.value);
                 // console.log(e.target.value);
-
                 if (textareaRef.current) {
                   textareaRef.current.style.height = "auto";
                   textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
