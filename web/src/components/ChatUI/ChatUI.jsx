@@ -7,7 +7,7 @@ import ChatInputField from "../ChatInputField/ChatInputField";
 import ChatScreenInitalized from "../ChatScreen/ChatScreenInitialized";
 import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import userSlice from "../../store/userSlice";
+import userSlice, { userActions } from "../../store/userSlice";
 
 // const DUMMY_TEXT_DATA = [
 //   {
@@ -33,6 +33,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import { bigDataAction } from "../../store/bigDataSlice";
 
 let shouldUpdate = false;
+let shouldFetchData = true
 const ChatUI = () => {
   // let chatName = props.mode;
 
@@ -51,6 +52,8 @@ const ChatUI = () => {
 
   const [typing, setTyping] = useState(false);
 
+  const inputRef = useRef();
+
   const dispatch = useDispatch();
 
   // console.log(data.filter((sub) => sub.course === courseName)[0].assignments.filter((ass) => ass.assignmentId === chatName)[0])
@@ -60,80 +63,62 @@ const ChatUI = () => {
   );
 
   useEffect(() => {
+    console.log(data.filter((sub) => sub.course === courseName)[0].assignments)
+
     setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
   }, [data.filter((sub) => sub.course === courseName)[0].assignments]);
 
   // Fetch recent history data
   useEffect(() => {
-    console.log("FETCHING HISTORY");
-    // console.log(usrData)
+    if (shouldFetchData == true) {
+      console.log("FETCHING HISTORY");
+      // console.log(usrData)
+  
+      const cleanUp = async () => {
+        const fetchedHistory = await axios
+          .post(
+            "https://api.canarie.cmkl.ai/ai/getFullHistory",
+            {
+              username: usrData.username,
+              email: usrData.email,
+              course: subjectId,
+              chatroom_name: assignmentId,
+              api_key: usrData.api_key,
+            },
+            { headers: { "Access-Control-Allow-Origin": "*" } }
+          )
+          .then((res) => res.data.content);
+  
+        if (fetchedHistory != undefined) {
+          console.log(fetchedHistory);
 
-    const cleanUp = async () => {
-      // console.log({
-      //   username: usrData.username,
-      //   email: usrData.email,
-      //   course: subjectId,
-      //   chatroom_name: assignmentId,
-      //   api_key: usrData.api_key,
-      // })
-      // const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api.canarie.cmkl.ai/ai/getFullHistory');
-
-      const fetchedHistory = await axios
-        .post(
-          "https://api.canarie.cmkl.ai/ai/getFullHistory",
-          {
-            username: usrData.username,
-            email: usrData.email,
-            course: subjectId,
-            chatroom_name: assignmentId,
-            api_key: usrData.api_key,
-          },
-          { headers: { "Access-Control-Allow-Origin": "*" } }
-        )
-        .then((res) => res.data.content);
-      // .catch((err) => console.log(err));
-
-      // console.log(history);
-
-      // console.log(fetchedHistory);
-      // setHistory(fetchedHistory.map(chat => {
-      //   return {
-      //     chatId: nanoid(),
-      //     message: chat[1],
-      //     sender: chat[0] === "<|im_start|>user" ? "user" : "ai",
-      //     rating: "none",
-      //     file_attachments: []
-      //   }
-      // }))
-      // if (fetchedHistory !== undefined) {
-
-      if (fetchedHistory != undefined) {
-        console.log(fetchedHistory);
-
-        setHistory((prev) =>
-          prev.map((ass) => {
-            if (ass.name === assignmentId) {
-              return {
-                ...ass,
-                chatHistory: fetchedHistory.map((chat) => {
-                  return {
-                    chatId: nanoid(),
-                    message: chat[1],
-                    sender: chat[0] === "USER" ? "user" : "ai",
-                    rating: "none",
-                    file_attachments: [],
-                  };
-                }),
-              };
-            } else {
-              return ass;
-            }
-          })
-        );
-      }
-    };
-
-    cleanUp();
+          setHistory((prev) =>
+            prev.map((ass) => {
+              if (ass.name === assignmentId) {
+                return {
+                  ...ass,
+                  chatHistory: fetchedHistory.map((chat) => {
+                    return {
+                      chatId: nanoid(),
+                      message: chat[1],
+                      sender: chat[0] === "USER" ? "user" : "ai",
+                      rating: "none",
+                      file_attachments: [],
+                    };
+                  }),
+                };
+              } else {
+                return ass;
+              }
+            })
+          );
+        }
+      };
+  
+      cleanUp();
+    } else {
+      shouldFetchData = true
+    }
   }, [
     subjectId,
     assignmentId,
@@ -144,7 +129,7 @@ const ChatUI = () => {
   //   setHistory(data.filter((sub) => sub.course === courseName)[0].assignments);
   // });
 
-  console.log("REFRESHED");
+  // console.log("REFRESHED");
 
   // console.log(history);
 
@@ -238,39 +223,6 @@ const ChatUI = () => {
       setLock(false);
       setTyping(false);
     }
-
-    // console.log(res)
-    // } else {
-    //   // For general chat
-    //   addChatToAssignment(question, "user");
-
-    //   setHistory((prevState) =>
-    //     prevState.map((assignment) => {
-    //       if (assignment.name === chatName) {
-    //         return {
-    //           ...assignment,
-    //           chatHistory: [
-    //             ...assignment["chatHistory"],
-    //             {
-    //               chatId: Math.random(),
-    //               message: "Which assignment is your question referencing",
-    //               sender: "ai",
-    //               rating: "none",
-    //               assignment: history.map((ass) => {
-    //                 if (ass.name !== "General")
-    //                   return { name: ass.name, id: ass.assignmentId };
-    //               }),
-    //             },
-    //           ],
-    //         };
-    //       } else {
-    //         return assignment;
-    //       }
-    //     })
-    //   );
-
-    //   setLock(true);
-    // }
   };
 
   const ratingHandler = (rating, id) => {
@@ -355,6 +307,7 @@ const ChatUI = () => {
   // console.log(history.filter((ass) => ass.name === chatName)[0]);
 
   const historyDeleteHandler = async () => {
+    shouldFetchData = false
     axios.post("https://api.canarie.cmkl.ai/auth/chatroom/reset", {
       username: usrData.username,
       email: usrData.email,
@@ -408,32 +361,50 @@ const ChatUI = () => {
 
     const newName = chatRef.current.textContent;
 
-    // await axios
-    //   .post("https://api.canarie.cmkl.ai/auth/chatroom/rename", {
-    //     username: usrData.username,
-    //     email: usrData.email,
-    //     course: subjectId,
-    //     chatroom: assignmentId,
-    //     api_key: usrData.api_key,
-    //     new_chatroom: newName,
-    //   })
-      // .then(() => {
-      //   dispatch(
-      //     bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
-      //   );
-      // })
-      // .then(() => {
-      //   nav(`/Chat/${subjectId}/${newName}`);
-      // });
+    console.log({
+      username: usrData.username,
+      email: usrData.email,
+      course: subjectId,
+      chatroom_name: assignmentId,
+      api_key: usrData.api_key,
+      newchatroom_name: newName,
+    });
+
+    await axios
+      .post(
+        "https://api.canarie.cmkl.ai/auth/chatroom/rename",
+        {
+          username: usrData.username,
+          email: usrData.email,
+          course: subjectId,
+          chatroom_name: assignmentId,
+          api_key: usrData.api_key,
+          newchatroom_name: newName,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => console.log(res.data));
+    // .then(() => {
+    //   dispatch(
+    //     bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
+    //   );
+    // })
+    // .then(() => {
+    //   nav(`/Chat/${subjectId}/${newName}`);
+    // });
 
     dispatch(
-      bigDataAction.setChatName({ subjectId, assignmentId, newId: newName })
+      bigDataAction.setChatName({ subjectId, assignmentId, newName: newName })
     );
     nav(`/Chat/${subjectId}/${newName}`);
   };
 
   const changeRenameHandler = (e) => {
-    console.log(e);
+    // console.log(e);
 
     if (
       e.key === "Enter" &&
@@ -458,9 +429,14 @@ const ChatUI = () => {
     range.insertNode(document.createTextNode(pastedText));
   };
 
-  useEffect(() => {
-    dispatch(bigDataAction.addChat({ subjectId, name: assignmentId }));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(bigDataAction.addChat({ subjectId, name: assignmentId }));
+  // }, []);
+
+  // Note: This function is for a useless purpose (the copying code prevention) by informing the usr of their name. You can delete this if the appication needs performance optimisation
+  // useEffect(() => {
+  //   dispatch(userActions.setUsername(usrData.username))
+  // }, [])
 
   return (
     <>
@@ -526,6 +502,7 @@ const ChatUI = () => {
             onUploadFile={fileAddHandler}
             onSend={askAIHandler}
             lock={lock}
+            inputRef={inputRef}
             typing={typing}
           />
         </div>

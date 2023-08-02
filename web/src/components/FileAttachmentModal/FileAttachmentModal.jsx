@@ -38,6 +38,8 @@ const FileAttachmentModal = (props) => {
         </p>
         <div className={`${styles.files} ${props.static ? styles.static : ""}`}>
           {props.files.map((file) => {
+            console.log(file)
+
             return (
               <FileCard
                 onSelect={() => {
