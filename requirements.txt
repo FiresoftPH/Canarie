@@ -1,8 +1,0 @@
-langchain
-# pickle5
-flask
-flask-cors
-python-dotenv
-flask_caching
-requests
-google-auth

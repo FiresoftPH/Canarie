@@ -41,6 +41,8 @@ RUN pip3 install Flask-Limiter
 
 RUN apt install watch -y
 
+RUN apt install nano
+
 # Checkpoint here
 
 # Copy the application files to the working directory

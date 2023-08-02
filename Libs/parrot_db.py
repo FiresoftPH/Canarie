@@ -9,7 +9,6 @@ import sys
 class Database:
     def __init__(self):
 
-        # file = open("Libs/parrot_db_keys.txt", "r")
         config = dotenv_values(".env")
         connection = pymysql.connect(
         host=config["HOST_ALT"],
@@ -22,8 +21,6 @@ class Database:
         write_timeout=1800
         )
         cursor = connection.cursor()
-        # file.close()
-        # except pymysql.err.OperationalError:
 
         try:
             command_0 = "CREATE TABLE courses (id INT AUTO_INCREMENT PRIMARY KEY, course_name VARCHAR(255), assignments VARCHAR(255))"
@@ -47,7 +44,7 @@ class Database:
             pass
 
         try:
-            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), course_name VARCHAR(255), room_name VARCHAR(255), log BLOB)"
+            command_3 = "CREATE TABLE chat_history (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), email VARCHAR(255), course_name VARCHAR(255), room_name VARCHAR(255), log LONGBLOB, ai_log LONGBLOB)"
             cursor.execute(command_3)
         except pymysql.err.OperationalError:
             print("Already initialized")
@@ -131,6 +128,7 @@ class Database:
         cursor.close()
         return api_key
     
+    # Check the user's api_key
     def checkAPIKey(self, email, username, api_key):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -154,6 +152,7 @@ class Database:
         else:
             return False
 
+    # Unused, only for debugging purposes.
     def temporaryEnroll(self, email, username):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -174,6 +173,7 @@ class Database:
         connection.commit()
         cursor.close()
 
+    # Check the user's enrolled course.
     def checkenrolledCourse(self, email, username, course):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -196,7 +196,8 @@ class Database:
             return True, course_list
         else:
             return False, course_list
-        
+    
+    # Enroll the courses from canvas
     def canvasEnrollCourse(self, email, username, course_list):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -216,7 +217,8 @@ class Database:
         cursor.execute(command, load)
         connection.commit()
         cursor.close()
-
+    
+    # Legacy method to enroll the courses, unused at the moment
     def enrollCourse(self, email, username, course):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -245,6 +247,7 @@ class Database:
             cursor.close()
             return temp
 
+    # fetch the user's data
     def getUserData(self, email, username):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -286,7 +289,7 @@ class Database:
         data = {"id": result[0][0], "name": result[0][1], "username": result[0][2], "password": result[0][3], "enrolled_courses": transform_courses, "status": result[0][5]}
         return data
 
-    # These are for the Assignment list for each courses. It changes an array to strings to store inside the database.
+    # Converters for the 1 dimensional array
     def stringFromArray(self, array):
         temp = ','.join(array)
         # print(temp)
@@ -317,7 +320,7 @@ class Database:
             return False
 
     # Update chat history in the database. This will be updated when the session ends.
-    def storeChatHistory(self, username, email, course, room_name, history):
+    def storeChatHistory(self, username, email, course, room_name, history, old_history):
         config = dotenv_values(".env")
         connection = pymysql.connect(
         host=config["HOST_ALT"],
@@ -329,18 +332,27 @@ class Database:
         read_timeout=1800,
         write_timeout=1800
         )
+        history = pickle.loads(history)
+        old_history.append(history[-2])
+        old_history.append(history[-1])
+        full_history = pickle.dumps(old_history)
+        history = pickle.dumps(history)
+
         cursor = connection.cursor()
-        # history = pickle.dumps(history)
-        if sys.getsizeof(history) >= 62000:
-            while sys.getsizeof(history) >= 32000:
-                history = pickle.loads(history)
-                history.pop(0)
-                history = pickle.dumps(history)
+        if sys.getsizeof(full_history) >= 1000000000:
+            while sys.getsizeof(full_history) >= 500000000:
+                full_history = pickle.loads(full_history)
+                full_history.pop(0)
+                full_history = pickle.dumps(full_history)
             
         else:
             pass
 
         cursor.execute("UPDATE chat_history SET log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
+                                    (full_history, email, username, course, room_name))
+        connection.commit()
+
+        cursor.execute("UPDATE chat_history SET ai_log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
                                     (history, email, username, course, room_name))
         connection.commit()
         cursor.close()
@@ -359,11 +371,18 @@ class Database:
         write_timeout=1800
         )
         cursor = connection.cursor()
-        command = "INSERT INTO chat_history (username, email, course_name, room_name) VALUES (%s, %s, %s, %s)"
-        cursor.execute(command, (username, email, course, room_name))
-        connection.commit()
-        cursor.close()
-
+        command = "SELECT room_name FROM chat_history WHERE username = %s AND email = %s AND course_name = %s"
+        cursor.execute(command, (username, email, course))
+        result = cursor.fetchall()
+        if (room_name, ) not in result:
+            command = "INSERT INTO chat_history (username, email, course_name, room_name) VALUES (%s, %s, %s, %s)"
+            cursor.execute(command, (username, email, course, room_name))
+            connection.commit()
+            cursor.close()
+        else:
+            cursor.close()
+    
+    # Get the chathistory from a specific room_name
     def fetchChatHistory(self, email, username, course, room_name):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -378,11 +397,13 @@ class Database:
         )
         cursor = connection.cursor()
         cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))        
-        history = cursor.fetchall()
-        temp = history[0][0]
+        result = cursor.fetchall()
+        full_history = result[0][0]
+        # history = result[0][1]
         cursor.close()
-        return pickle.loads(temp)
+        return pickle.loads(full_history)
     
+    # Reset the chat history but dont delete the chatroom
     def resetChatHistory(self, email, username, course, room_name):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -402,8 +423,12 @@ class Database:
         cursor.execute("UPDATE chat_history SET log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
                                     (history, email, username, course, room_name))
         connection.commit()
+        cursor.execute("UPDATE chat_history SET ai_log = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s",
+                                    (history, email, username, course, room_name))
+        connection.commit()
         cursor.close()
 
+    # Load the chat history the database to feed it to the AI.
     def loadChatHistory(self, username, email, course, room_name):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -418,14 +443,15 @@ class Database:
         )
         cursor = connection.cursor()
         try:
-            cursor.execute("SELECT log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))
+            cursor.execute("SELECT ai_log, log FROM chat_history WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s", (email, username, course, room_name))
             result = cursor.fetchall()
-            temp = result[0][0]
+            history = result[0][0]
+            full_history = result[0][0]
             cursor.close()
-            if temp == "" or temp == None:
+            if history == "" or history == None or full_history  == "" or full_history == None:
                 return False
             else:
-                return pickle.loads(temp)
+                return pickle.loads(history), pickle.loads(full_history)
         
         except IndexError:
             return False
@@ -435,7 +461,8 @@ class Database:
 
         except pymysql.OperationalError:
             return False
-        
+    
+    # Change the chatroom name
     def changeChatRoomName(self, email, username, course, chatroom, new_chatroom):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -449,11 +476,12 @@ class Database:
         write_timeout=1800
         )
         cursor = connection.cursor()
-        command = "UPDATE chat_history SET room_name = %s WHERE email = %s AND username = %s AND course_name = %s AND chatroom = %s"
+        command = "UPDATE chat_history SET room_name = %s WHERE email = %s AND username = %s AND course_name = %s AND room_name = %s"
         cursor.execute(command, (new_chatroom, email, username, course, chatroom))
         connection.commit()
         cursor.close()
-        
+    
+    # Get all chatrooms for a specific course
     def getChatRoom(self, email, username, course):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -478,6 +506,7 @@ class Database:
 
         return chatroom
 
+    # Check is chatroom exist or not
     def checkChatRoom(self, email, username, course, chatroom):
         all_chatrooms = self.getChatRoom(email, username, course)
         if chatroom in all_chatrooms:
@@ -485,6 +514,7 @@ class Database:
         else:
             return False
     
+    # Unused but left for debugging. Unenroll the course
     def unenrollCourse(self, email, username, course):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -516,7 +546,8 @@ class Database:
             connection.commit()
             cursor.close()
             return temp
-        
+    
+    # Delete the chatroom alongside the history
     def deleteChatRoom(self, email, username, course, chatroom):
         config = dotenv_values(".env")
         connection = pymysql.connect(
@@ -545,4 +576,5 @@ class Database:
             cursor.execute(command, load)
             connection.commit()
             cursor.close()
-            return True   
+            return True
+        
