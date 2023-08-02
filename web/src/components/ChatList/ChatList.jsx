@@ -99,6 +99,13 @@ const ChatList = (props) => {
 
   const [testName, setTestName] = useState("");
   const addChatHandler = async (name) => {
+    // console.log(chats)
+    // const intances = chats.filter(c => c.name === name)
+
+    // if (intances.length !== 0) {
+    //   return;
+    // }
+
     // const fetchedHistory = await axios.post(
     //   "https://api.canarie.cmkl.ai/ai/getFullHistory",
     //   {
@@ -111,6 +118,7 @@ const ChatList = (props) => {
     // ).catch(err => console.log(err));
     // console.log('history')
     // console.log(fetchedHistory)
+
     dispatch(bigDataAction.addChat({ name, subjectId }));
     setTestName(name);
     // console.log(data.filter((sub) => sub.course === subjectId)[0].assignments)
@@ -175,7 +183,7 @@ const ChatList = (props) => {
         </div>
         {/* <button onClick={getChatnameHandler}>test</button> */}
         {toggle && (
-          <CreateChatModal onSubmit={addChatHandler} toggle={modalToggle} />
+          <CreateChatModal chats={chats} onSubmit={addChatHandler} toggle={modalToggle} />
         )}
       </section>
     </>

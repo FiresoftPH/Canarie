@@ -5,7 +5,7 @@ export default function CourseList(props) {
   const {displayData} = props
   return (
     <ul className={styles.course_container}>
-      <CourseCard data={displayData}/>
+      <CourseCard datas={displayData}/>
     </ul>
   );
 }

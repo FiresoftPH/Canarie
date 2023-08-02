@@ -44,20 +44,16 @@ const IDE = (props) => {
   useEffect(() => {
     console.log(codeData);
     setCode(codeData);
-    // codeee = codeData;
   }, [codeData, fid]);
 
   // IDE stuff //
   const onChange1 = (event) => {
-    // console.log(event)
     setCode(event);
   };
 
   function handleLangChange(lang) {
     setLanguage(lang);
   }
-
-  // console.log(code)
 
   const fileSaveHandler = () => {
     console.log("Saving file");
@@ -86,8 +82,8 @@ const IDE = (props) => {
         case "c++":
           result = exeCode(code, ".cpp");
           break;
-        case "csharp":
-          result = exeCode(code, ".cs");
+        case "rust":
+          result = exeCode(code, ".rs");
           break;
         case "python":
           result = exeCode(code, ".py");
@@ -102,7 +98,6 @@ const IDE = (props) => {
       setOutput(error.toString());
     }
   };
-
   const usrData = JSON.parse(localStorage.getItem("data"));
 
   const exeCode = async (code, fType) => {
@@ -113,47 +108,13 @@ const IDE = (props) => {
       api_key: usrData.api_key,
       file_extension: fType,
     });
-
     console.log(res);
-
     setOutput(
       res.data.Error !== ""
         ? "An error has occured, please check if your file type is correct or your code is free of error"
         : res.data.Output
     );
   };
-
-  // const excutePythonCode = (code) => {
-  //   const cacheName = "file.py";
-  //   const fileContent = code;
-
-  //   const blob = new Blob([fileContent], { type: "text/plain" });
-
-  //   const cachePromise = caches.open(cacheName).then((cache) => {
-  //     const request = new Request(cacheName);
-  //     const response = new Response(blob);
-  //     return cache.put(request, response);
-  //   });
-  //   cachePromise.catch((error) => {
-  //     console.error("Error saving code to cache:", error);
-  //   });
-  // };
-
-  // const excuteJavascriptCode = (code) => {
-  //   const cacheName = "file.js";
-  //   const fileContent = code;
-
-  //   // const blob = new Blob([fileContent], { type: 'text/plain' });
-
-  //   const cachePromise = caches.open(cacheName).then((cache) => {
-  //     const request = new Request(cacheName);
-  //     const response = new Response(fileContent);
-  //     return cache.put(request, response);
-  //   });
-  //   cachePromise.catch((error) => {
-  //     console.error("Error saving code to cache:", error);
-  //   });
-  // };
 
   const fixedHeightEditor = EditorView.theme({
     "& ": { height: -y + 200 + "px" },
@@ -165,8 +126,9 @@ const IDE = (props) => {
     // javascript: langs.javascript(),
     // typescript: langs.typescript(),
     c: langs.c(),
+    // rust: langs.rust(),
     // css: langs.css(),
-    "c#": langs.csharp(),
+    // "c#": langs.csharp(),
     // dockerfile: langs.dockerfile(),
     // go: langs.go(),
     // php: langs.php(),

@@ -46,9 +46,9 @@ function Course() {
   useEffect(() => {
     const hour = new Date().getHours()
     setGreet(`${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}`)
-    console.log(courses)
+    // console.log(courses)
     dispatch(bigDataAction.setHistory(courses.map(course => course.competency_code)))
-    console.log(history)
+    // console.log(history)
   }, [])
   return (
     <>
