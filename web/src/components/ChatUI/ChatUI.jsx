@@ -72,6 +72,13 @@ const ChatUI = () => {
   useEffect(() => {
     if (shouldFetchData == true) {
       console.log("FETCHING HISTORY");
+      console.log({
+        username: usrData.username,
+        email: usrData.email,
+        course: subjectId,
+        chatroom_name: assignmentId,
+        api_key: usrData.api_key,
+      },)
       // console.log(usrData)
   
       const cleanUp = async () => {

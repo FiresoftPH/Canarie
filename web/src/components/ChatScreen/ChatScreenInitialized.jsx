@@ -44,6 +44,10 @@ const ChatScreenInitialized = ({ history, onRate }) => {
     }
   }, [history])
 
+  useEffect(() => {
+    
+  }, [])
+
   // useEffect(() => {
   //   const animation = lottie.loadAnimation({
   //     container: scrollRef.current,
