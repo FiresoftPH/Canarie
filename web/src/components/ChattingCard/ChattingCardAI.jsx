@@ -15,12 +15,13 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import detectLanguage from "../../utils/detectLangulage";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import CopySuccessfulPopup from "../CopySuccessfulPopup/CopySuccessfulPopup";
 import axios from "axios";
 
 // import { detect } from 'program-language-detector';
 
+let poem = "";
 const ChattingCardAI = memo(function ChattingCardAI(props) {
   console.log("ChattingCardAI component is called");
 
@@ -28,9 +29,27 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
 
   // var detectLang = require('lang-detector');
 
-  const [copy, setCopy] = useState(false);
+  const [copy, setCopy] = useState("");
 
   // const usrData = localStorage.getItem("data")
+
+  const usrData = JSON.parse(localStorage.getItem("data"));
+
+  useEffect(() => {
+    const cleanUp = async () => {
+      const shakeSpear = await axios
+          .post("https://api.canarie.cmkl.ai/ai/shakespeare", {
+            username: usrData.username,
+            email: usrData.email,
+            api_key: usrData.api_key,
+          })
+          .then((res) => res.data.message)
+
+      setCopy(shakeSpear)
+    }
+
+    cleanUp()
+  }, [])
 
   return (
     <div
@@ -38,7 +57,6 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
       ref={wholeDiv}
       onCopy={async (e) => {
         e.preventDefault();
-        const usrData = JSON.parse(localStorage.getItem("data"));
 
         // setCopy("COPYING")
         // const shakeSpear = await axios
@@ -63,10 +81,15 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
 
         // e.clipboardData.setData("text/plain", shakeSpear)
 
+        // e.clipboardData.setData(
+        //   "text/plain",
+        //   `Hello ${usrData.username}.\nFirst of all, nice try bro.\nSecondly, this act will be notified to the supervisor for this course.\nTry negotiating with them and see how it goes.\n-Sincerely, Canarie`
+        // );
         e.clipboardData.setData(
           "text/plain",
-          `Hello ${usrData.username}.\nFirst of all, nice try bro.\nSecondly, this act will be notified to the supervisor for this course.\nTry negotiating with them and see how it goes.\n-Sincerely, Canarie`
+          copy
         );
+        window.open("https://www.youtube.com/watch?v=6a_PHeYO7OI");
         // setCopy(true);
       }}
     >

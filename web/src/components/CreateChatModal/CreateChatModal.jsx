@@ -49,7 +49,7 @@ const CreateChatModal = (props) => {
             props.toggle();
           }}
         >
-          &#128473;
+          &times;
         </button>
       </div>
       <div className={styles.container}>

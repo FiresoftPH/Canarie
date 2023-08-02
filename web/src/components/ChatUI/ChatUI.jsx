@@ -352,30 +352,34 @@ const ChatUI = () => {
     }
   };
 
+  // console.log(history)
+
   const stopRenameHandler = async (e) => {
     // console.log(e.target.textContent)
+    // history.map(a => console.log(a))
 
-    // console.log('thing blured bro')
-    if (e.target.textContent == "") {
-      console.log("no.");
-      e.preventDefault();
+    // console.log(history.filter(a => a.name == e.target.textContent).length)
+    // // history.filter(a => {console.log(a)})
+    // console.log(e.target.textContent)
 
-      selectTarget(e.target);
-      return;
+    if (e.target.textContent == "" || history.filter(a => a.name === e.target.textContent).length != 0) {
+      // console.log(e.target.textContent)
+      // console.log(assignmentId)
+      // console.log(e.target.textContent !== assignmentId)
+      if (e.target.textContent !== assignmentId) {
+        console.log("no.");
+        e.preventDefault();
+  
+        selectTarget(e.target.focus());
+        return;
+      }
     }
+
+    // return;
 
     chatRef.current.contentEditable = false;
 
     const newName = chatRef.current.textContent;
-
-    console.log({
-      username: usrData.username,
-      email: usrData.email,
-      course: subjectId,
-      chatroom_name: assignmentId,
-      api_key: usrData.api_key,
-      newchatroom_name: newName,
-    });
 
     await axios
       .post(

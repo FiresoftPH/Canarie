@@ -10,6 +10,7 @@ import styles from "./ChatScreenInitialized.module.css";
 
 import lottie from 'lottie-web';
 import anim from '../../assets/anim.json';
+import axios from "axios";
 
 const ChatScreenInitialized = ({ history, onRate }) => {
   // console.log("I run brfore");
@@ -43,10 +44,6 @@ const ChatScreenInitialized = ({ history, onRate }) => {
       contentElement.scrollTop = contentElement.scrollHeight - contentElement.clientHeight;
     }
   }, [history])
-
-  useEffect(() => {
-    
-  }, [])
 
   // useEffect(() => {
   //   const animation = lottie.loadAnimation({
