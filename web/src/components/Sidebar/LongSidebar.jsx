@@ -137,7 +137,6 @@ function LongSidebar(props) {
         sf={(f) => {
           setFile(f);
         }}
-        // mh={cHeight}
       />
     </div>
   );

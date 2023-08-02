@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import styles from "./ChatPage.module.css";
 import LongSidebar from "src/components/Sidebar/LongSidebar";
 import ShortSideBar from "../../components/Sidebar/ShortSideBar";
@@ -8,12 +8,10 @@ import Transition from "react-transition-group/Transition";
 
 function Chat() {
   const [closev2, setClosev2] = useState(false);
-  // const [mode, setMode] = useState("General");
   const toggleClosev2 = (val) => {
     setClosev2(!closev2);
   };
   return (
-    // <div className={`styles.bg_container ` + (closev2 ? "closev2" : "open")}>
     <div
       className={`${styles.bg_container} ${closev2 ? styles.close : styles.open}`}
     >
@@ -24,7 +22,6 @@ function Chat() {
         {(state) => (
           <LongSidebar
             onSelectMode={(id) => {
-              // setMode(id);
               console.log("ID: ", id);
             }}
             close={toggleClosev2}
