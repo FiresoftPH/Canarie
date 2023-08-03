@@ -24,7 +24,7 @@ const FileCard = (props) => {
         if (del === false) {
           props.onSelect(props.id);
           dispatch(chatAction.setFileId(props.id, props.code))
-          // console.log("selected")
+          // console.log(props.id)
         } else {
           del = false
         }

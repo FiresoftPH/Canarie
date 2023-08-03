@@ -55,7 +55,7 @@ function Course() {
       <div className={styles.bg_container}>
         <div className={styles.glass_layer_course}>
           <header className={styles.header_topleft}>
-            <p className={styles.title}>Courses</p>
+            <p className={styles.title}>Competencies</p>
             <SearchBox onInputChange={inputChangeHandler} />
           </header>
           <header className={styles.userdropdown}>

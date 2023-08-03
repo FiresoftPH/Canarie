@@ -5,7 +5,7 @@ function SearchBox(props) {
     <div  className={styles.wrapper}>
       <input  className={styles.searchbox}
               type='text' 
-              placeholder={'Search up course'}
+              placeholder={'Search up the competency'}
               onChange={props.onInputChange}
               />
     </div>

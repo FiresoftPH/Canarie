@@ -78,7 +78,7 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
           "text/plain",
           copy
         );
-        window.open("https://www.youtube.com/watch?v=6a_PHeYO7OI");
+        window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         // setCopy(true);
       }}
     >
@@ -108,7 +108,6 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
                 // const match = /language-(\w+)/.exec(className || "");
                 const match = detectLanguage(children[0]);
                 // console.log(match)
-
                 // console.log(match)
                 // console.log(inline)
                 return !inline && match ? (
@@ -132,7 +131,7 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
               },
             }}
           />
-          <div className={styles.assignmentList}>
+          {/* <div className={styles.assignmentList}>
             {props.assignments
               ? props.assignments.map((assignment) => {
                   if (assignment !== undefined) {
@@ -151,7 +150,7 @@ const ChattingCardAI = memo(function ChattingCardAI(props) {
                   }
                 })
               : ""}
-          </div>
+          </div> */}
         </div>
         {/* DON'T DELETE THIS */}
         {/* {props.rating === "none" ? (

@@ -1,10 +1,9 @@
 import styles from "./LongSidebar.module.css";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import ChatCard from "../ChatCard/ChatCard";
+// import ChatCard from "../ChatCard/ChatCard";
 import ChatList from "../ChatList/ChatList";
-import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
+// import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
 import FileList from "../FileList/FileList";
 import { useSelector } from "react-redux";
 
@@ -25,19 +24,14 @@ import Upload from "../../assets/Upload.svg";
 
 function LongSidebar(props) {
   const nav = useNavigate();
-
   // const chatHeight = useRef(null);
   // const [cHeight, setCHeight] = useState(0);
-
   // const [change, setChange] = useState(false);
   // const [mode, setMode] = useState("General");
-
   const [file, setFile] = useState();
   const data = useSelector((state) => state.bigData);
   // const code = useSelector((state) => state.chat.code);
-
   // const assHeightRef = useRef()
-
   const { subjectId, assignmentId } = useParams();
 
   // useEffect(() => {
@@ -109,7 +103,7 @@ function LongSidebar(props) {
 
   return (
     <div id="total" className={cssClasses.join(" ")}>
-      <div id="chat" className={styles.top}>
+      <section id="chat" className={styles.top}>
         <img
           onClick={() => {
             nav("/Course");
@@ -124,14 +118,14 @@ function LongSidebar(props) {
           src={Collapse}
         />
         <div className={styles.sepLine} />
-      </div>
+      </section>
       <ChatList />
       <section id="file-upload" className={styles.file_uploaded}>
         <p>File Uploaded</p>
         <img onClick={fileDownloadHandler} src={Upload} />
       </section>
       <FileList
-        sf={(f) => {
+        saveFile={(f) => {
           setFile(f);
         }}
       />

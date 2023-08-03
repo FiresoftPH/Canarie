@@ -1,9 +1,7 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import styles from "./CreateChatModal.module.css";
 import Icon from "../../assets/ParrotIcon.svg";
 import UserIcon from "../../assets/UserImage.svg";
-import { useState } from "react";
-import { useEffect } from "react";
 
 const CreateChatModal = (props) => {
   const inputRef = useRef();
@@ -21,7 +19,10 @@ const CreateChatModal = (props) => {
       }
       props.onSubmit(inputRef.current.value);
     } else {
-      console.log("errrrrrrrrrrr");
+      setAnim(true)
+      // return(
+      //   <p>test</p>
+      // )
     }
   };
 
@@ -41,7 +42,7 @@ const CreateChatModal = (props) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.new_chat_title}>
-        <p>New Chat</p>
+        <p>New Canarie Chat</p>
         <button
           onClick={() => {
             props.toggle();
@@ -54,7 +55,7 @@ const CreateChatModal = (props) => {
         <div className={styles.header}>
           <img src={Icon} alt="AI" />
           {/* <img src={ChatboxUwU} alt="chatbox" /> */}
-          <p className={styles.chat_ai}>What name would you like to set?</p>
+          <p className={styles.chat_ai}>Name your new chat here!</p>
         </div>
         <div className={cssClasses.join(" ")}>
           <form className={styles.user_chat} onSubmit={submitHandler}>

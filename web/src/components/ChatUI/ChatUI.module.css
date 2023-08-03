@@ -77,9 +77,6 @@
 
 /* HEADER */
 .header {
-  /* width: 100%; */
-  /* height: 100%; */
-
   padding: 1rem;
   padding-left: 2rem;
   padding-right: 2rem;
@@ -94,7 +91,6 @@
 
 .header p {
   margin-left: 0.5rem;
-
   overflow-x: hidden;
   overflow-wrap: break-word;
   max-height: 3rem;
@@ -116,7 +112,6 @@
   height: 0.1rem;
   background-color: rgba(255, 255, 255, 0.4);
   grid-area: line;
-
   margin-top: .5rem;
 }
 
@@ -125,11 +120,6 @@
   width: 100%;
   height: 100%;
   z-index: 5;
-}
-
-.temp {
-  /* position: absolute;
-  width: auto; */
 }
 
 .topBlur {

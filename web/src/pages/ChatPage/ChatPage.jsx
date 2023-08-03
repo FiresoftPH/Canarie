@@ -16,18 +16,22 @@ function Chat() {
       className={`${styles.bg_container} ${closev2 ? styles.close : styles.open}`}
     >
       <Transition in={closev2} timeout={300} mountOnEnter unmountOnExit>
-        {(state) => <ShortSideBar open={toggleClosev2} show={state} />}
+        {(state) => {
+          return(
+          <ShortSideBar open={toggleClosev2} show={state} />
+          )}}
       </Transition>
       <Transition in={!closev2} timeout={300} mountOnEnter unmountOnExit>
-        {(state) => (
+        {(state) => {
+          return(
           <LongSidebar
-            onSelectMode={(id) => {
-              console.log("ID: ", id);
-            }}
+            // onSelectMode={(id) => {
+            //   console.log("ID: ", id);
+            // }}
             close={toggleClosev2}
             show={state}
           />
-        )}
+        )}}
       </Transition>
       <div className={styles.right_side}>
         <section id="ChatUI" className={styles.chat}>

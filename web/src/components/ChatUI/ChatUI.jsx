@@ -448,7 +448,6 @@ const ChatUI = () => {
             <div className={styles.sepLine} />
             <div className={styles.topBlur}></div>
           </div>
-          <div className={styles.chatting}></div>
           <ChatScreenInitalized
             onRate={ratingHandler}
             history={history.filter((ass) => ass.name === chatName)[0]}

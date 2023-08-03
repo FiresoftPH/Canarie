@@ -20,19 +20,14 @@
 .message {
   padding: 1rem;
   position: relative;
-
   margin-right: 1rem;
-
   border-radius: 1.875rem;
   background: linear-gradient(0deg, #252525 0%, #252525 100%), #252525;
-  
   /* display: flex; */
   justify-content: center;
   align-items: center;
   max-width: 90%;
-
   /* overflow-x: new; */
-
   word-wrap: break-word;
 }
 

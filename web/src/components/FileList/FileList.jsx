@@ -51,32 +51,27 @@ const FileList = (props) => {
       const transformedData = data.filter((sub) => sub.course === subjectId)[0]
         .files;
       // console.log(transformedData)
-
       setFiles(transformedData);
       // setSelectedFile(transformedData[0].id);
       if (transformedData.length > 0) {
-        props.sf(transformedData[0].id);
+        props.saveFile(transformedData[0].id);
         dispatch(chatAction.setCode(transformedData[0].code));
       }
     } else {
       // console.log("Nah I ain't running");
-
       dispatch(chatAction.setShouldUpdate(true));
     }
     // }
   }, [data.filter((sub) => sub.course === subjectId)[0].files]);
-
   // useEffect(() => {
   //   console.log("I run v2")
   // }, [])
-
   // When a file card is deleted, trigger this event
   const fileDeleteHandler = (id) => {
     shouldUpdateId = false;
     const filteredData = files.filter((file) => {
       return file.id !== id;
     });
-
     dispatch(bigDataAction.deleteFile({ subjectId, fileId: id }));
     setFiles(filteredData);
 
@@ -86,7 +81,7 @@ const FileList = (props) => {
       setSelectedFile(transformedData.id);
       dispatch(chatAction.setCode(transformedData.code));
       dispatch(chatAction.setFileId(transformedData.id));
-      props.sf(transformedData.id);
+      props.saveFile(transformedData.id);
       // console.log(transformedData)
     }
   };
@@ -110,23 +105,17 @@ const FileList = (props) => {
             .files.filter((f) => f.id === id)[0].code
         )
       );
-      dispatch(chatAction.setShouldUpdate(false));
+      dispatch(chatAction.setShouldUpdate(true));
       dispatch(chatAction.setFileId(id));
-      props.sf(id);
+      props.saveFile(id);
     } else {
       shouldUpdateId = true;
     }
-    // props.sf(id);
+    // props.saveFile(id);
   };
-
   return (
     <>
-      <section
-        // style={{
-        //   maxHeight: props.mh,
-        // }}
-        className={styles.file_status}
-      >
+      <section className={styles.file_status}>
         {/* <FileCard selected name="Untitled-1" />
         <FileCard name="Untitled-2" />
         <FileCard name="Untitled-3" /> */}

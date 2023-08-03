@@ -1,9 +1,7 @@
 import styles from "./FileAttachmentModal.module.css";
-import FileCard from "../FileCard/FileCard";
-import { useState } from "react";
 import StaticFileCard from '../FileCard/StaticFileCard.jsx';
 
-const FileAttachmentModal = (props) => {
+const StaticFileAttachmentModal = (props) => {
   return (
     <div className={`${styles.total}`}>
       <div
@@ -18,21 +16,18 @@ const FileAttachmentModal = (props) => {
         </p>
         <div className={`${styles.files} ${props.static ? styles.static : ""}`}>
           {props.files[0].map((file) => {
-            // console.log(file)
-
-            if (typeof file === "string") {
-                return (
-                  <StaticFileCard
-                    name={file}
-                  />
-                );
-            } else {
-                return (
-                    <StaticFileCard name={file.name} />
-                )
-                // console.log(file)
-                // return <div></div>
-            }
+            // if (typeof file === "string") {
+            //   return (
+            //     <StaticFileCard
+            //       fileName={file.name}
+            //     />
+            //   );
+            // } else {
+              return (
+                <StaticFileCard fileName={file} />
+              )
+              // console.log(file)
+            // }
           })}
         </div>
       </div>
@@ -40,4 +35,4 @@ const FileAttachmentModal = (props) => {
   );
 };
 
-export default FileAttachmentModal;
+export default StaticFileAttachmentModal;

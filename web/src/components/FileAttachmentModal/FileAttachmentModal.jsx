@@ -18,7 +18,6 @@ const FileAttachmentModal = (props) => {
     const transformedData = props.files.filter((file) =>
       selectedFiles.includes(file.id)
     );
-
     // console.log(transformedData)
     props.onSubmit(transformedData);
     props.toggle();
@@ -38,8 +37,7 @@ const FileAttachmentModal = (props) => {
         </p>
         <div className={`${styles.files} ${props.static ? styles.static : ""}`}>
           {props.files.map((file) => {
-            // console.log(file)
-
+            console.log(file)
             return (
               <FileCard
                 onSelect={() => {

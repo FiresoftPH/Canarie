@@ -3,7 +3,6 @@ import UserImage from "src/assets/UserImage.svg";
 // import LikeIcon from "src/assets/LikeIcon.svg";
 // import DislikeIcon from "src/assets/DislikeIcon.svg";
 import FileIcon from "src/assets/FileIcon.svg";
-
 import styles from "./ChattingCardUser.module.css";
 import { useState } from "react";
 // import FileAttachmentModal from "../FileAttachmentModal/FileAttachmentModal";
@@ -57,6 +56,7 @@ const ChattingCardUser = memo(function ChattingCardUser(props) {
         ) : (
           ""
         )}
+        {/* {console.log(props.message)} */}
         <ReactMarkdown>{props.message.split("$^$Reference files$^$:\n")[0]}</ReactMarkdown>
       </div>
       <img className={styles.userImg} src={UserImage} />
