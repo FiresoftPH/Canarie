@@ -58,14 +58,11 @@ function Course() {
             <p className={styles.title}>Competencies</p>
             <SearchBox onInputChange={inputChangeHandler} />
           </header>
-          <header className={styles.userdropdown}>
+          <header className={styles.header_topright}>
             <p className={styles.username}>
-              {" "}
-              Good <span>{greet}</span>, <span>Mr/Mrs</span>{" "}
-              <span>{name}</span>
+              Good {greet},<br />{name}
             </p>
             <div className={styles.user_img}> <img src={user_with_suit} /> </div>
-            {"  "}
             <box-icon color="white"
                       size="3rem"
                       name="log-out"

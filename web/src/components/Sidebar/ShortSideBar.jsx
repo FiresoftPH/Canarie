@@ -23,9 +23,6 @@ const ShortSideBar = (props) => {
           }}
           src={Enlarge}
         />
-        {/* <img src={SearchIcon} />
-        <img src={ChatIcon} />
-        <img src={New_Button} /> */}
       </div>
       <div className={styles.bottom}>
         <p

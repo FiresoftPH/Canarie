@@ -1,7 +1,7 @@
 import styles from "./ChatInputField.module.css";
 
 import FileAttachmentIcon from "src/assets/FileAttachmentIcon.svg";
-import SendIcon from "src/assets/SendIcon.svg";
+import SendIcon from "../../assets/SendIcon.svg";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bigDataAction } from "../../store/bigDataSlice";
@@ -186,7 +186,7 @@ const ChatInputField = (props) => {
           <div className={styles.typing1}></div>
           <div className={styles.typing2}></div>
           <div className={styles.typing3}></div>
-          <p>Parrot is typing</p>
+          <p>Canarie is typing</p>
         </div>
       )}
     </div>
