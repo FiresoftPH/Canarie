@@ -7,12 +7,73 @@
   background-color: rgba(58, 58, 58, 0.247);
   z-index: 1000;
   backdrop-filter: blur(20px);
-  display: grid;
-  grid-template: 1fr 1.5fr /1fr 1fr 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* grid-template: 1fr 1.5fr /1fr 1fr 1fr;
   grid-template-areas:
   "blank1 head blank2"
   "blank1 body blank2";
-  justify-items: center;
+  justify-items: center; */
+}
+
+/* .content {
+
+} */
+
+@keyframes bounce {
+  0% {
+    transform: translateY(2rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(2rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.bounceUp {
+  animation: bounce 100ms linear forwards;
+}
+
+.bounceDown {
+  animation: bounce 100ms reverse forwards;
+  animation-delay: .2s;
+}
+
+.jumpUp {
+  opacity: 0;
+  animation: bounce 100ms linear forwards;
+  animation-delay: .1s;
+}
+
+.jumpDown {
+  opacity: 1;
+  animation: bounce 150ms reverse forwards;
+}
+
+.slideUp {
+  opacity: 0;
+  /* animation-delay: 500ms; */
+  /* animation-delay: 4s; */
+  animation: bounce 100ms linear forwards;
+  animation-delay: .2s;
+}
+
+.slideDown {
+  animation: bounce 100ms reverse forwards;
+  animation-delay: .1s;
 }
 
 .backdrop {

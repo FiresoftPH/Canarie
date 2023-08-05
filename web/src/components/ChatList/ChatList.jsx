@@ -8,6 +8,7 @@ import styles from "./ChatList.module.css";
 import CreateChatModal from "../CreateChatModal/CreateChatModal";
 import { bigDataAction } from "../../store/bigDataSlice";
 import axios from "axios";
+import Transition from "react-transition-group/Transition";
 
 let shouldUpdate = true;
 const ChatList = () => {
@@ -176,9 +177,11 @@ const ChatList = () => {
           <p>New Chat</p>
         </div>
         {/* <button onClick={getChatnameHandler}>test</button> */}
-        {toggle && (
-          <CreateChatModal chats={chats} onSubmit={addChatHandler} toggle={modalToggle} />
-        )}
+        {/* {toggle && ( */}
+        <Transition in={toggle} timeout={300} mountOnEnter unmountOnExit>
+          {state => <CreateChatModal show={state} chats={chats} onSubmit={addChatHandler} toggle={modalToggle} />}
+        </Transition>
+        {/* )} */}
       </section>
     </>
   );

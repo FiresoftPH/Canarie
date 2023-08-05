@@ -1,38 +1,21 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./ChatPage.module.css";
 import LongSidebar from "src/components/Sidebar/LongSidebar";
 import ShortSideBar from "../../components/Sidebar/ShortSideBar";
 import ChatUI from "../../components/ChatUI/ChatUI";
 import IDE from "../../components/IDE/IDE";
 import Transition from "react-transition-group/Transition";
+import SideBar from '../../components/Sidebar/Sidebar';
 
 function Chat() {
-  const [closev2, setClosev2] = useState(false);
-  const toggleClosev2 = (val) => {
-    setClosev2(!closev2);
-  };
+  const bigDivRef = useRef(null)
+
   return (
     <div
-      className={`${styles.bg_container} ${closev2 ? styles.close : styles.open}`}
+      className={`${styles.bg_container}`}
+      ref={bigDivRef}
     >
-      <Transition in={closev2} timeout={300} mountOnEnter unmountOnExit>
-        {(state) => {
-          return(
-          <ShortSideBar open={toggleClosev2} show={state} />
-          )}}
-      </Transition>
-      <Transition in={!closev2} timeout={300} mountOnEnter unmountOnExit>
-        {(state) => {
-          return(
-          <LongSidebar
-            // onSelectMode={(id) => {
-            //   console.log("ID: ", id);
-            // }}
-            close={toggleClosev2}
-            show={state}
-          />
-        )}}
-      </Transition>
+      <SideBar bigDivRef={bigDivRef} />
       <div className={styles.right_side}>
         <section id="ChatUI" className={styles.chat}>
           <ChatUI />

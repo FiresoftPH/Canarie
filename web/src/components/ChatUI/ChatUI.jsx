@@ -5,7 +5,7 @@ import RenameIcon from "src/assets/RenameIcon.svg";
 import ClearChatHistoryIcon from "src/assets/ClearChatHistoryIcon.svg";
 import ChatInputField from "../ChatInputField/ChatInputField";
 import ChatScreenInitalized from "../ChatScreen/ChatScreenInitialized";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // const DUMMY_TEXT_DATA = [
@@ -52,6 +52,8 @@ const ChatUI = () => {
   const [history, setHistory] = useState(
     data.filter((sub) => sub.course === courseName)[0].assignments
   );
+
+  console.log("re rendered")
 
   useEffect(() => {
     // console.log(data.filter((sub) => sub.course === courseName)[0].assignments)
