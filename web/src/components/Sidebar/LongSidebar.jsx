@@ -1,6 +1,6 @@
 import styles from "./LongSidebar.module.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 // import ChatCard from "../ChatCard/ChatCard";
 import ChatList from "../ChatList/ChatList";
 // import CourseSlideUp from "../CourseSlideUp/CourseSlideUp";
@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import Back_Button from "../../assets/Back_Button.svg";
 import Collapse from "../../assets/Collapse.svg";
 import Upload from "../../assets/Upload.svg";
+import { useMemo } from "react";
 
 // function Dimension(el) {
 //   // Get the DOM Node if you pass in a string
@@ -73,7 +74,7 @@ function LongSidebar(props) {
       .filter((sub) => sub.course === subjectId)[0]
       .files.filter((f) => f.id === file)[0];
 
-    console.log(transformedData);
+    // console.log(transformedData);
 
     let fType = "text/plain";
 
@@ -101,6 +102,8 @@ function LongSidebar(props) {
       : null,
   ];
 
+  const memorisedChatList = useMemo(() => <ChatList />, [subjectId])
+
   return (
     <div id="total" className={cssClasses.join(" ")}>
       <section id="chat" className={styles.top}>
@@ -119,7 +122,8 @@ function LongSidebar(props) {
         />
         <div className={styles.sepLine} />
       </section>
-      <ChatList />
+      {/* <ChatList /> */}
+      {memorisedChatList}
       <section id="file-upload" className={styles.file_uploaded}>
         <p>File Uploaded</p>
         <img onClick={fileDownloadHandler} src={Upload} />
@@ -133,4 +137,4 @@ function LongSidebar(props) {
   );
 }
 
-export default LongSidebar;
+export default memo(LongSidebar);

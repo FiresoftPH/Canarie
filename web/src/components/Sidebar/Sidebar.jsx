@@ -2,17 +2,21 @@ import { useState } from "react";
 import Transition from "react-transition-group/Transition";
 import ShortSideBar from "./ShortSideBar";
 import LongSidebar from "./LongSidebar";
+import { useDispatch } from "react-redux";
+import { chatAction } from "../../store/chatSlice";
 
 function Sidebar({ bigDivRef }) {
   const [closev2, setClosev2] = useState(false);
+  const dispatch = useDispatch()
 
   const toggleClosev2 = (val) => {
     setClosev2(!closev2);
 
-    console.log(closev2)
+    // console.log(closev2)
 
     if (closev2 == true) {
         bigDivRef.current.style.gridTemplateColumns = "0.55fr 1fr 1fr"
+        dispatch(chatAction.setShouldDispatch(false))
     } else {
         bigDivRef.current.style.gridTemplateColumns = "0.1fr 1fr 1fr"
     }

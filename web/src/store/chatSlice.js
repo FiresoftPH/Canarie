@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   code: "",
   fid: "",
-  shouldUpdate: true
+  shouldUpdate: true,
+  prevAss: null,
+  shouldDispatch: true
   //   assignment: "",
 };
 
@@ -23,6 +25,12 @@ const chatSlice = createSlice({
     setShouldUpdate: (state, action) => {
       state.shouldUpdate = action.payload
     },
+    setPrevAss: (state, action) => {
+      state.prevAss = action.payload
+    },
+    setShouldDispatch: (state, action) => {
+      state.shouldDispatch = action.payload
+    }
   },
 });
 

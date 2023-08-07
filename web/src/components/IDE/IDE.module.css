@@ -168,6 +168,22 @@
 
   flex: 1;
   background-color: rgba(80, 80, 80, 1);
+
+  padding: .5rem;
+  position: relative;
+  display: flex;
+}
+
+.output p {
+  white-space: pre-line;
+}
+
+.output h1 {
+  align-self: center;
+  margin: auto;
+  /* position: absolute;
+  top: 50%;
+  left: 30%; */
 }
 
 .close {

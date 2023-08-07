@@ -38,7 +38,7 @@ const CreateChatModal = (props) => {
 
   const cssClasses = [styles.middle, anim && styles.shake, props.show === "entering" && styles.jumpUp, props.show === "exiting" && styles.jumpDown];
 
-  console.log(props.show)
+  // console.log(props.show)
 
   return (
     <div className={styles.wrapper}>

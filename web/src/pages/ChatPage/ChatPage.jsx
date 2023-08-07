@@ -6,9 +6,28 @@ import ChatUI from "../../components/ChatUI/ChatUI";
 import IDE from "../../components/IDE/IDE";
 import Transition from "react-transition-group/Transition";
 import SideBar from '../../components/Sidebar/Sidebar';
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { chatAction } from "../../store/chatSlice";
 
 function Chat() {
   const bigDivRef = useRef(null)
+
+  const { subjectId, assignmentId } = useParams()
+  const prevParamValueRef = useRef(null);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    // if (prevParamValueRef.current) {
+    //   console.log(prevParamValueRef.current)
+    // }
+
+    // dispatch(chatAction.setPrevAss(prevParamValueRef.current))
+    // prevParamValueRef.current = assignmentId
+
+    dispatch(chatAction.setPrevAss(assignmentId))
+  })
 
   return (
     <div

@@ -32,7 +32,7 @@ import { bigDataAction } from "../../store/bigDataSlice";
 
 let shouldUpdate = false;
 let shouldFetchData = true
-const ChatUI = () => {
+const ChatUI = (props) => {
   // let chatName = props.mode;
   // Fetch data only once
   let data = useSelector((state) => state.bigData);
@@ -53,7 +53,7 @@ const ChatUI = () => {
     data.filter((sub) => sub.course === courseName)[0].assignments
   );
 
-  console.log("re rendered")
+  // console.log("re rendered")
 
   useEffect(() => {
     // console.log(data.filter((sub) => sub.course === courseName)[0].assignments)
@@ -64,6 +64,7 @@ const ChatUI = () => {
   // Fetch recent history data
   useEffect(() => {
     if (shouldFetchData == true) {
+
       // console.log("FETCHING HISTORY");
       // console.log({
       //   username: usrData.username,
@@ -85,9 +86,12 @@ const ChatUI = () => {
               chatroom_name: assignmentId,
               api_key: usrData.api_key,
             },
-            { headers: { "Access-Control-Allow-Origin": "*" } }
+            // { headers: { "Access-Control-Allow-Origin": "*" } }
           )
           .then((res) => res.data.content);
+
+        // console.log(fetchedHistory)
+
         if (fetchedHistory != undefined) {
           // console.log(fetchedHistory);
           setHistory((prev) =>
@@ -122,7 +126,7 @@ const ChatUI = () => {
     data.filter((sub) => sub.course === courseName)[0].assignments,
   ]);
 
-  const [topName, setTopName] = useState("-");
+  // const [topName, setTopName] = useState("-");
   const [lock, setLock] = useState(false);
   const [openFiles, setOpenFiles] = useState(false);
   const [fileAttached, setFileAttached] = useState([]);
@@ -241,7 +245,7 @@ const ChatUI = () => {
     } else {
       shouldUpdate = false;
     }
-    setTopName(assignmentId);
+    // setTopName(assignmentId);
     // } else {
     //   setLock(true);
     // }

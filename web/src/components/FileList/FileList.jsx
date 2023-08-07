@@ -113,6 +113,7 @@ const FileList = (props) => {
     }
     // props.saveFile(id);
   };
+
   return (
     <>
       <section className={styles.file_status}>

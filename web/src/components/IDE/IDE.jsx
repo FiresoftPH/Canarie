@@ -214,8 +214,9 @@ const IDE = (props) => {
           <div className={styles.verticalSlide}>||</div>
         </section>
         <section className={styles.output}>
-          <h1>Output</h1>
-          <ReactMarkdown>{output}</ReactMarkdown>
+          {/* <h1>Output</h1>
+          <p>{output}</p> */}
+          {output.length === 0 ? <h1>Output</h1> : <p>{output}</p>}
         </section>
       </div>
     </div>
