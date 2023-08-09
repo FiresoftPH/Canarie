@@ -1,0 +1,83 @@
+.nav_bar {
+  width: 100%;
+  height: 10vh;
+  grid-template-columns: 0.7fr 1.2fr 1fr;
+  grid-template-areas: "Logo Nav Link";
+  display: grid;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4rem);
+  overflow: visible;
+}
+
+.logo_admin {
+  display: flex;
+  align-items: center;
+  padding-left: 3.81rem;
+  /* padding-top: 1rem;
+  padding-bottom: 1rem; */
+  /* background-color: #1d1d1f; */
+}
+
+.logo_admin img {
+  grid-area: Logo;
+  height: 4rem;
+  width: 4rem;
+}
+
+.name_admin {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  padding-left: 0.75rem;
+}
+
+.name_admin p {
+  line-height: 119%;
+}
+
+.name_admin p:first-child {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+
+.name_admin p:last-child {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(201, 201, 201, 1);
+}
+
+.navigation {
+  display: grid;
+  grid-area: Nav;
+  grid-template-columns: auto auto auto;
+  margin-left: 1rem;
+}
+
+.navigation Link {
+  font-size: 1.2rem;
+  font-weight: 400;
+  /* justify-self: center; */
+  /* margin-left: 1rem; */
+}
+
+.navigation a {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgba(201, 201, 201, 1);
+}
+
+.chat_page {
+  display: flex;
+  justify-content: end;
+  padding-right: 2.5rem;
+}
+
+.chat_page p {
+  display: flex;
+  font-size: 1.2rem;
+  color: rgba(160, 160, 160, 0.8);
+  justify-content: end;
+  padding-right: 1rem;
+}

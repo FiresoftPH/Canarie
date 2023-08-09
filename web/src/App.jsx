@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import { useSelector } from "react-redux";
 import { createBrowserRouter } from "react-router-dom";
 import Root from "./pages/RootPage/Root";
+import AdminRoot from "./pages/RootPage/AdminRoot";
 
 /*
 REQUIRED DEPENDENCIES:
@@ -33,14 +34,42 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    errorElement: <ErrorPage />,
+    errorElement: (
+      <ErrorPage
+        message={"Something went wrong!"}
+        back={"/Course"}
+        name={"Course"}
+      />
+    ),
     children: [
       { path: "/", element: <Login /> },
       { path: "/Term", element: <Term /> },
       { path: "/Course", element: <Course /> },
       { path: "/Chat/:subjectId/:assignmentId", element: <ChatPage /> },
+      // { path: "*", element: <ErrorPage /> },
+    ],
+  },
+]);
+
+const adminRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <AdminRoot />,
+    errorElement: (
+      <ErrorPage
+        message={"Something went wrong!"}
+        back={"/"}
+        name={"Admin Page"}
+      />
+    ),
+    children: [
       { path: "/Admin", element: <Admin /> },
+      { path: "/AdminCourse/:pillarName", element: <AdminCourse /> },
       { path: "/AdminCourse", element: <AdminCourse /> },
+      { path: "/", element: <Login /> },
+      { path: "/Term", element: <Term /> },
+      { path: "/Course", element: <Course /> },
+      { path: "/Chat/:subjectId/:assignmentId", element: <ChatPage /> },
       // { path: "*", element: <ErrorPage /> },
     ],
   },
@@ -48,6 +77,7 @@ const router = createBrowserRouter([
 
 function App() {
   const loggedIn = useSelector((state) => state.login.loggedIn);
+  const admin = true;
 
   console.log(loggedIn);
 
@@ -72,7 +102,7 @@ function App() {
   //   </>
   // );
 
-  return <RouterProvider router={router} />
+  return <RouterProvider router={admin ? adminRouter : router} />;
 }
 
 export default App;

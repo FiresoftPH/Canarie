@@ -1,0 +1,43 @@
+.user_online {
+  grid-area: online;
+  width: 24vw;
+  height: 10vh;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 17px 20px 40px 0px rgba(0, 0, 0, 0.21);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1.87rem;
+  place-self: center;
+}
+
+.user_online_title {
+  display: flex;
+  flex-direction: row;
+}
+
+.user_online_title p {
+  padding-left: 0.5rem;
+  color: #1d1d1f;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2.25rem;
+  letter-spacing: 0.00813rem;
+}
+
+.user_online_list {
+  display: flex;
+  flex-direction: row;
+  padding-right: 2rem;
+}
+
+.user_online_list p {
+  color: #fff;
+  font-size: 1.25rem;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: -0.01688rem;
+}

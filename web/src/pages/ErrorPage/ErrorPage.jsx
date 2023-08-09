@@ -3,7 +3,7 @@ import styles from "./ErrorPage.module.css";
 
 import logo from "../../assets/Logo.svg";
 
-const ErrorPage = () => {
+const ErrorPage = (props) => {
   const error = useRouteError();
 
   return (
@@ -14,8 +14,8 @@ const ErrorPage = () => {
             <img className={styles.parrotLogo} src={logo} />
           </div> */}
           <div className={styles.right}>
-            <p>Something went wrong!</p>
-            <Link to="/Course">Go Back To Courses</Link>
+            <p>{props.message}</p>
+            <Link to={props.back}>Go Back To {props.name}</Link>
           </div>
         </div>
         <div className={styles.mask}>

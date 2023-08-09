@@ -1,0 +1,44 @@
+.analytics_dash {
+  grid-area: analytics;
+  display: flex;
+  width: 24vw;
+  height: 40vh;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 17px 20px 40px 0px rgba(0, 0, 0, 0.21);
+  place-self: stretch center;
+}
+
+.analytics_dash_bar {
+  display: flex;
+  height: 5rem;
+  width: 100%;
+  padding: 0.48938rem 0rem 0.49rem 0.9375rem;
+  justify-content: start;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 1rem 1rem 0rem 0rem;
+  background: white;
+}
+
+.analytics_dash_bar img {
+  padding-left: 1rem;
+}
+
+.analytics_text p {
+  padding-left: 1rem;
+}
+
+.analytics_text p:first-child {
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1rem;
+  padding-left: 1;
+}
+
+.analytics_text p:last-child {
+  color: #1d1d1f;
+  font-size: 1rem;
+}

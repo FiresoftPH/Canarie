@@ -1,0 +1,99 @@
+.competencies_rank {
+  grid-area: compentencies;
+  place-self: stretch center;
+  /* width: 40vw; */
+  /* height: 100%; */
+  height: 83.2vh;
+  flex-shrink: 0;
+  border-radius: 1rem 1rem 1rem 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 17px 20px 40px 0px rgba(0, 0, 0, 0.21);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+}
+
+.competencies_rank_bar {
+  display: flex;
+  height: 5rem;
+  width: 100%;
+  padding: 0.48938rem 0rem 0.49rem 0.9375rem;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-radius: 1rem 1rem 0rem 0rem;
+  background: white;
+}
+
+.competencies_rank_title_left {
+  display: flex;
+  padding-left: 1rem;
+  align-items: center;
+}
+
+.competencies_rank_left_text {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
+
+.competencies_rank_left_text p:first-child {
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1rem;
+  padding-left: 1;
+}
+
+.competencies_rank_left_text p:last-child {
+  color: #1d1d1f;
+  font-size: 1rem;
+}
+
+.competencies_rank_title_right {
+  display: flex;
+  flex-direction: row;
+  padding-right: 1rem;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #1d1d1f; */
+}
+
+.competencies_rank_right_text p {
+  display: flex;
+  padding-right: 1rem;
+  padding-left: 10rem;
+  color: #1d1d1f;
+}
+
+.competencies_rank_list {
+  padding: 2rem;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.competencies_rankings {
+  padding: 1rem;
+  overflow-y: scroll;
+  max-height: 100%;
+
+  margin-bottom: .7rem;
+  margin-right: 2rem;
+  margin-left: 1rem;
+}
+
+.competencies_rankings::-webkit-scrollbar {
+  width: 7px;
+}
+
+.competencies_rankings::-webkit-scrollbar-track {
+  opacity: 0.6;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.446);
+}
+
+.competencies_rankings::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 0.5rem;
+}

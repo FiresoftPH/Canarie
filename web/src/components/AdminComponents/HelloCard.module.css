@@ -1,0 +1,68 @@
+.profile_cover {
+  grid-area: profile;
+  display: flex;
+  position: relative;
+  align-items: baseline;
+  place-self: stretch center;
+}
+
+.profile {
+  width: 24vw;
+  height: 30vh;
+  border-radius: 1rem;
+  background: radial-gradient(
+    150.6% 150.6% at 93.97% 6.19%,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(245, 245, 245, 0.13) 100%
+  );
+  box-shadow: 17px 20px 40px 0px rgba(0, 0, 0, 0.21);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.profile_pic {
+  width: 5rem;
+  height: 5rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  border-radius: 50%;
+  background-color: #ea4335;
+}
+
+.username {
+  align-items: center;
+  justify-items: center;
+}
+
+.username p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  padding-top: 1rem;
+  line-height: 80%;
+  /* padding-left: 1rem; */
+}
+
+.username p:first-child {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.username p:nth-child(2) {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(29, 29, 31, 1);
+  font-size: 1.0625rem;
+  font-weight: 500;
+}
+
+.username p:last-child {
+  padding-top: 1.5rem;
+  font-size: 1rem;
+  color: rgba(29, 29, 31, 1);
+  font-size: 1.25rem;
+  font-weight: 600;
+}

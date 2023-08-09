@@ -1,12 +1,35 @@
 .container_course {
   display: grid;
-  grid-template-columns: repeat(5, auto);
+  /* grid-template-columns: repeat(5, auto); */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* grid-template-rows: repeat(50, 15rem); */
   /* background-color: rgb(245, 106, 106); */
-  height: 100%;
-  width: 100%;
-  grid-template-rows: auto auto;
+  height: 80vh;
+  /* width: 100%; */
+  /* grid-template-rows: auto auto; */
+  /* flex-wrap: wrap; */
   gap: 2rem;
   padding: 2rem;
+
+  margin-bottom: 1rem;
+  margin-right: 2rem !important;
+
+  overflow-y: scroll;
+}
+
+.container_course::-webkit-scrollbar {
+  width: 7px;
+}
+
+.container_course::-webkit-scrollbar-track {
+  opacity: 0.6;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.446);
+}
+
+.container_course::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 0.5rem;
 }
 
 .card {

@@ -1,0 +1,28 @@
+.wrapper {
+    background-color: black;
+    border-radius: 1rem;
+    box-shadow: 1px 1px 80px rgba(0, 0, 0, 0.401);
+    /* height: 7rem;
+    width: 5rem; */
+}
+
+.wrapper img {
+    max-width: 100%;
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+}
+
+.textContent {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    padding: 1rem;
+    padding-top: .6rem;
+}
+
+.textContent p:nth-child(3) {
+    font-size: small !important;
+}
+
+.left {
+    margin-left: auto;
+}
